@@ -15,6 +15,7 @@ declare function __memcpy(a0: number, a1: number, a2: number): void
 declare function __memcmp(a0: number, a1: number, a2: number): number
 declare function __memset(a0: number, a1: number, a2: number): void
 declare function __sbrk(a0: number): number
+declare function __alloc_vm(a0: number): number
 declare function __write(a0: number, a1: number, a2: number): number
 declare function __read(a0: number, a1: number, a2: number): number
 declare function __open(a0: number, a1: number, a2: number): number

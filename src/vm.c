@@ -33,6 +33,7 @@ typedef float    __attribute__((may_alias, aligned(1))) f32u;
 
 /* Space kept free between the heap break and the stack pointer. */
 #define VM_STACK_RESERVE 65536u
+#define HEAP_STEP (1u << 20)
 
 /* The loader verifies every opcode, so computed goto needs no bounds check. */
 #if defined(__GNUC__) && !defined(CHVM_SWITCH)
@@ -156,6 +157,34 @@ static inline uint32_t ror32(uint32_t x, uint64_t n)
     return (x >> k) | (x << ((32 - k) & 31));
 }
 
+/* JavaScript % on doubles. Whole numbers below 2^53 take a plain integer path. */
+static inline double js_mod(double a, double b)
+{
+    if (fabs(a) < 9e15 && fabs(b) < 9e15 && b != 0) {
+        int64_t ia = (int64_t)a, ib = (int64_t)b;
+        if ((double)ia == a && (double)ib == b) {
+            int64_t r = ib == -1 ? 0 : ia % ib;
+            double d = (double)r;
+            if (r == 0 && signbit(a))
+                d = -0.0;       /* the result takes the sign of the dividend */
+            return d;
+        }
+    }
+    return fmod(a, b);
+}
+
+/* Index from a double: truncated, NaN is 0, and a negative index becomes huge so one unsigned compare catches it. */
+static inline uint64_t index_of(double d)
+{
+    if (d != d)
+        return 0;
+    if (d >= 9223372036854775808.0)
+        return UINT64_MAX;
+    if (d <= -9223372036854775808.0)
+        return UINT64_MAX;
+    return (uint64_t)(int64_t)d;
+}
+
 static inline int mem_ok(uint64_t addr, uint64_t n, uint64_t mem_size)
 {
     return addr >= CHBC_NULL_PAGE && addr <= mem_size && n <= mem_size - addr;
@@ -236,6 +265,7 @@ vm_status vm_run(const chbc_image *img, const vm_config *cfg,
     const uint64_t mem_size = c.mem_bytes;
     const uint64_t mem_limit = mem_size - CHBC_NULL_PAGE;
     uint64_t brk = heap_base;
+    uint64_t heap_ptr = heap_base;   /* next ALLOC address, always <= brk */
     vm_foreign *foreign = NULL;
     if (c.allow_foreign) {
         foreign = foreign_new();
@@ -444,7 +474,7 @@ dispatch:
             memset(mem + old, 0, (size_t)(nb - old));
         } else {
             uint64_t dec = 0 - (uint64_t)d;
-            if (dec > old - heap_base) {
+            if (dec > old - heap_ptr) {
                 RA.i = -1;
                 NEXT();
             }
@@ -611,7 +641,190 @@ dispatch:
         }
     }
 
-    FALU(FMOD, fmod(RB.f, RC.f))
+    FALU(FMOD, js_mod(RB.f, RC.f))
+    FALU(FMOVI, (double)pc->imm)
+    FALU(FADDI, RB.f + (double)pc->imm)
+    FALU(FSUBI, RB.f - (double)pc->imm)
+    FALU(FMULI, RB.f * (double)pc->imm)
+    FALU(FDIVI, RB.f / (double)pc->imm)
+    FALU(FMODI, js_mod(RB.f, (double)pc->imm))
+    OP(BFLT)
+        BRANCH(RA.f < RB.f);
+    OP(BFLE)
+        BRANCH(RA.f <= RB.f);
+    OP(BFEQ)
+        BRANCH(RA.f == RB.f);
+    OP(BFNE)
+        BRANCH(RA.f != RB.f);
+    OP(BFNLT)
+        BRANCH(!(RA.f < RB.f));
+    OP(BFNLE)
+        BRANCH(!(RA.f <= RB.f));
+    OP(BFLTI)
+        BRANCH(RA.f < (double)VAL16);
+    OP(BFLEI)
+        BRANCH(RA.f <= (double)VAL16);
+    OP(BFGTI)
+        BRANCH(RA.f > (double)VAL16);
+    OP(BFGEI)
+        BRANCH(RA.f >= (double)VAL16);
+    OP(BFEQI)
+        BRANCH(RA.f == (double)VAL16);
+    OP(BFNEI)
+        BRANCH(RA.f != (double)VAL16);
+    OP(BFNLTI)
+        BRANCH(!(RA.f < (double)VAL16));
+    OP(BFNLEI)
+        BRANCH(!(RA.f <= (double)VAL16));
+    OP(BFNGTI)
+        BRANCH(!(RA.f > (double)VAL16));
+    OP(BFNGEI)
+        BRANCH(!(RA.f >= (double)VAL16));
+
+    /* Array header: [length][capacity][address of the 8-byte elements]. */
+    OP(LDAX) {
+        uint64_t h = RB.u;
+        if (UNLIKELY(h - CHBC_NULL_PAGE > mem_limit - 24))
+            FAIL(VM_E_BAD_MEM);
+        uint64_t i = index_of(RC.f);
+        if (UNLIKELY(i >= RD(u64u, mem + h)))
+            FAIL(VM_E_INDEX);
+        uint64_t ad = RD(u64u, mem + h + 16) + i * 8;
+        if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 8))
+            FAIL(VM_E_BAD_MEM);
+        RA.u = RD(u64u, mem + ad);
+        NEXT();
+    }
+    OP(STAX) {
+        uint64_t h = RA.u;
+        if (UNLIKELY(h - CHBC_NULL_PAGE > mem_limit - 24))
+            FAIL(VM_E_BAD_MEM);
+        uint64_t i = index_of(RB.f);
+        if (UNLIKELY(i >= RD(u64u, mem + h)))
+            FAIL(VM_E_INDEX);
+        uint64_t ad = RD(u64u, mem + h + 16) + i * 8;
+        if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 8))
+            FAIL(VM_E_BAD_MEM);
+        WR(u64u, mem + ad, RC.u);
+        NEXT();
+    }
+    /* String: [byte length][bytes]. The result is the byte as a double. */
+    OP(SCHAR) {
+        uint64_t s = RB.u;
+        if (UNLIKELY(s - CHBC_NULL_PAGE > mem_limit - 8))
+            FAIL(VM_E_BAD_MEM);
+        uint64_t i = index_of(RC.f);
+        if (UNLIKELY(i >= RD(u64u, mem + s)))
+            FAIL(VM_E_INDEX);
+        uint64_t ad = s + 8 + i;
+        if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 1))
+            FAIL(VM_E_BAD_MEM);
+        RA.f = (double)mem[ad];
+        NEXT();
+    }
+    /* Absolute 8-byte load and store: the address is the immediate, for globals. */
+    OP(LDG) {
+        uint64_t ad = (uint32_t)pc->imm;
+        if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 8))
+            FAIL(VM_E_BAD_MEM);
+        RA.u = RD(u64u, mem + ad);
+        NEXT();
+    }
+    OP(STG) {
+        uint64_t ad = (uint32_t)pc->imm;
+        if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 8))
+            FAIL(VM_E_BAD_MEM);
+        WR(u64u, mem + ad, RA.u);
+        NEXT();
+    }
+    /*
+     * Array push: rd = 1 and the value is appended when there is room (length < capacity),
+     * else rd = 0 and nothing changes, so the caller can run its growth path.
+     */
+    OP(APUSH) {
+        uint64_t h = RB.u;
+        if (UNLIKELY(h - CHBC_NULL_PAGE > mem_limit - 24))
+            FAIL(VM_E_BAD_MEM);
+        uint64_t len = RD(u64u, mem + h), cap = RD(u64u, mem + h + 8);
+        if (len >= cap) {
+            RA.u = 0;
+            NEXT();
+        }
+        uint64_t ad = RD(u64u, mem + h + 16) + len * 8;
+        if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 8))
+            FAIL(VM_E_BAD_MEM);
+        WR(u64u, mem + ad, RC.u);
+        WR(u64u, mem + h, len + 1);
+        RA.u = 1;
+        NEXT();
+    }
+    OP(APOP) {
+        uint64_t h = RB.u;
+        if (UNLIKELY(h - CHBC_NULL_PAGE > mem_limit - 24))
+            FAIL(VM_E_BAD_MEM);
+        uint64_t len = RD(u64u, mem + h);
+        if (UNLIKELY(len == 0))
+            FAIL(VM_E_INDEX);
+        uint64_t ad = RD(u64u, mem + h + 16) + (len - 1) * 8;
+        if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 8))
+            FAIL(VM_E_BAD_MEM);
+        RA.u = RD(u64u, mem + ad);
+        WR(u64u, mem + h, len - 1);
+        NEXT();
+    }
+    /* Bump allocator on the heap: zeroed memory, 8-byte aligned, grows the break as needed. */
+    OP(ALLOC) {
+        uint64_t sz = RB.u;
+        if (UNLIKELY(sz > (1ull << 40)))
+            FAIL(VM_E_OOM);
+        sz = (sz + 7) & ~(uint64_t)7;
+        if (UNLIKELY(heap_ptr + sz > brk)) {
+            uint64_t grow = sz > HEAP_STEP ? (sz + HEAP_STEP - 1) / HEAP_STEP * HEAP_STEP : HEAP_STEP;
+            uint64_t top = SP.u > VM_STACK_RESERVE ? SP.u - VM_STACK_RESERVE : 0;
+            if (UNLIKELY(grow > top || brk > top - grow))
+                FAIL(VM_E_OOM);
+            memset(mem + brk, 0, (size_t)grow);
+            brk += grow;
+        }
+        RA.u = heap_ptr;
+        heap_ptr += sz;
+        NEXT();
+    }
+    OP(ALLOCI) {
+        uint64_t sz = ((uint64_t)(uint32_t)pc->imm + 7) & ~(uint64_t)7;
+        if (UNLIKELY(heap_ptr + sz > brk)) {
+            uint64_t grow = sz > HEAP_STEP ? (sz + HEAP_STEP - 1) / HEAP_STEP * HEAP_STEP : HEAP_STEP;
+            uint64_t top = SP.u > VM_STACK_RESERVE ? SP.u - VM_STACK_RESERVE : 0;
+            if (UNLIKELY(grow > top || brk > top - grow))
+                FAIL(VM_E_OOM);
+            memset(mem + brk, 0, (size_t)grow);
+            brk += grow;
+        }
+        RA.u = heap_ptr;
+        heap_ptr += sz;
+        NEXT();
+    }
+    /* Address of an array element, with the same checks as LDAX: for a[i] += x and a[i]++. */
+    OP(AADDR) {
+        uint64_t h = RB.u;
+        if (UNLIKELY(h - CHBC_NULL_PAGE > mem_limit - 24))
+            FAIL(VM_E_BAD_MEM);
+        uint64_t i = index_of(RC.f);
+        if (UNLIKELY(i >= RD(u64u, mem + h)))
+            FAIL(VM_E_INDEX);
+        uint64_t ad = RD(u64u, mem + h + 16) + i * 8;
+        if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 8))
+            FAIL(VM_E_BAD_MEM);
+        RA.u = ad;
+        NEXT();
+    }
+    OP(LDI2F) {
+        uint64_t ad = RB.u + UIMM;
+        if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 8))
+            FAIL(VM_E_BAD_MEM);
+        RA.f = (double)(int64_t)RD(u64u, mem + ad);
+        NEXT();
+    }
     FALU(FFLOOR, floor(RB.f))
     FALU(FCEIL, ceil(RB.f))
     FALU(FTRUNC, trunc(RB.f))
@@ -674,6 +887,8 @@ const char *vm_status_str(vm_status s)
     case VM_E_NOMEM:            return "out of memory";
     case VM_E_MEM_TOO_SMALL:    return "memory too small for data, bss and stack";
     case VM_E_TRAP:             return "trap";
+    case VM_E_INDEX:            return "index out of range";
+    case VM_E_OOM:              return "out of memory";
     case VM_E_FOREIGN_OFF:      return "foreign calls are not enabled (run chvm with -F)";
     case VM_E_FOREIGN_FN:       return "foreign call: unknown, closed or forged function id";
     case VM_E_FOREIGN_SIG:      return "foreign call: bad signature";

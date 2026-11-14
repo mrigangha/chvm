@@ -74,7 +74,18 @@ enum chbc_fmt {
     X(I2FS, F_RR) X(U2FS, F_RR) X(FS2I, F_RR) X(FS2U, F_RR)                \
     X(FS2D, F_RR) X(D2FS, F_RR) X(PRINTFS, F_R)                            \
     X(CALLX, F_RRR)                                                        \
-    X(FMOD, F_RRR) X(FFLOOR, F_RR) X(FCEIL, F_RR) X(FTRUNC, F_RR)
+    X(FMOD, F_RRR) X(FFLOOR, F_RR) X(FCEIL, F_RR) X(FTRUNC, F_RR)          \
+    X(FMOVI, F_RI) X(FADDI, F_RRI) X(FSUBI, F_RRI) X(FMULI, F_RRI)         \
+    X(FDIVI, F_RRI) X(FMODI, F_RRI)                                        \
+    X(BFLT, F_RRJ) X(BFLE, F_RRJ) X(BFEQ, F_RRJ) X(BFNE, F_RRJ)            \
+    X(BFNLT, F_RRJ) X(BFNLE, F_RRJ)                                        \
+    X(BFLTI, F_RIJ) X(BFLEI, F_RIJ) X(BFGTI, F_RIJ) X(BFGEI, F_RIJ)        \
+    X(BFEQI, F_RIJ) X(BFNEI, F_RIJ) X(BFNLTI, F_RIJ) X(BFNLEI, F_RIJ)      \
+    X(BFNGTI, F_RIJ) X(BFNGEI, F_RIJ)                                      \
+    X(LDAX, F_RRR) X(STAX, F_RRR) X(SCHAR, F_RRR) X(LDI2F, F_LD)           \
+    X(LDG, F_RI) X(STG, F_RI)                                              \
+    X(APUSH, F_RRR) X(APOP, F_RR) X(ALLOC, F_RR) X(ALLOCI, F_RI)           \
+    X(AADDR, F_RRR)
 
 enum chbc_op {
 #define X(name, fmt) OP_##name,

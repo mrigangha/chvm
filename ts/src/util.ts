@@ -115,3 +115,19 @@ export function removeChar(s: string, c: number): string {
   parts.push(s.slice(start, s.length))
   return parts.join("")
 }
+
+// s cut at every occurrence of the single-character separator
+export function splitChar(s: string, sep: number): string[] {
+  const parts: string[] = []
+  let start = 0
+  let i = 0
+  while (i < s.length) {
+    if (s.charCodeAt(i) === sep) {
+      parts.push(s.slice(start, i))
+      start = i + 1
+    }
+    i++
+  }
+  parts.push(s.slice(start, s.length))
+  return parts
+}

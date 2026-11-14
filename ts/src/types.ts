@@ -62,6 +62,7 @@ export const INTRINSICS: Intrinsic[] = [
   intr("__memcmp", [T_NUM, T_NUM, T_NUM], T_NUM),
   intr("__memset", [T_NUM, T_NUM, T_NUM], T_VOID),
   intr("__sbrk", [T_NUM], T_NUM),
+  intr("__alloc_vm", [T_NUM], T_NUM),
   intr("__write", [T_NUM, T_NUM, T_NUM], T_NUM),
   intr("__read", [T_NUM, T_NUM, T_NUM], T_NUM),
   intr("__open", [T_NUM, T_NUM, T_NUM], T_NUM),

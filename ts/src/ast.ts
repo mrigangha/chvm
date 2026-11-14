@@ -25,6 +25,7 @@ export interface Node {
   slot: number      // storage slot or other per-node number, set by the checker
   tag: string       // extra text from the checker (function label, kind of access)
   file: string
+  reg: number       // register assigned to a local, or -1 when it lives in the frame
 }
 
 // The sentinels point at themselves. ZERO is an untyped 0 used only to build them,
@@ -37,7 +38,7 @@ NOTYPE.elem = NOTYPE
 export const NIL: Node = {
   kind: "nil", text: "", num: 0, line: 0, col: 0,
   a: ZERO, b: ZERO, c: ZERO, d: ZERO,
-  list: [], ann: NOTYPE, ty: NOTYPE, slot: 0, tag: "", file: "",
+  list: [], ann: NOTYPE, ty: NOTYPE, slot: 0, tag: "", file: "", reg: -1,
 }
 NIL.a = NIL
 NIL.b = NIL
@@ -48,7 +49,7 @@ export function mkNode(kind: string, file: string, line: number, col: number): N
   return {
     kind: kind, text: "", num: 0, line: line, col: col,
     a: NIL, b: NIL, c: NIL, d: NIL,
-    list: [], ann: NOTYPE, ty: NOTYPE, slot: 0, tag: "", file: file,
+    list: [], ann: NOTYPE, ty: NOTYPE, slot: 0, tag: "", file: file, reg: -1,
   }
 }
 

@@ -26,7 +26,9 @@ typedef enum {
     VM_E_FOREIGN_FN,
     VM_E_FOREIGN_SIG,
     VM_E_FOREIGN_PTR,
-    VM_E_FOREIGN_RET
+    VM_E_FOREIGN_RET,
+    VM_E_INDEX,
+    VM_E_OOM
 } vm_status;
 
 typedef struct {

@@ -9,26 +9,10 @@
 // Pointers are held in 'any' values and moved to numbers with __toaddr. They are never
 // interpreted as numbers by the program.
 
-let __hp: number = 0
-let __he: number = 0
-
-// Round up to a multiple of 8 and hand out zeroed memory.
+// Round up to a multiple of 8 and hand out zeroed memory. The machine keeps the heap pointer, so
+// this and the generated code for object literals draw from the same heap.
 function __alloc(n: number): number {
-  const size = Math.floor((n + 7) / 8) * 8
-  if (__hp + size > __he) {
-    let grow = 1048576
-    if (size > grow) grow = Math.floor((size + 1048575) / 1048576) * 1048576
-    const got = __sbrk(grow)
-    if (got < 0) {
-      __die("out of memory")
-    }
-    if (__he === 0) __hp = got
-    else if (got !== __he) __hp = got
-    __he = got + grow
-  }
-  const p = __hp
-  __hp = __hp + size
-  return p
+  return __alloc_vm(n)
 }
 
 function __die(msg: string): void {

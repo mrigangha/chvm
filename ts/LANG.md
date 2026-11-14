@@ -56,3 +56,14 @@ address arithmetic on `number`s, and the intrinsics convert a `number` argument 
 
 Functions take their arguments in `r1`..`r5` as the values above and return the result in `r0`.
 Generated assembly calls runtime functions the same way, so there is only one convention.
+
+## Generated code
+
+The code generator keeps the busiest locals in registers `r9`-`r13` (chosen by use count, weighted
+by loop depth) and computes expressions in `r1`-`r8`. Arguments are computed straight into the
+registers they are passed in. A top-level variable that no function uses is an ordinary local of the
+top-level code, so it lives in a register too. A function that needs no memory locals has no frame
+pointer: it saves the registers it uses with `PUSH` and `POP`.
+
+Conditions in `if`, `while` and `for` become one fused compare-and-branch. NaN is handled with
+dedicated "not less than" branches, because `!(a < b)` is not `a >= b` when either side is NaN.

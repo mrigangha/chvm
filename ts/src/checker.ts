@@ -18,6 +18,8 @@ export interface Sym {
   isConst: boolean
   slot: number      // local slot, or -1 for a global
   label: string     // global label
+  uses: number      // how often the variable is read or written, weighted by loop depth
+  inFunc: boolean   // a global that some function body uses, so it must stay in memory
 }
 
 export interface FuncInfo {
@@ -27,6 +29,9 @@ export interface FuncInfo {
   ret: Type
   label: string
   nslots: number
+  syms: Sym[]       // every local and parameter, in slot order
+  calls: number     // calls made from the body, including runtime helper calls
+  usesCalls: boolean
 }
 
 export interface Program {
@@ -36,9 +41,10 @@ export interface Program {
   top: Node[]          // top-level statements in order, run by the start function
   topSlots: number
   strings: string[]
+  start: FuncInfo      // the top-level code
 }
 
-export const NOSYM: Sym = { name: "", ty: NOTYPE, isConst: false, slot: -9, label: "" }
+export const NOSYM: Sym = { name: "", ty: NOTYPE, isConst: false, slot: -9, label: "", uses: 0, inFunc: false }
 
 interface Scope {
   names: string[]
@@ -56,6 +62,7 @@ interface Ctx {
   loopDepth: number
   inFunc: boolean
   strIndex: IndexMap
+  syms: Sym[]       // locals of the function being checked
 }
 
 function err(n: Node, msg: string): void {
@@ -116,7 +123,8 @@ function declareLocal(c: Ctx, n: Node, name: string, ty: Type, isConst: boolean)
     if (top.names[j] === name) err(n, "'" + name + "' is already declared in this block")
     j++
   }
-  const s: Sym = { name: name, ty: ty, isConst: isConst, slot: c.nslots, label: "" }
+  const s: Sym = { name: name, ty: ty, isConst: isConst, slot: c.nslots, label: "", uses: 0, inFunc: false }
+  c.syms.push(s)
   c.nslots++
   top.names.push(name)
   top.syms.push(s)
@@ -212,9 +220,21 @@ function checkExprInner(c: Ctx, n: Node, hint: Type): Type {
   return NOTYPE
 }
 
+function loopWeight(c: Ctx): number {
+  let w = 1
+  let d = c.loopDepth
+  while (d > 0 && w < 1000) {
+    w = w * 8
+    d--
+  }
+  return w
+}
+
 function checkId(c: Ctx, n: Node): Type {
   const s = lookup(c, n.text)
   if (s !== NOSYM) {
+    s.uses = s.uses + loopWeight(c)
+    if (s.slot < 0 && c.inFunc) s.inFunc = true
     if (s.ty.kind === "none") err(n, "'" + n.text + "' is used before its type is known: write the type where it is declared, as in 'let " + n.text + ": number = ...'")
     n.slot = s.slot
     n.tag = s.slot < 0 ? s.label : ""
@@ -226,6 +246,7 @@ function checkId(c: Ctx, n: Node): Type {
 }
 
 function checkArrayLit(c: Ctx, n: Node, hint: Type): Type {
+  c.cur.calls++
   let elem = NOTYPE
   if (hint.kind === "array") elem = hint.elem
   if (n.list.length === 0) {
@@ -254,6 +275,7 @@ function ifaceField(t: Type, name: string): number {
 
 function checkObjectLit(c: Ctx, n: Node, hint: Type): Type {
   if (hint.kind !== "iface") err(n, "an object literal needs a known interface type, write 'let p: Point = { ... }'")
+  c.cur.calls++
   const seen: boolean[] = []
   let i = 0
   while (i < hint.fnames.length) {
@@ -318,6 +340,7 @@ function checkBinary(c: Ctx, n: Node): Type {
       if (l.kind !== "string" && l.kind !== "number" && l.kind !== "boolean" && l.kind !== "any") err(n.a, "cannot join " + typeStr(l) + " to a string")
       if (r.kind !== "string" && r.kind !== "number" && r.kind !== "boolean" && r.kind !== "any") err(n.b, "cannot join " + typeStr(r) + " to a string")
       n.tag = "concat"
+      c.cur.calls++
       return T_STR
     }
     need(n.a, l, T_NUM, "the left side of '+'")
@@ -332,6 +355,7 @@ function checkBinary(c: Ctx, n: Node): Type {
   if (op === "<" || op === "<=" || op === ">" || op === ">=") {
     if (l.kind === "string" && r.kind === "string") {
       n.tag = "str"
+      c.cur.calls++
       return T_BOOL
     }
     need(n.a, l, T_NUM, "the left side of '" + op + "'")
@@ -343,6 +367,7 @@ function checkBinary(c: Ctx, n: Node): Type {
   if (l.kind === "void") err(n, "cannot compare void values")
   const kd = l.kind === "any" ? r.kind : l.kind
   n.tag = kd === "string" ? "str" : kd === "number" ? "num" : kd === "boolean" ? "bool" : "ref"
+  if (kd === "string") c.cur.calls++
   return T_BOOL
 }
 
@@ -358,6 +383,7 @@ function checkAssign(c: Ctx, n: Node): Type {
   if (n.text === "+=" && lt.kind === "string") {
     if (rt.kind !== "string" && rt.kind !== "number" && rt.kind !== "boolean") err(n.b, "cannot join " + typeStr(rt) + " to a string")
     n.tag = "concat"
+    c.cur.calls++
     return lt
   }
   need(n.a, lt, T_NUM, "the target of '" + n.text + "'")
@@ -383,6 +409,7 @@ function checkCall(c: Ctx, n: Node): Type {
     checkArgs(c, n, [T_STR], "Number")
     n.tag = "builtin"
     n.text = "Number"
+    c.cur.calls++
     return T_NUM
   }
   if (f.kind === "id") {
@@ -401,6 +428,7 @@ function checkCall(c: Ctx, n: Node): Type {
     }
     const fn = c.prog.funcs[fi]
     checkArgs(c, n, fn.params, "'" + f.text + "'")
+    c.cur.calls++
     n.tag = "func"
     n.text = fn.label
     n.slot = fi
@@ -440,6 +468,7 @@ function checkMethod(c: Ctx, n: Node): Type {
       }
       n.tag = "builtin"
       n.text = "console." + name
+      c.cur.calls++
       return T_VOID
     }
     if (o === "Math") {
@@ -448,6 +477,7 @@ function checkMethod(c: Ctx, n: Node): Type {
         checkArgs(c, n, unary ? [T_NUM] : [T_NUM, T_NUM], "Math." + name)
         n.tag = "builtin"
         n.text = "Math." + name
+        if (name === "min" || name === "max") c.cur.calls++
         return T_NUM
       }
       err(f, "Math." + name + " is not supported")
@@ -456,12 +486,14 @@ function checkMethod(c: Ctx, n: Node): Type {
       checkArgs(c, n, [T_NUM], "String.fromCharCode")
       n.tag = "builtin"
       n.text = "String.fromCharCode"
+      c.cur.calls++
       return T_STR
     }
     err(f, "unknown name '" + o + "'")
   }
   const t = checkExpr(c, obj, NOTYPE)
   n.tag = "method"
+  c.cur.calls++
   f.ty = t
   if (t.kind === "string") {
     if (name === "charCodeAt") { checkArgs(c, n, [T_NUM], "charCodeAt"); n.text = "__str_charCodeAt"; return T_NUM }
@@ -587,10 +619,10 @@ function checkVar(c: Ctx, n: Node): void {
 // ---- program ----
 
 function newCtx(prog: Program): Ctx {
-  const dummy: FuncInfo = { name: "", node: NIL, params: [], ret: T_VOID, label: "", nslots: 0 }
+  const dummy: FuncInfo = { name: "", node: NIL, params: [], ret: T_VOID, label: "", nslots: 0, syms: [], calls: 0, usesCalls: false }
   return {
     prog: prog, funcIndex: newMap(), ifaceIndex: newMap(), globalIndex: newMap(),
-    scopes: [], cur: dummy, nslots: 0, loopDepth: 0, inFunc: false, strIndex: newMap(),
+    scopes: [], cur: dummy, nslots: 0, loopDepth: 0, inFunc: false, strIndex: newMap(), syms: [],
   }
 }
 
@@ -600,7 +632,8 @@ function labelFor(file: string, name: string): string {
 }
 
 export function check(files: Node[]): Program {
-  const prog: Program = { funcs: [], globals: [], ifaces: [], top: [], topSlots: 0, strings: [] }
+  const dummyStart: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false }
+  const prog: Program = { funcs: [], globals: [], ifaces: [], top: [], topSlots: 0, strings: [], start: dummyStart }
   const c = newCtx(prog)
 
   // pass 1: interfaces, then function signatures, then globals
@@ -664,7 +697,7 @@ export function check(files: Node[]): Program {
           params.push(pt)
           j++
         }
-        const info: FuncInfo = { name: it.text, node: it, params: params, ret: resolveType(c, it.ann, it), label: labelFor(it.file, it.text), nslots: 0 }
+        const info: FuncInfo = { name: it.text, node: it, params: params, ret: resolveType(c, it.ann, it), label: labelFor(it.file, it.text), nslots: 0, syms: [], calls: 0, usesCalls: false }
         prog.funcs.push(info)
         mapSet(c.funcIndex, it.text, prog.funcs.length - 1)
       }
@@ -692,6 +725,7 @@ export function check(files: Node[]): Program {
     c.cur = info
     c.inFunc = true
     c.nslots = 0
+    c.syms = []
     c.scopes = []
     pushScope(c)
     let j = 0
@@ -706,6 +740,8 @@ export function check(files: Node[]): Program {
     popScope(c)
     info.nslots = c.nslots
     info.node.slot = c.nslots
+    info.syms = c.syms
+    info.usesCalls = info.calls > 0
     k++
   }
 
@@ -713,8 +749,9 @@ export function check(files: Node[]): Program {
   c.inFunc = false
   c.nslots = 0
   c.scopes = []
-  const startInfo: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0 }
+  const startInfo: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false }
   c.cur = startInfo
+  c.syms = []
   pushScope(c)
   fi = 0
   while (fi < files.length) {
@@ -735,6 +772,10 @@ export function check(files: Node[]): Program {
   }
   popScope(c)
   prog.topSlots = c.nslots
+  startInfo.syms = c.syms
+  startInfo.nslots = c.nslots
+  startInfo.usesCalls = true
+  prog.start = startInfo
   return prog
 }
 
@@ -756,7 +797,7 @@ function declareGlobal(c: Ctx, n: Node): void {
   if (n.ann.kind !== "none") ty = resolveType(c, n.ann, n)
   else ty = literalType(n.a)
   if (mapFind(c.globalIndex, n.text) >= 0) err(n, "'" + n.text + "' is already declared")
-  const g: Sym = { name: n.text, ty: ty, isConst: n.num === 1, slot: -1, label: "g_" + n.text }
+  const g: Sym = { name: n.text, ty: ty, isConst: n.num === 1, slot: -1, label: "g_" + n.text, uses: 0, inFunc: false }
   c.prog.globals.push(g)
   mapSet(c.globalIndex, n.text, c.prog.globals.length - 1)
   n.ty = ty
@@ -772,9 +813,17 @@ function checkTopVar(c: Ctx, n: Node): void {
     if (t.kind === "any") err(n, "'" + n.text + "' needs a type")
     g.ty = t
     n.ty = t
-    return
+  } else if (!assignable(g.ty, t)) {
+    err(n.a, "cannot assign " + typeStr(t) + " to '" + n.text + "' of type " + typeStr(g.ty))
   }
-  if (!assignable(g.ty, t)) err(n.a, "cannot assign " + typeStr(t) + " to '" + n.text + "' of type " + typeStr(g.ty))
+  // No function body uses this variable, so it is an ordinary local of the top-level code and can
+  // live in a register. Function bodies were all checked before this point, so inFunc is final.
+  // The one thing this changes is a use before the declaration, which JavaScript rejects anyway.
+  if (!g.inFunc) {
+    const s = declareLocal(c, n, n.text, g.ty, g.isConst)
+    n.slot = s.slot
+    n.tag = ""
+  }
 }
 
 function alwaysReturns(n: Node): boolean {
