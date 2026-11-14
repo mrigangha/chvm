@@ -15,6 +15,22 @@ const vm_config vm_default_config = {
     .mem_bytes = 64u << 20,
 };
 
+/*
+ * Fixed-size loads and stores on guest memory. Distro compilers turn memcpy into a
+ * __memcpy_chk library call under _FORTIFY_SOURCE, which made every store about 3x slower.
+ * A may_alias type with a plain assignment always compiles to a single instruction.
+ */
+typedef uint16_t __attribute__((may_alias, aligned(1))) u16u;
+typedef uint32_t __attribute__((may_alias, aligned(1))) u32u;
+typedef uint64_t __attribute__((may_alias, aligned(1))) u64u;
+typedef int8_t   __attribute__((may_alias)) i8a;
+typedef int16_t  __attribute__((may_alias, aligned(1))) i16u;
+typedef int32_t  __attribute__((may_alias, aligned(1))) i32u;
+typedef float    __attribute__((may_alias, aligned(1))) f32u;
+
+#define RD(type, p) (*(const type *)(p))
+#define WR(type, p, v) (*(type *)(p) = (v))
+
 /* Space kept free between the heap break and the stack pointer. */
 #define VM_STACK_RESERVE 65536u
 
@@ -81,9 +97,7 @@ const vm_config vm_default_config = {
         uint64_t ad = RB.u + UIMM;                      \
         if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - sizeof(type))) \
             FAIL(VM_E_BAD_MEM);                         \
-        type v;                                         \
-        memcpy(&v, mem + ad, sizeof v);                 \
-        RA.field = v;                                   \
+        RA.field = RD(type, mem + ad);                  \
         NEXT();                                         \
     }
 
@@ -92,8 +106,7 @@ const vm_config vm_default_config = {
         uint64_t ad = RB.u + UIMM;                      \
         if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - sizeof(type))) \
             FAIL(VM_E_BAD_MEM);                         \
-        type v = (type)RC.u;                            \
-        memcpy(mem + ad, &v, sizeof v);                 \
+        WR(type, mem + ad, (type)RC.u);                 \
         NEXT();                                         \
     }
 
@@ -324,32 +337,31 @@ dispatch:
     ALU(ZEXT32, (uint32_t)RB.u)
 
     LDOP(LD8, uint8_t, u)
-    LDOP(LD16, uint16_t, u)
-    LDOP(LD32, uint32_t, u)
-    LDOP(LD64, uint64_t, u)
-    LDOP(LD8S, int8_t, i)
-    LDOP(LD16S, int16_t, i)
-    LDOP(LD32S, int32_t, i)
+    LDOP(LD16, u16u, u)
+    LDOP(LD32, u32u, u)
+    LDOP(LD64, u64u, u)
+    LDOP(LD8S, i8a, i)
+    LDOP(LD16S, i16u, i)
+    LDOP(LD32S, i32u, i)
     STOP(ST8, uint8_t)
-    STOP(ST16, uint16_t)
-    STOP(ST32, uint32_t)
-    STOP(ST64, uint64_t)
+    STOP(ST16, u16u)
+    STOP(ST32, u32u)
+    STOP(ST64, u64u)
 
     OP(PUSH) {
         uint64_t v = RA.u;
         uint64_t nsp = SP.u - 8;
         if (UNLIKELY(nsp < brk || nsp > mem_size - 8))
             FAIL(VM_E_STACK_OVERFLOW);
-        memcpy(mem + nsp, &v, 8);
+        WR(u64u, mem + nsp, v);
         SP.u = nsp;
         NEXT();
     }
     OP(POP) {
         uint64_t sp = SP.u;
-        uint64_t v;
         if (UNLIKELY(sp - CHBC_NULL_PAGE > mem_limit - 8))
             FAIL(VM_E_STACK_UNDERFLOW);
-        memcpy(&v, mem + sp, 8);
+        const uint64_t v = RD(u64u, mem + sp);
         SP.u = sp + 8;
         RA.u = v;
         NEXT();
@@ -379,7 +391,7 @@ dispatch:
         if (UNLIKELY(nsp < brk || nsp > mem_size - 8))
             FAIL(VM_E_STACK_OVERFLOW);
         uint64_t ra = (uint64_t)(pc + 1 - code) * CHBC_INSN_SIZE;
-        memcpy(mem + nsp, &ra, 8);
+        WR(u64u, mem + nsp, ra);
         SP.u = nsp;
         JUMP();
     }
@@ -391,17 +403,16 @@ dispatch:
         if (UNLIKELY(nsp < brk || nsp > mem_size - 8))
             FAIL(VM_E_STACK_OVERFLOW);
         uint64_t ra = (uint64_t)(pc + 1 - code) * CHBC_INSN_SIZE;
-        memcpy(mem + nsp, &ra, 8);
+        WR(u64u, mem + nsp, ra);
         SP.u = nsp;
         pc = code + (t >> 3);
         DISPATCH();
     }
     OP(RET) {
         uint64_t sp = SP.u;
-        uint64_t ra;
         if (UNLIKELY(sp - CHBC_NULL_PAGE > mem_limit - 8))
             FAIL(VM_E_STACK_UNDERFLOW);
-        memcpy(&ra, mem + sp, 8);
+        const uint64_t ra = RD(u64u, mem + sp);
         if (UNLIKELY(ra >= code_size || (ra & 7)))
             FAIL(VM_E_BAD_JUMP);
         SP.u = sp + 8;
@@ -621,13 +632,12 @@ dispatch:
     ALUS(F2I, f2i(RB.f))
     ALU(F2U, f2u(RB.f))
     FALU(FROUND32, (double)(float)RB.f)
-    LDOP(LDF32, float, f)
+    LDOP(LDF32, f32u, f)
     OP(STF32) {
         uint64_t ad = RB.u + UIMM;
         if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - sizeof(float)))
             FAIL(VM_E_BAD_MEM);
-        float v = (float)RC.f;
-        memcpy(mem + ad, &v, sizeof v);
+        WR(f32u, mem + ad, (float)RC.f);
         NEXT();
     }
     OP(PRINTF)
