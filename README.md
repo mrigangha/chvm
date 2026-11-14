@@ -24,6 +24,10 @@ build/chvm -F prog.chbc   # allow calls into native .so libraries (needs libffi)
 build/chdis fib.chbc      # disassemble
 ```
 
+## chts, a TypeScript subset
+
+`ts/` holds a compiler for a small TypeScript subset, written in that subset. It builds itself on chvm. See `ts/README.md`.
+
 ## Stages
 
 1. Bytecode interpreter (done).

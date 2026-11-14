@@ -73,7 +73,8 @@ enum chbc_fmt {
     X(FEQS, F_RRR) X(FNES, F_RRR) X(FLTS, F_RRR) X(FLES, F_RRR)            \
     X(I2FS, F_RR) X(U2FS, F_RR) X(FS2I, F_RR) X(FS2U, F_RR)                \
     X(FS2D, F_RR) X(D2FS, F_RR) X(PRINTFS, F_R)                            \
-    X(CALLX, F_RRR)
+    X(CALLX, F_RRR)                                                        \
+    X(FMOD, F_RRR) X(FFLOOR, F_RR) X(FCEIL, F_RR) X(FTRUNC, F_RR)
 
 enum chbc_op {
 #define X(name, fmt) OP_##name,

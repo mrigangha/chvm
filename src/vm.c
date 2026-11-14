@@ -4,6 +4,7 @@
 #include "sys.h"
 
 #include <inttypes.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -598,6 +599,11 @@ dispatch:
             FAIL(VM_E_FOREIGN_RET);
         }
     }
+
+    FALU(FMOD, fmod(RB.f, RC.f))
+    FALU(FFLOOR, floor(RB.f))
+    FALU(FCEIL, ceil(RB.f))
+    FALU(FTRUNC, trunc(RB.f))
 
     FALU(FADD, RB.f + RC.f)
     FALU(FSUB, RB.f - RC.f)

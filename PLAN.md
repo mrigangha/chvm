@@ -50,6 +50,7 @@ offset  size  field
 | 4g | Debug info and tools | line table, function names, `chdis` disassembler, assembler hash table (no label limit), no line length limit | done |
 | 4h | Extras | `MULH`/`MULHU`, `SEL`, `CLZ`/`CTZ`/`POPCNT`, rotates, byte swaps, single-precision float ops | done |
 | 4i | Native calls | `CALLX`, `SYS_DLOPEN/DLSYM/DLCLOSE`, libffi, `-F` flag, optional at build time | done |
+| 6 | Language `chts` | a TypeScript subset compiler written in itself (`ts/`), compiled by node first, then by itself | done |
 | 5 | Optimiser | peephole, constant folding, dead code, superinstructions, as a `.chbc` to `.chbc` pass | todo |
 | 6 | Extras | float opcodes, disassembler, fuzzing the loader and verifier | todo |
 
