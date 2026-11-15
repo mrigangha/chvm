@@ -13,7 +13,8 @@
 #define CHBC_VERSION     4
 #define CHBC_HEADER_SIZE 32
 #define CHBC_INSN_SIZE   8
-#define CHBC_NREGS       16
+/* r0..r31. Instructions already carry a full byte per register, so programs that use only r0..r15 are unchanged. */
+#define CHBC_NREGS       32
 #define CHBC_REG_FP      14
 #define CHBC_REG_SP      15
 #define CHBC_MAX_FILE    (256u << 20)

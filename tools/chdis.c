@@ -23,8 +23,8 @@ static const char *regname(unsigned r)
         return "fp";
     if (r == CHBC_REG_SP)
         return "sp";
-    snprintf(names[r & 15], sizeof names[0], "r%u", r & 15);
-    return names[r & 15];
+    snprintf(names[r % CHBC_NREGS], sizeof names[0], "r%u", r % CHBC_NREGS);
+    return names[r % CHBC_NREGS];
 }
 
 static void print_mem(const chbc_insn *in)

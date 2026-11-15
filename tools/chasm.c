@@ -13,7 +13,7 @@
  *   Predefined constants: SYS_WRITE, SYS_READ, ... (see src/syscalls.h), O_RDONLY,
  *   O_CREAT, SEEK_SET, FD_STDOUT, NULL_PAGE (4096), DATA_BASE (4096), and so on.
  *   SYSCALL SYS_WRITE      system call: args r1..r5, result r0
- *   OP operands            registers: r0..r15, fp (r14), sp (r15)
+ *   OP operands            registers: r0..r31, fp (r14), sp (r15)
  *   LD64 r1, [r2+8]        load:  r1 = mem[r2 + 8]
  *   ST64 [r2-8], r1        store: mem[r2 - 8] = r1
  *
@@ -329,7 +329,7 @@ static int reg_tok(const char *t)
 {
     char c0 = (char)(t[0] | 0x20);   /* lower-case a letter, harmless for anything else here */
     if (c0 == 'r') {
-        /* r0 .. r15, with no leading zero: "r5", "r15" */
+        /* r0 .. r31, with no leading zero: "r5", "r15", "r31" */
         unsigned d1 = (unsigned char)t[1] - '0';
         if (d1 > 9)
             return -1;

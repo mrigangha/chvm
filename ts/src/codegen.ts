@@ -50,8 +50,41 @@ interface Gen {
 const FIRST_TEMP = 1
 const MAX_TEMP = 7
 const TOP_SCRATCH = 8
+// Callee-saved registers: r9..r13, then r16..r31. r14 is fp and r15 is sp, so they are skipped.
+// A saved register is numbered by its position 0..NSAVED-1 and turned into a register by savedReg.
 const FIRST_SAVED = 9
-const LAST_SAVED = 13
+const NSAVED = 21
+
+function savedReg(i: number): number {
+  return i < 5 ? FIRST_SAVED + i : 16 + (i - 5)
+}
+
+// The position of a saved register, or -1 if r is not one.
+function savedIndex(r: number): number {
+  if (r >= 9 && r <= 13) return r - 9
+  if (r >= 16 && r <= 31) return r - 16 + 5
+  return -1
+}
+
+function falseList(n: number): boolean[] {
+  const out: boolean[] = []
+  let i = 0
+  while (i < n) {
+    out.push(false)
+    i++
+  }
+  return out
+}
+
+function zeroList(n: number): number[] {
+  const out: number[] = []
+  let i = 0
+  while (i < n) {
+    out.push(0)
+    i++
+  }
+  return out
+}
 
 function emit(g: Gen, s: string): void {
   g.out.push("    " + s)
@@ -247,7 +280,7 @@ function genUpdateEffect(g: Gen, n: Node): void {
 // operand has been read, so `out` may be a variable's own register even when n reads that variable.
 // All temporaries stay in r1..r8, so no other variable's register is touched.
 function genInto(g: Gen, n: Node, out: number): void {
-  if (out >= FIRST_SAVED) {
+  if (savedIndex(out) >= 0) {
     if (n.kind === "num") {
       if (isSmallInt(n.num)) emit(g, "FMOVI " + rn(out) + ", " + n.num)
       else emit(g, "LIF " + rn(out) + ", " + numLit(n.num))
@@ -423,23 +456,23 @@ function hasCall(n: Node): boolean {
 
 // Saved registers that no variable uses are free to hold a value across a call. This hands one out.
 function parkReg(g: Gen): number {
-  let r = LAST_SAVED
-  while (r >= FIRST_SAVED) {
-    if (g.parked[r - FIRST_SAVED] === 0 && !g.usedMask[r - FIRST_SAVED]) {
-      g.parked[r - FIRST_SAVED] = 1
-      if (!g.extraUsed[r - FIRST_SAVED]) {
-        g.extraUsed[r - FIRST_SAVED] = true
-        g.extraRegs.push(r)
+  let i = NSAVED - 1
+  while (i >= 0) {
+    if (g.parked[i] === 0 && !g.usedMask[i]) {
+      g.parked[i] = 1
+      if (!g.extraUsed[i]) {
+        g.extraUsed[i] = true
+        g.extraRegs.push(savedReg(i))
       }
-      return r
+      return savedReg(i)
     }
-    r--
+    i--
   }
   return -1
 }
 
 function releaseReg(g: Gen, r: number): void {
-  g.parked[r - FIRST_SAVED] = 0
+  g.parked[savedIndex(r)] = 0
 }
 
 // Two operands in registers (left, right). The registers are temporaries or a local's own register.
@@ -1336,14 +1369,19 @@ function assignHomes(g: Gen, f: FuncInfo, nparams: number): void {
   // are all dead before it is declared or declared after it ends, so variables in separate blocks
   // share a register. The checker records each variable's life as the ticks lo to hi.
   g.usedRegs = []
-  const occupants: Sym[][] = [[], [], [], [], []]
+  const occupants: Sym[][] = []
+  let oi = 0
+  while (oi < NSAVED) {
+    occupants.push([])
+    oi++
+  }
   let k = 0
   while (k < order.length) {
     const s = syms[order[k]]
     if (s.uses >= 2) {
       let r = 0
       let placed = false
-      while (r < 5 && !placed) {
+      while (r < NSAVED && !placed) {
         let clash = false
         let o = 0
         while (o < occupants[r].length) {
@@ -1353,7 +1391,7 @@ function assignHomes(g: Gen, f: FuncInfo, nparams: number): void {
         }
         if (!clash) {
           occupants[r].push(s)
-          g.homes[s.slot].reg = FIRST_SAVED + r
+          g.homes[s.slot].reg = savedReg(r)
           placed = true
         }
         r++
@@ -1362,8 +1400,8 @@ function assignHomes(g: Gen, f: FuncInfo, nparams: number): void {
     k++
   }
   let r2 = 0
-  while (r2 < 5) {
-    if (occupants[r2].length > 0) g.usedRegs.push(FIRST_SAVED + r2)
+  while (r2 < NSAVED) {
+    if (occupants[r2].length > 0) g.usedRegs.push(savedReg(r2))
     r2++
   }
   // memory locals follow the saved registers in the frame
@@ -1394,13 +1432,13 @@ function genFunc(g: Gen, f: FuncInfo): void {
 function genFuncRaw(g: Gen, f: FuncInfo): void {
   g.fname = f.label
   assignHomes(g, f, f.params.length)
-  g.parked = [0, 0, 0, 0, 0]
-  g.extraUsed = [false, false, false, false, false]
+  g.parked = zeroList(NSAVED)
+  g.extraUsed = falseList(NSAVED)
   g.extraRegs = []
-  g.usedMask = [false, false, false, false, false]
+  g.usedMask = falseList(NSAVED)
   let i = 0
   while (i < g.usedRegs.length) {
-    g.usedMask[g.usedRegs[i] - FIRST_SAVED] = true
+    g.usedMask[savedIndex(g.usedRegs[i])] = true
     i++
   }
   let memLocals = 0
@@ -1594,7 +1632,7 @@ export function generate(prog: Program, entryFile: string): string {
   const g: Gen = {
     out: [], label: 0, loops: [], fname: "", prog: prog, file: entryFile, line: 0,
     homes: [], usedRegs: [], depth: 0, hasFrame: false, isStart: false,
-    hoisted: [], hoistReg: [], liveFloor: 1, parked: [0, 0, 0, 0, 0], usedMask: [false, false, false, false, false], extraUsed: [false, false, false, false, false], extraRegs: [],
+    hoisted: [], hoistReg: [], liveFloor: 1, parked: [], usedMask: [], extraUsed: [], extraRegs: [],
   }
   g.out.push(".entry __start")
   g.out.push(".data")
@@ -1636,10 +1674,10 @@ export function generate(prog: Program, entryFile: string): string {
   g.isStart = true
   g.fname = "__start"
   assignHomes(g, st, 0)
-  g.usedMask = [false, false, false, false, false]
+  g.usedMask = falseList(NSAVED)
   i = 0
   while (i < g.usedRegs.length) {
-    g.usedMask[g.usedRegs[i] - FIRST_SAVED] = true
+    g.usedMask[savedIndex(g.usedRegs[i])] = true
     i++
   }
   g.liveFloor = FIRST_TEMP
