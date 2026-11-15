@@ -20,6 +20,8 @@ export interface Sym {
   label: string     // global label
   uses: number      // how often the variable is read or written, weighted by loop depth
   inFunc: boolean   // a global that some function body uses, so it must stay in memory
+  lo: number        // the variable is alive from tick lo (its declaration) to tick hi (the end of its block)
+  hi: number
 }
 
 export interface FuncInfo {
@@ -44,7 +46,7 @@ export interface Program {
   start: FuncInfo      // the top-level code
 }
 
-export const NOSYM: Sym = { name: "", ty: NOTYPE, isConst: false, slot: -9, label: "", uses: 0, inFunc: false }
+export const NOSYM: Sym = { name: "", ty: NOTYPE, isConst: false, slot: -9, label: "", uses: 0, inFunc: false, lo: 0, hi: 0 }
 
 interface Scope {
   names: string[]
@@ -63,6 +65,7 @@ interface Ctx {
   inFunc: boolean
   strIndex: IndexMap
   syms: Sym[]       // locals of the function being checked
+  tick: number      // counts declarations and block ends, to order variable lifetimes
 }
 
 function err(n: Node, msg: string): void {
@@ -96,7 +99,15 @@ function pushScope(c: Ctx): void {
   c.scopes.push({ names: [], syms: [] })
 }
 
+// Leaving a block ends the life of everything declared in it.
 function popScope(c: Ctx): void {
+  const s = c.scopes[c.scopes.length - 1]
+  let i = 0
+  while (i < s.syms.length) {
+    s.syms[i].hi = c.tick
+    i++
+  }
+  c.tick++
   c.scopes.pop()
 }
 
@@ -123,7 +134,8 @@ function declareLocal(c: Ctx, n: Node, name: string, ty: Type, isConst: boolean)
     if (top.names[j] === name) err(n, "'" + name + "' is already declared in this block")
     j++
   }
-  const s: Sym = { name: name, ty: ty, isConst: isConst, slot: c.nslots, label: "", uses: 0, inFunc: false }
+  const s: Sym = { name: name, ty: ty, isConst: isConst, slot: c.nslots, label: "", uses: 0, inFunc: false, lo: c.tick, hi: 0 }
+  c.tick++
   c.syms.push(s)
   c.nslots++
   top.names.push(name)
@@ -629,7 +641,7 @@ function newCtx(prog: Program): Ctx {
   const dummy: FuncInfo = { name: "", node: NIL, params: [], ret: T_VOID, label: "", nslots: 0, syms: [], calls: 0, usesCalls: false }
   return {
     prog: prog, funcIndex: newMap(), ifaceIndex: newMap(), globalIndex: newMap(),
-    scopes: [], cur: dummy, nslots: 0, loopDepth: 0, inFunc: false, strIndex: newMap(), syms: [],
+    scopes: [], cur: dummy, nslots: 0, loopDepth: 0, inFunc: false, strIndex: newMap(), syms: [], tick: 0,
   }
 }
 
@@ -804,7 +816,7 @@ function declareGlobal(c: Ctx, n: Node): void {
   if (n.ann.kind !== "none") ty = resolveType(c, n.ann, n)
   else ty = literalType(n.a)
   if (mapFind(c.globalIndex, n.text) >= 0) err(n, "'" + n.text + "' is already declared")
-  const g: Sym = { name: n.text, ty: ty, isConst: n.num === 1, slot: -1, label: "g_" + n.text, uses: 0, inFunc: false }
+  const g: Sym = { name: n.text, ty: ty, isConst: n.num === 1, slot: -1, label: "g_" + n.text, uses: 0, inFunc: false, lo: 0, hi: 0 }
   c.prog.globals.push(g)
   mapSet(c.globalIndex, n.text, c.prog.globals.length - 1)
   n.ty = ty

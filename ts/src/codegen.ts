@@ -1196,17 +1196,39 @@ function assignHomes(g: Gen, f: FuncInfo, nparams: number): void {
     g.homes.push({ reg: -1, off: 0 })
     i++
   }
+  // Greedy, most used first. A variable takes the lowest saved register whose current occupants
+  // are all dead before it is declared or declared after it ends, so variables in separate blocks
+  // share a register. The checker records each variable's life as the ticks lo to hi.
   g.usedRegs = []
-  let next = FIRST_SAVED
+  const occupants: Sym[][] = [[], [], [], [], []]
   let k = 0
   while (k < order.length) {
     const s = syms[order[k]]
-    if (s.uses >= 2 && next <= LAST_SAVED) {
-      g.homes[s.slot].reg = next
-      g.usedRegs.push(next)
-      next++
+    if (s.uses >= 2) {
+      let r = 0
+      let placed = false
+      while (r < 5 && !placed) {
+        let clash = false
+        let o = 0
+        while (o < occupants[r].length) {
+          const t = occupants[r][o]
+          if (s.lo <= t.hi && t.lo <= s.hi) clash = true
+          o++
+        }
+        if (!clash) {
+          occupants[r].push(s)
+          g.homes[s.slot].reg = FIRST_SAVED + r
+          placed = true
+        }
+        r++
+      }
     }
     k++
+  }
+  let r2 = 0
+  while (r2 < 5) {
+    if (occupants[r2].length > 0) g.usedRegs.push(FIRST_SAVED + r2)
+    r2++
   }
   // memory locals follow the saved registers in the frame
   let off = -8 * g.usedRegs.length
@@ -1270,9 +1292,20 @@ function genFuncRaw(g: Gen, f: FuncInfo): void {
     else emit(g, "ST64 " + memOff(h) + ", " + rn(i + 1))
     i++
   }
-  genStmt(g, f.node.a)
+  const early = earlyReturn(f)
+  if (early !== NIL) {
+    // the first statement runs before the prologue, so the body starts at the second one
+    let s = 1
+    while (s < f.node.a.list.length) {
+      genStmt(g, f.node.a.list[s])
+      s++
+    }
+  } else {
+    genStmt(g, f.node.a)
+  }
   const body = g.out
   g.out = head
+  if (early !== NIL) genEarlyReturn(g, f, early)
 
   // saved registers: those that hold variables, then those used only for parking
   const saved: number[] = []
@@ -1332,6 +1365,71 @@ function genFuncRaw(g: Gen, f: FuncInfo): void {
   }
   emit(g, "RET")
   g.out.push(".endfunc")
+}
+
+// ---- early return before the prologue ----
+//
+// A function that starts with `if (test) return value` often takes that path most of the time
+// (the base case of a recursion, a guard). When test and value read nothing but parameters, they can
+// run before the prologue, so that path saves and restores no registers at all. The parameters are
+// still in r1..r5 then. Everything is computed in r6 and above, which the caller does not expect kept.
+
+// The expression uses only parameters, constants, arithmetic, comparisons and && || ! -.
+function simpleParamExpr(n: Node, nparams: number): boolean {
+  const k = n.kind
+  if (k === "num" || k === "true" || k === "false") return true
+  if (k === "id") return n.slot >= 0 && n.slot < nparams
+  if (k === "unary") return (n.text === "-" || n.text === "!") && simpleParamExpr(n.a, nparams)
+  if (k === "binary") return n.tag !== "concat" && n.tag !== "str" && simpleParamExpr(n.a, nparams) && simpleParamExpr(n.b, nparams)
+  if (k === "logical") return simpleParamExpr(n.a, nparams) && simpleParamExpr(n.b, nparams)
+  return false
+}
+
+// The statement `if (test) return value` or `if (test) { return value }`, with no else.
+// Returns the return statement, or NIL when the function does not start that way.
+function earlyReturn(f: FuncInfo): Node {
+  const body = f.node.a
+  if (body.kind !== "block" || body.list.length === 0) return NIL
+  const first = body.list[0]
+  if (first.kind !== "if" || first.c !== NIL) return NIL
+  let ret = first.b
+  if (ret.kind === "block") {
+    if (ret.list.length !== 1) return NIL
+    ret = ret.list[0]
+  }
+  if (ret.kind !== "return") return NIL
+  const np = f.params.length
+  if (np === 0 || np > 5) return NIL
+  if (!simpleParamExpr(first.a, np)) return NIL
+  if (ret.a !== NIL && !simpleParamExpr(ret.a, np)) return NIL
+  return ret
+}
+
+function genEarlyReturn(g: Gen, f: FuncInfo, ret: Node): void {
+  const first = f.node.a.list[0]
+  // for this stretch every parameter lives in the register it arrived in
+  const saved: Home[] = []
+  let i = 0
+  while (i < f.params.length) {
+    const slot = f.node.list[i].slot
+    saved.push(g.homes[slot])
+    g.homes[slot] = { reg: i + 1, off: 0 }
+    i++
+  }
+  const skip = lab(g, "full")
+  setLine(g, first)
+  genJumpIfFalse(g, first.a, skip, 6)
+  if (ret.a !== NIL) {
+    genTo(g, ret.a, 6)
+    emit(g, "MOV r0, r6")
+  }
+  emit(g, "RET")
+  place(g, skip)
+  i = 0
+  while (i < f.params.length) {
+    g.homes[f.node.list[i].slot] = saved[i]
+    i++
+  }
 }
 
 // Memory locals were given offsets assuming only the variable registers are saved. When parking
