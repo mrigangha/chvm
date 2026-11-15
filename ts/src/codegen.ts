@@ -229,15 +229,36 @@ function genUpdateEffect(g: Gen, n: Node): void {
   emit(g, "ST64 [r1], r2")
 }
 
+// Evaluate n and leave the value in register `out`. Only the last instruction writes `out`, after every
+// operand has been read, so `out` may be a variable's own register even when n reads that variable.
+// All temporaries stay in r1..r8, so no other variable's register is touched.
+function genInto(g: Gen, n: Node, out: number): void {
+  if (out >= FIRST_SAVED) {
+    if (n.kind === "num") {
+      if (isSmallInt(n.num)) emit(g, "FMOVI " + rn(out) + ", " + n.num)
+      else emit(g, "LIF " + rn(out) + ", " + numLit(n.num))
+      return
+    }
+    if (n.kind === "true" || n.kind === "false") {
+      emit(g, "LI " + rn(out) + ", " + (n.kind === "true" ? 1 : 0))
+      return
+    }
+    if (n.kind === "binary" && n.tag !== "concat" && n.tag !== "str" && !hasCall(n)) {
+      genBinaryOut(g, n, FIRST_TEMP, out)
+      return
+    }
+  }
+  genTo(g, n, FIRST_TEMP)
+  emit(g, "MOV " + rn(out) + ", r1")
+}
+
 function genAssignEffect(g: Gen, n: Node): void {
   const target = n.a
   if (target.kind === "id" && n.tag !== "concat") {
     const home = target.slot >= 0 ? homeOf(g, target.slot).reg : -1
     if (n.text === "=") {
-      // compute straight into the variable's register
       if (home >= 0) {
-        genTo(g, n.b, home === 0 ? FIRST_TEMP : FIRST_TEMP)
-        emit(g, "MOV " + rn(home) + ", r1")
+        genInto(g, n.b, home)
       } else {
         genTo(g, n.b, FIRST_TEMP)
         storeVar(g, target, FIRST_TEMP)
@@ -370,6 +391,11 @@ function floatOp(op: string): string {
 }
 
 function genBinary(g: Gen, n: Node, dst: number): void {
+  genBinaryOut(g, n, dst, dst)
+}
+
+// Like genBinary, but the final instruction writes register `out` and temporaries start at `dst`.
+function genBinaryOut(g: Gen, n: Node, dst: number, out: number): void {
   const op = n.text
   if (n.tag === "concat") {
     genConcat(g, n.a, n.b, dst)
@@ -396,30 +422,38 @@ function genBinary(g: Gen, n: Node, dst: number): void {
   }
   const fop = floatOp(op)
   if (fop !== "") {
-    // right operand a small whole number: use the immediate form
-    if (n.b.kind === "num" && isSmallInt(n.b.num) && (op !== "-" || true)) {
-      const ra = operand(g, n.a, dst)
+    // a small whole number on the right: use the immediate form. + and * give the same answer in
+    // either order, so a constant on the left is moved to the right. The constant has no side effects,
+    // so the other operand is still evaluated exactly once and in the same place.
+    let left = n.a
+    let right = n.b
+    if ((op === "+" || op === "*") && left.kind === "num" && isSmallInt(left.num) && !(right.kind === "num")) {
+      left = n.b
+      right = n.a
+    }
+    if (right.kind === "num" && isSmallInt(right.num)) {
+      const ra = operand(g, left, dst)
       const imm = op === "+" ? "FADDI" : op === "-" ? "FSUBI" : op === "*" ? "FMULI" : op === "/" ? "FDIVI" : "FMODI"
-      emit(g, imm + " " + rn(dst) + ", " + rn(ra) + ", " + n.b.num)
+      emit(g, imm + " " + rn(out) + ", " + rn(ra) + ", " + right.num)
       return
     }
     const rs = genPair(g, n.a, n.b, dst)
-    emit(g, fop + " " + rn(dst) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
+    emit(g, fop + " " + rn(out) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
     return
   }
   if (op === "<" || op === "<=" || op === ">" || op === ">=") {
     const rs = genPair(g, n.a, n.b, dst)
-    if (op === "<") emit(g, "FLT " + rn(dst) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
-    else if (op === "<=") emit(g, "FLE " + rn(dst) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
-    else if (op === ">") emit(g, "FLT " + rn(dst) + ", " + rn(rs[1]) + ", " + rn(rs[0]))
-    else emit(g, "FLE " + rn(dst) + ", " + rn(rs[1]) + ", " + rn(rs[0]))
+    if (op === "<") emit(g, "FLT " + rn(out) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
+    else if (op === "<=") emit(g, "FLE " + rn(out) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
+    else if (op === ">") emit(g, "FLT " + rn(out) + ", " + rn(rs[1]) + ", " + rn(rs[0]))
+    else emit(g, "FLE " + rn(out) + ", " + rn(rs[1]) + ", " + rn(rs[0]))
     return
   }
   // equality
   const rs = genPair(g, n.a, n.b, dst)
   const neg = op === "!==" || op === "!="
-  if (n.tag === "num") emit(g, (neg ? "FNE " : "FEQ ") + rn(dst) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
-  else emit(g, (neg ? "NE " : "EQ ") + rn(dst) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
+  if (n.tag === "num") emit(g, (neg ? "FNE " : "FEQ ") + rn(out) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
+  else emit(g, (neg ? "NE " : "EQ ") + rn(out) + ", " + rn(rs[0]) + ", " + rn(rs[1]))
 }
 
 // the value in register r, of type t, becomes a string in r
@@ -1063,9 +1097,12 @@ function genStmt(g: Gen, n: Node): void {
   } else if (k === "var") {
     if (n.slot >= 0) {
       const h = homeOf(g, n.slot)
-      if (h.reg >= 0) genTo(g, n.a, h.reg === 0 ? FIRST_TEMP : FIRST_TEMP)
-      else genTo(g, n.a, FIRST_TEMP)
-      storeLocal(g, n.slot, FIRST_TEMP)
+      if (h.reg >= 0) {
+        genInto(g, n.a, h.reg)
+      } else {
+        genTo(g, n.a, FIRST_TEMP)
+        storeLocal(g, n.slot, FIRST_TEMP)
+      }
     } else {
       genTo(g, n.a, FIRST_TEMP)
       emit(g, "STG r1, " + n.tag)
@@ -1086,13 +1123,18 @@ function genStmt(g: Gen, n: Node): void {
       place(g, no)
     }
   } else if (k === "while") {
+    // Inverted: test once before the loop, then run the body and test again at the bottom, so an
+    // iteration ends in one conditional branch back to the top instead of a branch and a jump.
     const top = lab(g, "while")
+    const cont = lab(g, "wcont")
     const end = lab(g, "wend")
-    g.loops.push(top + " " + end)
-    place(g, top)
+    g.loops.push(cont + " " + end)
     genJumpIfFalse(g, n.a, end, FIRST_TEMP)
+    place(g, top)
     genStmt(g, n.b)
-    emit(g, "JMP " + top)
+    place(g, cont)
+    setLine(g, n)
+    genJumpIfTrue(g, n.a, top, FIRST_TEMP)
     place(g, end)
     g.loops.pop()
   } else if (k === "for") {
@@ -1101,12 +1143,13 @@ function genStmt(g: Gen, n: Node): void {
     const end = lab(g, "fend")
     if (n.a !== NIL) genStmt(g, n.a)
     g.loops.push(cont + " " + end)
-    place(g, top)
     if (n.b !== NIL) genJumpIfFalse(g, n.b, end, FIRST_TEMP)
+    place(g, top)
     genStmt(g, n.d)
     place(g, cont)
     if (n.c !== NIL) genEffect(g, n.c)
-    emit(g, "JMP " + top)
+    if (n.b !== NIL) genJumpIfTrue(g, n.b, top, FIRST_TEMP)
+    else emit(g, "JMP " + top)
     place(g, end)
     g.loops.pop()
   } else if (k === "return") {
