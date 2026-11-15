@@ -69,6 +69,7 @@ export const INTRINSICS: Intrinsic[] = [
   intr("__close", [T_NUM], T_NUM),
   intr("__argc", [], T_NUM),
   intr("__argv", [T_NUM, T_NUM, T_NUM], T_NUM),
+  intr("__spawn", [T_NUM, T_NUM], T_NUM),
   intr("__exit", [T_NUM], T_VOID),
   intr("__fmtnum", [T_NUM, T_NUM, T_NUM], T_NUM),
   intr("__parsenum", [T_NUM, T_NUM], T_NUM),

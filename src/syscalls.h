@@ -20,13 +20,17 @@
  *   FMTNUM(buf, x, mode)        formats the double x as JavaScript does and returns the length.
  *                               buf needs 32 bytes. Mode 0 is String(x), mode 1 is console.log (-0 stays -0)
  *   PARSENUM(buf, len)          JavaScript Number(text): the double for the len bytes at buf, as raw bits
+ *   SPAWN(argv, flags)          runs another program, waits for it, and returns its exit code
+ *                               (128 + n if a signal n killed it) or -errno if it could not start.
+ *                               argv is an array of string addresses ended by a 0 entry. No shell is used.
+ *                               Needs chvm -X, otherwise -EPERM. flags must be 0.
  * The DL calls work only when FFI was compiled in and enabled with -F. They return -EPERM
  * when it is not enabled and -ENOSYS when it was not compiled in.
  */
 #define CHBC_SYSCALLS(X) \
     X(WRITE, 1) X(READ, 2) X(OPEN, 3) X(CLOSE, 4) X(SEEK, 5) \
     X(ARGC, 6) X(ARGV, 7) X(TIME, 8) X(UNLINK, 9)            \
-    X(DLOPEN, 10) X(DLSYM, 11) X(DLCLOSE, 12) X(FMTNUM, 13) X(PARSENUM, 14)
+    X(DLOPEN, 10) X(DLSYM, 11) X(DLCLOSE, 12) X(FMTNUM, 13) X(PARSENUM, 14) X(SPAWN, 15)
 
 enum {
 #define X(name, num) CHBC_SYS_##name = num,

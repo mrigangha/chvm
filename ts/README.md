@@ -33,8 +33,16 @@ build/chvm ts/out/chts.chbc -S -H ts/src/host_chvm.ts -o prog.asm prog.ts
 build/chasm prog.asm prog.chbc
 ```
 
-The self-hosted compiler cannot start `chasm` itself yet (chvm has no way to run another
-program), so it writes assembly with `-S` and you assemble it.
+With `-X`, chvm lets the compiler start `chasm` itself, so one command gives a `.chbc`
+(run from inside `ts/`, where `../build` holds `chasm`):
+
+```
+cd ts
+../build/chvm -X out/chts.chbc -H src/host_chvm.ts -o prog.chbc prog.ts
+```
+
+Without `-X` it prints `cannot run ../build/chasm: run chvm with -X to allow it`. `-S` still
+writes assembly only.
 
 ## Tests
 

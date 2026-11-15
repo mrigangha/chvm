@@ -66,8 +66,10 @@ export function argAt(i: number): string {
   return r
 }
 
+// Where chasm and chvm are. $CHVM_BIN is not readable here (there is no way to read the environment),
+// so the build directory next to the repository is assumed, as build_self.sh runs from ts/.
 export function toolDir(): string {
-  return "build"
+  return "../build"
 }
 
 export function printErr(s: string): void {
@@ -78,9 +80,25 @@ export function exit(code: number): void {
   __exit(code)
 }
 
+// Runs cmd with args and waits for it. Returns its exit code. Needs chvm -X. A program that could
+// not be started returns 127 and prints why, like a shell does.
 export function runProgram(cmd: string, args: string[]): number {
-  __print(2, "running other programs is not available on chvm\n")
-  return 1
+  const n = args.length + 1
+  const table = __alloc((n + 1) * 8)
+  __stp(table, __fromaddr(cstr(cmd)))
+  let i = 0
+  while (i < args.length) {
+    __stp(table + (i + 1) * 8, __fromaddr(cstr(args[i])))
+    i++
+  }
+  __sti(table + n * 8, 0)
+  const rc = __spawn(table, 0)
+  if (rc < 0) {
+    if (rc === -1) __print(2, "cannot run " + cmd + ": run chvm with -X to allow it\n")
+    else __print(2, "cannot run " + cmd + " (error " + (0 - rc) + ")\n")
+    return 127
+  }
+  return rc
 }
 
 export function dirOf(path: string): string {

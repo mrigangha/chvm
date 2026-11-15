@@ -12,6 +12,7 @@ typedef struct {
     int argc;
     char **argv;
     vm_foreign *foreign;    /* NULL unless FFI is enabled */
+    int allow_spawn;        /* 1 lets SYS_SPAWN run other programs */
 } vm_sysenv;
 
 /* args points at r1. Returns the value for r0. */

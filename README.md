@@ -21,6 +21,7 @@ build/chvm fib.chbc [args...]
 build/chvm -m 1000000 fib.chbc   # set memory size in bytes
 build/chvm -v fib.chbc    # verify only
 build/chvm -F prog.chbc   # allow calls into native .so libraries (needs libffi)
+build/chvm -X prog.chbc   # allow the program to run other programs (SYS_SPAWN)
 build/chdis fib.chbc      # disassemble
 ```
 

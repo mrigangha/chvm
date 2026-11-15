@@ -22,6 +22,7 @@ declare function __open(a0: number, a1: number, a2: number): number
 declare function __close(a0: number): number
 declare function __argc(): number
 declare function __argv(a0: number, a1: number, a2: number): number
+declare function __spawn(a0: number, a1: number): number
 declare function __exit(a0: number): void
 declare function __fmtnum(a0: number, a1: number, a2: number): number
 declare function __parsenum(a0: number, a1: number): number

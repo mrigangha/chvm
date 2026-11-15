@@ -5,6 +5,7 @@
 #   <name>.args program arguments, <name>.vmargs chvm options, <name>.in stdin (all optional)
 #   <name>.ffi  run with -F, the test library path is program argument 1
 #   <name>.needffi  skipped in a build without libffi, but run without -F
+#   <name>.spawn    run with -X, which allows SYS_SPAWN
 cd "$(dirname "$0")/.." || exit 1
 B=build
 T=$(mktemp -d)
@@ -34,6 +35,9 @@ for asm in tests/cases/*.asm; do
             echo "skip $n (no foreign call support in this build)"
             continue
         fi
+    fi
+    if [ -f "tests/cases/$n.spawn" ]; then
+        vmargs="-X $vmargs"
     fi
     if [ -f "tests/cases/$n.ffi" ]; then
         vmargs="-F $vmargs"

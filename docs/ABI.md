@@ -127,6 +127,7 @@ A caller does not need to know whether a callee is variadic. There is no hidden 
 | `SYS_DLOPEN` 10 | path | library handle (1 or more). Path 0 opens the host process itself |
 | `SYS_DLSYM` 11 | handle, name | function id (1 or more) |
 | `SYS_DLCLOSE` 12 | handle | 0 |
+| `SYS_SPAWN` 15 | argv, flags | exit code of the child (128 + n if signal n killed it), or `-errno`. See below |
 
 Buffers must lie inside memory and above the null page, or the call returns `-14` (`EFAULT`).
 Output through `SYS_WRITE` to fd 1 and through `PRINT` shares one buffer, so the order is kept.
@@ -178,6 +179,18 @@ Assembler directives, for a compiler to emit:
 - `BSWAP16`, `BSWAP32`, `BSWAP64` reverse the bytes of the low 2, 4 or 8 bytes. The result is zero-extended.
 - Single-precision float ops work on the low 32 bits of a register and write a result with the upper 32 bits zero: `FADDS FSUBS FMULS FDIVS FNEGS FABSS FSQRTS`, compares `FEQS FNES FLTS FLES`, conversions `I2FS U2FS FS2I FS2U`, and `FS2D`, `D2FS` to move between float and double. Float results are rounded to single precision by the operation itself, so no `FROUND32` is needed. `FS2I` and `FS2U` saturate and turn NaN into 0, like the double versions.
 - `PRINTFS` prints the shortest text that reads back as the same float, and `nan` for NaN. `LIFS rd, 3.14` loads a float constant. `LDF32` and `STF32` still exist for the double-based form. For a float kept in a register, use `LD32` and `ST32`.
+
+## Running other programs
+
+`SYS_SPAWN argv, flags` runs a program and waits for it. It needs the `-X` flag: `chvm -X prog.chbc`. Without `-X` it returns `-EPERM`.
+
+- `argv` is the address of an array of 8-byte addresses of NUL-terminated strings, ended by a 0 entry. It must be 8-byte aligned. `argv[0]` is the program, searched in `PATH` if it has no `/`.
+- No shell is used, so there is no quoting or injection problem.
+- `flags` must be 0, otherwise `-22` (`EINVAL`).
+- At most 64 arguments of at most 4095 bytes each. More gives `-7` (`E2BIG`) or `-36` (`ENAMETOOLONG`). An empty list gives `-22`. A bad pointer gives `-14`.
+- The child gets stdin, stdout and stderr. Every other descriptor is closed.
+- The VM flushes its own output first, so the order of output is kept.
+- A program that cannot be started returns `-errno` (for example `-2`). A child that ran and exited with 127 returns 127.
 
 ## Calling native (C) libraries
 

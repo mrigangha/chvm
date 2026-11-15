@@ -19,7 +19,7 @@ skipped=0
 for asm in tests/cases/*.asm; do
     n=$(basename "$asm" .asm)
     if [ -f "tests/cases/$n.ffi" ] || [ -f "tests/cases/$n.args" ] || [ -f "tests/cases/$n.in" ] ||
-       [ -f "tests/cases/$n.vmargs" ] || [ -f "tests/cases/$n.needffi" ]; then
+       [ -f "tests/cases/$n.vmargs" ] || [ -f "tests/cases/$n.needffi" ] || [ -f "tests/cases/$n.spawn" ]; then
         skipped=$((skipped + 1))
         continue
     fi

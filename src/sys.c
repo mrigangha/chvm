@@ -1,6 +1,8 @@
 #include "sys.h"
 
 #include <errno.h>
+#include <spawn.h>
+#include <sys/wait.h>
 #include <fcntl.h>
 #include <limits.h>
 #include <math.h>
@@ -22,19 +24,25 @@ static int range_ok(const vm_sysenv *e, uint64_t addr, uint64_t len)
 }
 
 /* Copies a NUL-terminated string out of VM memory. Returns 0 or -errno. */
-static int get_path(const vm_sysenv *e, uint64_t addr, char *out)
+/* Copies a NUL-terminated string out of VM memory into out, which holds cap bytes including the NUL. */
+static int get_str(const vm_sysenv *e, uint64_t addr, char *out, size_t cap)
 {
     if (addr < CHBC_NULL_PAGE || addr >= e->mem_size)
         return -EFAULT;
     uint64_t room = e->mem_size - addr;
-    if (room > PATH_LIMIT)
-        room = PATH_LIMIT;
+    if (room > cap)
+        room = cap;
     const uint8_t *p = e->mem + addr;
     const uint8_t *z = memchr(p, 0, room);
     if (!z)
-        return room == PATH_LIMIT ? -ENAMETOOLONG : -EFAULT;
+        return room == cap ? -ENAMETOOLONG : -EFAULT;
     memcpy(out, p, (size_t)(z - p) + 1);
     return 0;
+}
+
+static int get_path(const vm_sysenv *e, uint64_t addr, char *out)
+{
+    return get_str(e, addr, out, PATH_LIMIT);
 }
 
 static int valid_fd(int64_t fd)
@@ -166,7 +174,7 @@ static int64_t sys_dlsym(const vm_sysenv *e, const vm_value *a)
     if (!e->foreign)
         return foreign_compiled() ? -EPERM : -ENOSYS;
     char name[256];
-    int rc = get_path(e, a[1].u, name);
+    int rc = get_str(e, a[1].u, name, sizeof name);
     if (rc)
         return rc;
     return foreign_sym(e->foreign, a[0].i, name);
@@ -350,6 +358,78 @@ static int64_t sys_parsenum(const vm_sysenv *e, const vm_value *a)
     return bits;
 }
 
+/*
+ * Runs a program with no shell and waits for it. posix_spawnp reports a start failure (no such file,
+ * not executable) as its own return value, so that is told apart from a child that ran and exited
+ * with 127. The exit status of a child that ran comes back through waitpid.
+ */
+#define SPAWN_MAX_ARGS 64
+#define SPAWN_ARG_LIMIT 4096
+
+extern char **environ;
+
+static int64_t sys_spawn(const vm_sysenv *e, const vm_value *a)
+{
+    if (!e->allow_spawn)
+        return -EPERM;
+    if (a[1].u != 0)
+        return -EINVAL;
+
+    uint64_t av = a[0].u;
+    if (av < CHBC_NULL_PAGE || (av & 7) || av >= e->mem_size)
+        return -EFAULT;
+
+    static char bufs[SPAWN_MAX_ARGS][SPAWN_ARG_LIMIT];
+    char *argv[SPAWN_MAX_ARGS + 1];
+    int n = 0;
+    for (;; n++) {
+        if (av + 8 * (uint64_t)n + 8 > e->mem_size)
+            return -EFAULT;
+        uint64_t p;
+        memcpy(&p, e->mem + av + 8 * (uint64_t)n, 8);
+        if (p == 0)
+            break;
+        if (n == SPAWN_MAX_ARGS)
+            return -E2BIG;
+        int rc = get_str(e, p, bufs[n], SPAWN_ARG_LIMIT);
+        if (rc)
+            return rc;
+        argv[n] = bufs[n];
+    }
+    if (n == 0)
+        return -EINVAL;
+    argv[n] = NULL;
+
+    fflush(stdout);
+    fflush(stderr);
+
+    posix_spawn_file_actions_t fa;
+    posix_spawn_file_actions_init(&fa);
+    /* the child sees only stdin, stdout and stderr: every other descriptor closes on exec */
+    long maxfd = sysconf(_SC_OPEN_MAX);
+    if (maxfd < 0 || maxfd > 4096)
+        maxfd = 4096;
+    for (int fd = 3; fd < maxfd; fd++)
+        posix_spawn_file_actions_addclose(&fa, fd);
+
+    pid_t pid;
+    int err = posix_spawnp(&pid, argv[0], &fa, NULL, argv, environ);
+    posix_spawn_file_actions_destroy(&fa);
+    if (err)
+        return -err;
+
+    int status = 0;
+    while (waitpid(pid, &status, 0) < 0) {
+        if (errno != EINTR)
+            return -errno;
+    }
+    if (WIFEXITED(status))
+        return WEXITSTATUS(status);
+    if (WIFSIGNALED(status))
+        return 128 + WTERMSIG(status);
+    return -ECHILD;
+}
+
 int64_t vm_syscall(const vm_sysenv *e, uint32_t num, const vm_value *a)
 {
     switch (num) {
@@ -363,6 +443,7 @@ int64_t vm_syscall(const vm_sysenv *e, uint32_t num, const vm_value *a)
     case CHBC_SYS_TIME:   return sys_time(a);
     case CHBC_SYS_UNLINK: return sys_unlink(e, a);
     case CHBC_SYS_FMTNUM: return sys_fmtnum(e, a);
+    case CHBC_SYS_SPAWN:  return sys_spawn(e, a);
     case CHBC_SYS_PARSENUM: return sys_parsenum(e, a);
     case CHBC_SYS_DLOPEN: return sys_dlopen(e, a);
     case CHBC_SYS_DLSYM:  return sys_dlsym(e, a);

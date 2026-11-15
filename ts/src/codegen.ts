@@ -1269,6 +1269,7 @@ function genIntrinsic(g: Gen, n: Node, dst: number): void {
   else if (name === "__close") emit(g, "SYSCALL SYS_CLOSE")
   else if (name === "__argc") emit(g, "SYSCALL SYS_ARGC")
   else if (name === "__argv") emit(g, "SYSCALL SYS_ARGV")
+  else if (name === "__spawn") emit(g, "SYSCALL SYS_SPAWN")
   else if (name === "__exit") {
     emit(g, "EXIT r1")
     result = ""

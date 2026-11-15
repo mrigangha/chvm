@@ -290,7 +290,7 @@ vm_status vm_run(const chbc_image *img, const vm_config *cfg,
             return foreign_compiled() ? VM_E_NOMEM : VM_E_FOREIGN_OFF;
         }
     }
-    const vm_sysenv env = {mem, mem_size, c.argc, c.argv, foreign};
+    const vm_sysenv env = {mem, mem_size, c.argc, c.argv, foreign, c.allow_spawn};
 
     vm_value r[CHBC_NREGS];
     memset(r, 0, sizeof r);

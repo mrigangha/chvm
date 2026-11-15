@@ -37,6 +37,7 @@ typedef struct {
     int argc;      /* program arguments, argv[0] is the program path */
     char **argv;
     int allow_foreign;   /* 1 enables DLOPEN, DLSYM and CALLX. Off by default. */
+    int allow_spawn;     /* 1 enables SYS_SPAWN. Off by default. */
 } vm_config;
 
 extern const vm_config vm_default_config;

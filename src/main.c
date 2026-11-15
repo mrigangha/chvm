@@ -10,9 +10,10 @@ enum { EXIT_USAGE = 64, EXIT_LOAD = 65, EXIT_RUN = 70 };
 
 static void usage(void)
 {
-    fputs("usage: chvm [-m mem_bytes] [-F] [-v] file.chbc [args...]\n"
+    fputs("usage: chvm [-m mem_bytes] [-F] [-X] [-v] file.chbc [args...]\n"
           "  -m  memory size in bytes (default 64 MiB)\n"
           "  -F  allow calls into native libraries (dlopen, CALLX). Trusted code only.\n"
+          "  -X  allow the program to run other programs (SYS_SPAWN). Trusted code only.\n"
           "  -v  verify only, do not run\n",
           stderr);
 }
@@ -36,6 +37,8 @@ int main(int argc, char **argv)
     for (; i < argc && argv[i][0] == '-' && argv[i][1]; i++) {
         if (!strcmp(argv[i], "-v")) {
             verify_only = 1;
+        } else if (!strcmp(argv[i], "-X")) {
+            cfg.allow_spawn = 1;
         } else if (!strcmp(argv[i], "-F")) {
             if (!foreign_compiled()) {
                 fputs("chvm: this build has no foreign call support (rebuild with libffi)\n", stderr);
