@@ -31,7 +31,10 @@ for f in tests/programs/*.ts; do
     else
         node "$f" >"$T/want" 2>/dev/null
     fi
-    "$CHVM_BIN/chvm" "$T/$n.chbc" >"$T/got" 2>"$T/err"
+    vmargs=""
+    [ -f "tests/programs/$n.vmargs" ] && vmargs=$(cat "tests/programs/$n.vmargs")
+    # shellcheck disable=SC2086
+    "$CHVM_BIN/chvm" $vmargs "$T/$n.chbc" >"$T/got" 2>"$T/err"
     rc=$?
     if [ -f "tests/programs/$n.rc" ]; then want_rc=$(cat "tests/programs/$n.rc"); else want_rc=0; fi
     if [ "$rc" -eq "$want_rc" ] && cmp -s "$T/want" "$T/got"; then

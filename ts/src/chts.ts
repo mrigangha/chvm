@@ -33,8 +33,15 @@ function isHostFile(path: string): boolean {
   return path.slice(path.length - 8, path.length) === "/host.ts" || path === "host.ts"
 }
 
-function loadAll(entry0: string, out: Node[], seen: string[], hostFile: string): void {
+// The node-only stand-in for arenaMark and arenaFree: lib/arena.ts. Only an import of it is skipped,
+// and only when it sits in a directory called lib, so a program of your own named arena.ts is untouched.
+function isArenaShim(path: string): boolean {
+  return path.slice(path.length - 13, path.length) === "/lib/arena.ts" || path === "lib/arena.ts"
+}
+
+function loadAll(entry0: string, out: Node[], seen: string[], hostFile: string, isEntry: boolean): void {
   let entry = entry0
+  if (!isEntry && isArenaShim(entry)) return
   if (hostFile !== "" && isHostFile(entry)) entry = hostFile
   let i = 0
   while (i < seen.length) {
@@ -50,7 +57,7 @@ function loadAll(entry0: string, out: Node[], seen: string[], hostFile: string):
   let k = 0
   while (k < tree.list.length) {
     const it = tree.list[k]
-    if (it.kind === "import") loadAll(resolveImport(entry, it.text), out, seen, hostFile)
+    if (it.kind === "import") loadAll(resolveImport(entry, it.text), out, seen, hostFile, false)
     k++
   }
   out.push(tree)
@@ -85,7 +92,7 @@ function main(): void {
   const files: Node[] = []
   const prelude = parseFile("prelude.ts", PRELUDE_SRC)
   files.push(prelude)
-  loadAll(input, files, [], hostFile)
+  loadAll(input, files, [], hostFile, true)
   const prog = check(files)
   const asm = generate(prog, input) + PRELUDE_ASM
 

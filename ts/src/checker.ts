@@ -412,6 +412,13 @@ function checkCall(c: Ctx, n: Node): Type {
     c.cur.calls++
     return T_NUM
   }
+  if (f.kind === "id" && (f.text === "arenaMark" || f.text === "arenaFree") && lookup(c, f.text) === NOSYM && mapFind(c.funcIndex, f.text) < 0) {
+    if (f.text === "arenaMark") checkArgs(c, n, [], "arenaMark")
+    else checkArgs(c, n, [T_NUM], "arenaFree")
+    n.tag = "builtin"
+    n.text = f.text
+    return f.text === "arenaMark" ? T_NUM : T_VOID
+  }
   if (f.kind === "id") {
     const ii = findIntrinsic(f.text)
     if (ii >= 0) {

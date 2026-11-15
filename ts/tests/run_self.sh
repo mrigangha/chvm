@@ -24,7 +24,10 @@ for f in tests/programs/*.ts; do
     "$BIN/chasm" "$T/$n.asm" "$T/$n.chbc" || { echo "FAIL $n (assemble)"; fail=$((fail + 1)); continue; }
     if [ -f "tests/programs/$n.rc" ] && [ "$(cat "tests/programs/$n.rc")" -ne 0 ]; then cp "tests/programs/$n.out" "$T/want"
     else node "$f" >"$T/want" 2>/dev/null; fi
-    "$BIN/chvm" "$T/$n.chbc" >"$T/got" 2>/dev/null
+    vmargs=""
+    [ -f "tests/programs/$n.vmargs" ] && vmargs=$(cat "tests/programs/$n.vmargs")
+    # shellcheck disable=SC2086
+    "$BIN/chvm" $vmargs "$T/$n.chbc" >"$T/got" 2>/dev/null
     rc=$?
     want_rc=0
     [ -f "tests/programs/$n.rc" ] && want_rc=$(cat "tests/programs/$n.rc")

@@ -28,7 +28,8 @@ typedef enum {
     VM_E_FOREIGN_PTR,
     VM_E_FOREIGN_RET,
     VM_E_INDEX,
-    VM_E_OOM
+    VM_E_OOM,
+    VM_E_HEAP
 } vm_status;
 
 typedef struct {

@@ -85,7 +85,7 @@ enum chbc_fmt {
     X(LDAX, F_RRR) X(STAX, F_RRR) X(SCHAR, F_RRR) X(LDI2F, F_LD)           \
     X(LDG, F_RI) X(STG, F_RI)                                              \
     X(APUSH, F_RRR) X(APOP, F_RR) X(ALLOC, F_RR) X(ALLOCI, F_RI)           \
-    X(AADDR, F_RRR)
+    X(AADDR, F_RRR) X(HEAPMARK, F_R) X(HEAPFREE, F_R)
 
 enum chbc_op {
 #define X(name, fmt) OP_##name,

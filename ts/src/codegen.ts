@@ -933,6 +933,17 @@ function genBuiltin(g: Gen, n: Node, dst: number): void {
     restoreTemps(g, dst)
     return
   }
+  if (name === "arenaMark") {
+    emit(g, "HEAPMARK r0")
+    emit(g, "I2F " + rn(dst) + ", r0")
+    return
+  }
+  if (name === "arenaFree") {
+    genTo(g, n.list[0], dst)
+    emit(g, "F2I r0, " + rn(dst))
+    emit(g, "HEAPFREE r0")
+    return
+  }
   if (name === "String.fromCharCode") {
     genTo(g, n.list[0], dst)
     saveTemps(g, dst)

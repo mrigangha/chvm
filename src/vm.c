@@ -818,6 +818,22 @@ dispatch:
         RA.u = ad;
         NEXT();
     }
+    /*
+     * Arena cleanup. HEAPMARK saves the allocation point. HEAPFREE rewinds to a saved point and
+     * zeroes what was released, so ALLOC keeps handing out zeroed memory. Anything allocated after
+     * the mark is gone: the program must not keep a pointer into it.
+     */
+    OP(HEAPMARK)
+        RA.u = heap_ptr;
+        NEXT();
+    OP(HEAPFREE) {
+        uint64_t m = RA.u;
+        if (UNLIKELY(m < heap_base || m > heap_ptr || (m & 7)))
+            FAIL(VM_E_HEAP);
+        memset(mem + m, 0, (size_t)(heap_ptr - m));
+        heap_ptr = m;
+        NEXT();
+    }
     OP(LDI2F) {
         uint64_t ad = RB.u + UIMM;
         if (UNLIKELY(ad - CHBC_NULL_PAGE > mem_limit - 8))
@@ -889,6 +905,7 @@ const char *vm_status_str(vm_status s)
     case VM_E_TRAP:             return "trap";
     case VM_E_INDEX:            return "index out of range";
     case VM_E_OOM:              return "out of memory";
+    case VM_E_HEAP:             return "bad heap release (the mark is not a current allocation point)";
     case VM_E_FOREIGN_OFF:      return "foreign calls are not enabled (run chvm with -F)";
     case VM_E_FOREIGN_FN:       return "foreign call: unknown, closed or forged function id";
     case VM_E_FOREIGN_SIG:      return "foreign call: bad signature";

@@ -73,3 +73,18 @@ offset  size  field
 - Registers in CPU registers. The interpreter keeps `r0`-`r15` in a C array, so the compiler addresses them as `96(%rsp,%rax,8)`, and dependent instructions wait on store-to-load forwarding. This is why fib35 is slower than the stack VM.
 - Options: x86-64 JIT (largest gain, x86-64 only), specialised handlers (needs fewer registers), or fewer instructions through the stage 5 optimiser.
 - Decision: stay with the interpreter for now.
+
+## Memory management (decision)
+
+- **Now:** manual arenas. `arenaMark()` and `arenaFree(mark)` in chts, backed by the `HEAPMARK` and
+  `HEAPFREE` instructions. Nothing is freed automatically. Memory stays flat in a loop that frees to a
+  mark each round (1,092 KB over 300,000 rounds, against 131 MB without). Anything allocated after a
+  mark must not be kept after `arenaFree`, and the VM cannot check that.
+- **Later, runtime:** a conservative mark-and-sweep collector in the VM, like D's. Roots are the 16
+  registers, the stack and the data segments. It needs a size-class allocator with free lists, a block
+  table that also handles interior pointers, and a stress mode that collects on every allocation and
+  compares output. Estimated 1 to 2 weeks. It handles replacement of long-lived objects, which regions cannot.
+- **Later, compile time:** region inference that inserts marks and frees automatically when escape analysis
+  proves nothing allocated inside survives. It must be conservative, because a wrong answer is a silent
+  use-after-free. It will not free objects that replace each other inside long-lived state. Needs a debug
+  mode that poisons freed memory, and tests that compare output with and without freeing.
