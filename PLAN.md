@@ -54,6 +54,7 @@ offset  size  field
 | 6b | Faster generated code | register locals, fused float branches, array/string instructions, peephole, no-frame leaf and call paths | done |
 | 6c | Baked executables | `chbake`: the program and the interpreter in one file, keeping only the instructions the program uses | done |
 | 6d | Fewer instructions | register results, loop inversion, shared registers, early return, 32-bit constant branches, folded consts, hoisted loads | done |
+| 6e | 32 registers, add-and-branch, inlining | `r0`..`r31`, `INCBLT` family, pure-function inlining | done |
 | 5 | Optimiser | peephole, constant folding, dead code, superinstructions, as a `.chbc` to `.chbc` pass | todo |
 | 6 | Extras | float opcodes, disassembler, fuzzing the loader and verifier | todo |
 

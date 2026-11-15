@@ -80,3 +80,6 @@ These only change how few instructions run, never what the program prints:
 - A comparison with a whole number that fits 32 bits is a single branch (`BFLTK`) with the number in the next slot.
 - A `const` number set from a literal is replaced by its value at every read, so it needs no register.
 - In a loop with no calls and no stores, `a[i]` read as `a[i][k]` is loaded once before the loop.
+- A call to a small pure function (one `return` of arithmetic, comparisons, `&& || ! ?:`, reads of fields and elements, and a few `Math` builtins) is replaced by its body. A parameter that is used more than once, or only on a conditional path, is replaced only when its argument is a variable or a constant, so an argument is never run twice or skipped. A fault inside an inlined body is reported at the call, not in the function.
+- A counting loop `for (...; i < bound; i++)` ends in one instruction that adds, compares and branches, when the counter is in a register and the bound is a constant or a register the body never writes.
+- The VM has 32 registers, and the generator keeps locals in 21 of them.

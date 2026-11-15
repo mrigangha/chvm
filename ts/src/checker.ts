@@ -36,6 +36,7 @@ export interface FuncInfo {
   syms: Sym[]       // every local and parameter, in slot order
   calls: number     // calls made from the body, including runtime helper calls
   usesCalls: boolean
+  inl: Node         // the returned expression when the function can be inlined, else NIL
 }
 
 export interface Program {
@@ -656,7 +657,7 @@ function checkVar(c: Ctx, n: Node): void {
 // ---- program ----
 
 function newCtx(prog: Program): Ctx {
-  const dummy: FuncInfo = { name: "", node: NIL, params: [], ret: T_VOID, label: "", nslots: 0, syms: [], calls: 0, usesCalls: false }
+  const dummy: FuncInfo = { name: "", node: NIL, params: [], ret: T_VOID, label: "", nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL }
   return {
     prog: prog, funcIndex: newMap(), ifaceIndex: newMap(), globalIndex: newMap(),
     scopes: [], cur: dummy, nslots: 0, loopDepth: 0, inFunc: false, strIndex: newMap(), syms: [], tick: 0,
@@ -669,7 +670,7 @@ function labelFor(file: string, name: string): string {
 }
 
 export function check(files: Node[]): Program {
-  const dummyStart: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false }
+  const dummyStart: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL }
   const prog: Program = { funcs: [], globals: [], ifaces: [], top: [], topSlots: 0, strings: [], start: dummyStart }
   const c = newCtx(prog)
 
@@ -734,7 +735,7 @@ export function check(files: Node[]): Program {
           params.push(pt)
           j++
         }
-        const info: FuncInfo = { name: it.text, node: it, params: params, ret: resolveType(c, it.ann, it), label: labelFor(it.file, it.text), nslots: 0, syms: [], calls: 0, usesCalls: false }
+        const info: FuncInfo = { name: it.text, node: it, params: params, ret: resolveType(c, it.ann, it), label: labelFor(it.file, it.text), nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL }
         prog.funcs.push(info)
         mapSet(c.funcIndex, it.text, prog.funcs.length - 1)
       }
@@ -779,6 +780,7 @@ export function check(files: Node[]): Program {
     info.node.slot = c.nslots
     info.syms = c.syms
     info.usesCalls = info.calls > 0
+    findInlinable(info)
     k++
   }
 
@@ -786,7 +788,7 @@ export function check(files: Node[]): Program {
   c.inFunc = false
   c.nslots = 0
   c.scopes = []
-  const startInfo: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false }
+  const startInfo: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL }
   c.cur = startInfo
   c.syms = []
   pushScope(c)
@@ -813,6 +815,18 @@ export function check(files: Node[]): Program {
   startInfo.nslots = c.nslots
   startInfo.usesCalls = true
   prog.start = startInfo
+
+  // every body is checked now, so calls can be replaced by the functions' bodies
+  let q = 0
+  while (q < prog.funcs.length) {
+    inlineTree(prog, prog.funcs[q].node.a)
+    q++
+  }
+  q = 0
+  while (q < prog.top.length) {
+    inlineTree(prog, prog.top[q])
+    q++
+  }
   return prog
 }
 
@@ -879,6 +893,194 @@ function checkTopVar(c: Ctx, n: Node): void {
     s.known = g.known
     s.value = g.value
   }
+}
+
+// ---- inlining ----
+//
+// A call is replaced by the callee's returned expression, with each parameter replaced by the
+// argument, when that cannot change what the program does:
+//   - the callee is one `return EXPR` and EXPR is pure: arithmetic, comparisons, && || ! ?:, reads of
+//     fields and elements, a few Math builtins. No calls, no assignments, no allocation.
+//   - every parameter is used at least once, so an argument that could fault is never dropped.
+//   - a parameter used more than once, or used only on a conditional path (right side of && ||, a branch
+//     of ?:), gets an argument that is a variable or a constant. Otherwise an argument could be run twice,
+//     or skipped, and a fault or its cost would change.
+//   - every argument is pure, so evaluating it later, inside the body, changes nothing.
+// A fault inside an inlined body is reported in the caller, not in the callee.
+
+function nodeCount(n: Node): number {
+  if (n === NIL) return 0
+  let total = 1 + nodeCount(n.a) + nodeCount(n.b) + nodeCount(n.c) + nodeCount(n.d)
+  let i = 0
+  while (i < n.list.length) {
+    total = total + nodeCount(n.list[i])
+    i++
+  }
+  return total
+}
+
+function pureBuiltin(text: string): boolean {
+  return text === "Math.floor" || text === "Math.ceil" || text === "Math.trunc" || text === "Math.abs" || text === "Math.sqrt"
+}
+
+// No calls except cheap builtins, no assignment or update, no allocation, no string building.
+function pureExpr(n: Node): boolean {
+  const k = n.kind
+  if (k === "num" || k === "true" || k === "false" || k === "str" || k === "id") return true
+  if (k === "unary") return pureExpr(n.a)
+  if (k === "binary") return n.tag !== "concat" && n.tag !== "str" && pureExpr(n.a) && pureExpr(n.b)
+  if (k === "logical") return pureExpr(n.a) && pureExpr(n.b)
+  if (k === "cond") return pureExpr(n.a) && pureExpr(n.b) && pureExpr(n.c)
+  if (k === "member") return pureExpr(n.a)
+  if (k === "index") return pureExpr(n.a) && pureExpr(n.b)
+  if (k === "call") {
+    if (n.tag !== "builtin" || !pureBuiltin(n.text)) return false
+    let i = 0
+    while (i < n.list.length) {
+      if (!pureExpr(n.list[i])) return false
+      i++
+    }
+    return true
+  }
+  return false
+}
+
+function cheapArg(n: Node): boolean {
+  return n.kind === "num" || n.kind === "true" || n.kind === "false" || n.kind === "str" || n.kind === "id"
+}
+
+// How many times parameter `slot` is read in n. A read on a conditional path adds 100 so it never counts as "once".
+function paramUses(n: Node, slot: number, conditional: boolean): number {
+  if (n === NIL) return 0
+  if (n.kind === "id" && n.slot === slot) return conditional ? 100 : 1
+  if (n.kind === "logical") return paramUses(n.a, slot, conditional) + paramUses(n.b, slot, true)
+  if (n.kind === "cond") return paramUses(n.a, slot, conditional) + paramUses(n.b, slot, true) + paramUses(n.c, slot, true)
+  let total = paramUses(n.a, slot, conditional) + paramUses(n.b, slot, conditional) + paramUses(n.c, slot, conditional) + paramUses(n.d, slot, conditional)
+  let i = 0
+  while (i < n.list.length) {
+    total = total + paramUses(n.list[i], slot, conditional)
+    i++
+  }
+  return total
+}
+
+function copyTree(n: Node): Node {
+  if (n === NIL) return NIL
+  const out = mkNode(n.kind, n.file, n.line, n.col)
+  out.text = n.text
+  out.num = n.num
+  out.ann = n.ann
+  out.ty = n.ty
+  out.slot = n.slot
+  out.tag = n.tag
+  out.reg = n.reg
+  out.a = copyTree(n.a)
+  out.b = copyTree(n.b)
+  out.c = copyTree(n.c)
+  out.d = copyTree(n.d)
+  let i = 0
+  while (i < n.list.length) {
+    out.list.push(copyTree(n.list[i]))
+    i++
+  }
+  return out
+}
+
+// The body with each parameter read replaced by a copy of its argument.
+function substitute(n: Node, args: Node[]): Node {
+  if (n === NIL) return NIL
+  if (n.kind === "id" && n.slot >= 0 && n.slot < args.length) return copyTree(args[n.slot])
+  const out = mkNode(n.kind, n.file, n.line, n.col)
+  out.text = n.text
+  out.num = n.num
+  out.ann = n.ann
+  out.ty = n.ty
+  out.slot = n.slot
+  out.tag = n.tag
+  out.reg = n.reg
+  out.a = substitute(n.a, args)
+  out.b = substitute(n.b, args)
+  out.c = substitute(n.c, args)
+  out.d = substitute(n.d, args)
+  let i = 0
+  while (i < n.list.length) {
+    out.list.push(substitute(n.list[i], args))
+    i++
+  }
+  return out
+}
+
+// Decides, once the body is checked, whether the function can be inlined at all.
+function findInlinable(info: FuncInfo): void {
+  info.inl = NIL
+  const body = info.node.a
+  if (body.kind !== "block" || body.list.length !== 1) return
+  const st = body.list[0]
+  if (st.kind !== "return" || st.a === NIL) return
+  if (info.ret.kind === "void" || info.ret.kind === "any") return
+  let i = 0
+  while (i < info.params.length) {
+    if (info.params[i].kind === "any") return
+    i++
+  }
+  if (nodeCount(st.a) > 24 || !pureExpr(st.a)) return
+  i = 0
+  while (i < info.params.length) {
+    if (paramUses(st.a, i, false) === 0) return
+    i++
+  }
+  info.inl = st.a
+}
+
+// Can this particular call be replaced? The arguments must suit how each parameter is used.
+function canInline(info: FuncInfo, call: Node): boolean {
+  if (info.inl === NIL || call.list.length !== info.params.length) return false
+  let i = 0
+  while (i < call.list.length) {
+    const arg = call.list[i]
+    if (!pureExpr(arg)) return false
+    if (paramUses(info.inl, i, false) !== 1 && !cheapArg(arg)) return false
+    i++
+  }
+  return true
+}
+
+// Rewrites calls in the tree, innermost first, so an argument that was itself a call can become pure.
+function inlineTree(prog: Program, n: Node): void {
+  if (n === NIL) return
+  inlineTree(prog, n.a)
+  inlineTree(prog, n.b)
+  inlineTree(prog, n.c)
+  inlineTree(prog, n.d)
+  let i = 0
+  while (i < n.list.length) {
+    inlineTree(prog, n.list[i])
+    i++
+  }
+  if (n.kind !== "call" || n.tag !== "func") return
+  const info = prog.funcs[n.slot]
+  if (!canInline(info, n)) return
+  const body = substitute(info.inl, n.list)
+  const line = n.line
+  const col = n.col
+  const file = n.file
+  const ty = n.ty
+  n.kind = body.kind
+  n.text = body.text
+  n.num = body.num
+  n.ann = body.ann
+  n.slot = body.slot
+  n.tag = body.tag
+  n.reg = body.reg
+  n.a = body.a
+  n.b = body.b
+  n.c = body.c
+  n.d = body.d
+  n.list = body.list
+  n.line = line
+  n.col = col
+  n.file = file
+  n.ty = ty
 }
 
 function alwaysReturns(n: Node): boolean {
