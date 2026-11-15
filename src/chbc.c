@@ -270,8 +270,27 @@ chbc_err chbc_verify(const chbc_image *img, uint32_t *bad_off)
                     return CHBC_E_TARGET;
             }
         }
+
+        /* A BF*K branch reads the constant in the slot after it, so that slot must exist and be a KDATA. */
+        if (in->op >= OP_BFLTK && in->op <= OP_BFNEK) {
+            if (i + 1 >= n || img->code[i + 1].op != OP_KDATA)
+                return CHBC_E_TARGET;
+        }
     }
 
+    /* Nothing may branch to a KDATA: it is a constant, not an instruction. */
+    for (uint32_t i = 0; i < n; i++) {
+        const chbc_insn *in = &img->code[i];
+        if (!chbc_fmt_is_branch(chbc_op_fmt[in->op]))
+            continue;
+        uint32_t t = (uint32_t)in->imm / CHBC_INSN_SIZE;
+        if (img->code[t].op == OP_KDATA) {
+            *bad_off = i * CHBC_INSN_SIZE;
+            return CHBC_E_TARGET;
+        }
+    }
+
+    /* a KDATA in the last slot would let a branch run past the end */
     unsigned last = img->code[n - 1].op;
     if (last != OP_HALT && last != OP_JMP && last != OP_RET && last != OP_EXIT &&
         last != OP_TRAP) {

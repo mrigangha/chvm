@@ -42,6 +42,13 @@ static void print_target(uint32_t t)
     printf("L%u", t);
 }
 
+/* BF*K branches carry their constant in the next slot. Prints "BFLTK r9, 50000000, L16". */
+static void print_branch_k(const chbc_insn *in, const chbc_insn *data)
+{
+    printf("%-7s %s, %d, ", chbc_op_name[in->op], regname(in->a), data->imm);
+    print_target((uint32_t)in->imm);
+}
+
 static void print_insn(const chbc_insn *in)
 {
     unsigned fmt = chbc_op_fmt[in->op];
@@ -209,12 +216,18 @@ usage:
         } else {
             printf("    ");
         }
-        print_insn(&img.code[k]);
+        const int is_k = img.code[k].op >= OP_BFLTK && img.code[k].op <= OP_BFNEK;
+        if (is_k)
+            print_branch_k(&img.code[k], &img.code[k + 1]);
+        else
+            print_insn(&img.code[k]);
         if (have && loc.file && loc.line_off != last_line_off && loc.line_off == o) {
             printf("%s; %s:%u", plain ? "" : "    ", loc.file, loc.line);
             last_line_off = loc.line_off;
         }
         putchar('\n');
+        if (is_k)
+            k++;   /* the KDATA slot was printed with its branch */
     }
 
     if (!plain && !skip_data)

@@ -1,0 +1,15124 @@
+.entry main
+.code
+main:
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, 0, t1
+    JMP e1
+t1: LI r0, 1
+e1: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, 0, t2
+    JMP e2
+t2: LI r0, 1
+e2: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, 0, t3
+    JMP e3
+t3: LI r0, 1
+e3: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, 0, t4
+    JMP e4
+t4: LI r0, 1
+e4: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, 0, t5
+    JMP e5
+t5: LI r0, 1
+e5: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, 0, t6
+    JMP e6
+t6: LI r0, 1
+e6: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, 0, t7
+    JMP e7
+t7: LI r0, 1
+e7: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, 0, t8
+    JMP e8
+t8: LI r0, 1
+e8: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, 0, t9
+    JMP e9
+t9: LI r0, 1
+e9: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, 0, t10
+    JMP e10
+t10: LI r0, 1
+e10: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, 1, t11
+    JMP e11
+t11: LI r0, 1
+e11: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, 1, t12
+    JMP e12
+t12: LI r0, 1
+e12: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, 1, t13
+    JMP e13
+t13: LI r0, 1
+e13: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, 1, t14
+    JMP e14
+t14: LI r0, 1
+e14: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, 1, t15
+    JMP e15
+t15: LI r0, 1
+e15: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, 1, t16
+    JMP e16
+t16: LI r0, 1
+e16: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, 1, t17
+    JMP e17
+t17: LI r0, 1
+e17: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, 1, t18
+    JMP e18
+t18: LI r0, 1
+e18: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, 1, t19
+    JMP e19
+t19: LI r0, 1
+e19: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, 1, t20
+    JMP e20
+t20: LI r0, 1
+e20: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, -1, t21
+    JMP e21
+t21: LI r0, 1
+e21: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, -1, t22
+    JMP e22
+t22: LI r0, 1
+e22: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, -1, t23
+    JMP e23
+t23: LI r0, 1
+e23: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, -1, t24
+    JMP e24
+t24: LI r0, 1
+e24: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, -1, t25
+    JMP e25
+t25: LI r0, 1
+e25: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, -1, t26
+    JMP e26
+t26: LI r0, 1
+e26: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, -1, t27
+    JMP e27
+t27: LI r0, 1
+e27: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, -1, t28
+    JMP e28
+t28: LI r0, 1
+e28: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, -1, t29
+    JMP e29
+t29: LI r0, 1
+e29: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, -1, t30
+    JMP e30
+t30: LI r0, 1
+e30: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, 40000, t31
+    JMP e31
+t31: LI r0, 1
+e31: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, 40000, t32
+    JMP e32
+t32: LI r0, 1
+e32: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, 40000, t33
+    JMP e33
+t33: LI r0, 1
+e33: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, 40000, t34
+    JMP e34
+t34: LI r0, 1
+e34: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, 40000, t35
+    JMP e35
+t35: LI r0, 1
+e35: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, 40000, t36
+    JMP e36
+t36: LI r0, 1
+e36: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, 40000, t37
+    JMP e37
+t37: LI r0, 1
+e37: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, 40000, t38
+    JMP e38
+t38: LI r0, 1
+e38: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, 40000, t39
+    JMP e39
+t39: LI r0, 1
+e39: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, 40000, t40
+    JMP e40
+t40: LI r0, 1
+e40: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, -40000, t41
+    JMP e41
+t41: LI r0, 1
+e41: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, -40000, t42
+    JMP e42
+t42: LI r0, 1
+e42: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, -40000, t43
+    JMP e43
+t43: LI r0, 1
+e43: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, -40000, t44
+    JMP e44
+t44: LI r0, 1
+e44: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, -40000, t45
+    JMP e45
+t45: LI r0, 1
+e45: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, -40000, t46
+    JMP e46
+t46: LI r0, 1
+e46: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, -40000, t47
+    JMP e47
+t47: LI r0, 1
+e47: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, -40000, t48
+    JMP e48
+t48: LI r0, 1
+e48: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, -40000, t49
+    JMP e49
+t49: LI r0, 1
+e49: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, -40000, t50
+    JMP e50
+t50: LI r0, 1
+e50: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, 50000000, t51
+    JMP e51
+t51: LI r0, 1
+e51: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, 50000000, t52
+    JMP e52
+t52: LI r0, 1
+e52: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, 50000000, t53
+    JMP e53
+t53: LI r0, 1
+e53: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, 50000000, t54
+    JMP e54
+t54: LI r0, 1
+e54: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, 50000000, t55
+    JMP e55
+t55: LI r0, 1
+e55: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, 50000000, t56
+    JMP e56
+t56: LI r0, 1
+e56: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, 50000000, t57
+    JMP e57
+t57: LI r0, 1
+e57: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, 50000000, t58
+    JMP e58
+t58: LI r0, 1
+e58: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, 50000000, t59
+    JMP e59
+t59: LI r0, 1
+e59: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, 50000000, t60
+    JMP e60
+t60: LI r0, 1
+e60: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, -50000000, t61
+    JMP e61
+t61: LI r0, 1
+e61: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, -50000000, t62
+    JMP e62
+t62: LI r0, 1
+e62: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, -50000000, t63
+    JMP e63
+t63: LI r0, 1
+e63: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, -50000000, t64
+    JMP e64
+t64: LI r0, 1
+e64: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, -50000000, t65
+    JMP e65
+t65: LI r0, 1
+e65: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, -50000000, t66
+    JMP e66
+t66: LI r0, 1
+e66: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, -50000000, t67
+    JMP e67
+t67: LI r0, 1
+e67: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, -50000000, t68
+    JMP e68
+t68: LI r0, 1
+e68: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, -50000000, t69
+    JMP e69
+t69: LI r0, 1
+e69: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, -50000000, t70
+    JMP e70
+t70: LI r0, 1
+e70: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, 2147483647, t71
+    JMP e71
+t71: LI r0, 1
+e71: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, 2147483647, t72
+    JMP e72
+t72: LI r0, 1
+e72: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, 2147483647, t73
+    JMP e73
+t73: LI r0, 1
+e73: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, 2147483647, t74
+    JMP e74
+t74: LI r0, 1
+e74: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, 2147483647, t75
+    JMP e75
+t75: LI r0, 1
+e75: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, 2147483647, t76
+    JMP e76
+t76: LI r0, 1
+e76: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, 2147483647, t77
+    JMP e77
+t77: LI r0, 1
+e77: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, 2147483647, t78
+    JMP e78
+t78: LI r0, 1
+e78: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, 2147483647, t79
+    JMP e79
+t79: LI r0, 1
+e79: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, 2147483647, t80
+    JMP e80
+t80: LI r0, 1
+e80: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, -2147483648, t81
+    JMP e81
+t81: LI r0, 1
+e81: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, -2147483648, t82
+    JMP e82
+t82: LI r0, 1
+e82: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, -2147483648, t83
+    JMP e83
+t83: LI r0, 1
+e83: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, -2147483648, t84
+    JMP e84
+t84: LI r0, 1
+e84: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, -2147483648, t85
+    JMP e85
+t85: LI r0, 1
+e85: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, -2147483648, t86
+    JMP e86
+t86: LI r0, 1
+e86: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, -2147483648, t87
+    JMP e87
+t87: LI r0, 1
+e87: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, -2147483648, t88
+    JMP e88
+t88: LI r0, 1
+e88: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, -2147483648, t89
+    JMP e89
+t89: LI r0, 1
+e89: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, -2147483648, t90
+    JMP e90
+t90: LI r0, 1
+e90: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, 32768, t91
+    JMP e91
+t91: LI r0, 1
+e91: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, 32768, t92
+    JMP e92
+t92: LI r0, 1
+e92: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, 32768, t93
+    JMP e93
+t93: LI r0, 1
+e93: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, 32768, t94
+    JMP e94
+t94: LI r0, 1
+e94: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, 32768, t95
+    JMP e95
+t95: LI r0, 1
+e95: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, 32768, t96
+    JMP e96
+t96: LI r0, 1
+e96: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, 32768, t97
+    JMP e97
+t97: LI r0, 1
+e97: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, 32768, t98
+    JMP e98
+t98: LI r0, 1
+e98: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, 32768, t99
+    JMP e99
+t99: LI r0, 1
+e99: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, 32768, t100
+    JMP e100
+t100: LI r0, 1
+e100: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, -32769, t101
+    JMP e101
+t101: LI r0, 1
+e101: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, -32769, t102
+    JMP e102
+t102: LI r0, 1
+e102: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, -32769, t103
+    JMP e103
+t103: LI r0, 1
+e103: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, -32769, t104
+    JMP e104
+t104: LI r0, 1
+e104: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, -32769, t105
+    JMP e105
+t105: LI r0, 1
+e105: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, -32769, t106
+    JMP e106
+t106: LI r0, 1
+e106: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, -32769, t107
+    JMP e107
+t107: LI r0, 1
+e107: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, -32769, t108
+    JMP e108
+t108: LI r0, 1
+e108: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, -32769, t109
+    JMP e109
+t109: LI r0, 1
+e109: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, -32769, t110
+    JMP e110
+t110: LI r0, 1
+e110: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLTK r5, 100, t111
+    JMP e111
+t111: LI r0, 1
+e111: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFLEK r5, 100, t112
+    JMP e112
+t112: LI r0, 1
+e112: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGTK r5, 100, t113
+    JMP e113
+t113: LI r0, 1
+e113: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFGEK r5, 100, t114
+    JMP e114
+t114: LI r0, 1
+e114: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLTK r5, 100, t115
+    JMP e115
+t115: LI r0, 1
+e115: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNLEK r5, 100, t116
+    JMP e116
+t116: LI r0, 1
+e116: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGTK r5, 100, t117
+    JMP e117
+t117: LI r0, 1
+e117: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNGEK r5, 100, t118
+    JMP e118
+t118: LI r0, 1
+e118: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFEQK r5, 100, t119
+    JMP e119
+t119: LI r0, 1
+e119: PRINT r0
+    LI r5, 0
+    LI r0, 0
+    BFNEK r5, 100, t120
+    JMP e120
+t120: LI r0, 1
+e120: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, 0, t121
+    JMP e121
+t121: LI r0, 1
+e121: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, 0, t122
+    JMP e122
+t122: LI r0, 1
+e122: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, 0, t123
+    JMP e123
+t123: LI r0, 1
+e123: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, 0, t124
+    JMP e124
+t124: LI r0, 1
+e124: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, 0, t125
+    JMP e125
+t125: LI r0, 1
+e125: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, 0, t126
+    JMP e126
+t126: LI r0, 1
+e126: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, 0, t127
+    JMP e127
+t127: LI r0, 1
+e127: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, 0, t128
+    JMP e128
+t128: LI r0, 1
+e128: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, 0, t129
+    JMP e129
+t129: LI r0, 1
+e129: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, 0, t130
+    JMP e130
+t130: LI r0, 1
+e130: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, 1, t131
+    JMP e131
+t131: LI r0, 1
+e131: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, 1, t132
+    JMP e132
+t132: LI r0, 1
+e132: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, 1, t133
+    JMP e133
+t133: LI r0, 1
+e133: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, 1, t134
+    JMP e134
+t134: LI r0, 1
+e134: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, 1, t135
+    JMP e135
+t135: LI r0, 1
+e135: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, 1, t136
+    JMP e136
+t136: LI r0, 1
+e136: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, 1, t137
+    JMP e137
+t137: LI r0, 1
+e137: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, 1, t138
+    JMP e138
+t138: LI r0, 1
+e138: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, 1, t139
+    JMP e139
+t139: LI r0, 1
+e139: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, 1, t140
+    JMP e140
+t140: LI r0, 1
+e140: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, -1, t141
+    JMP e141
+t141: LI r0, 1
+e141: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, -1, t142
+    JMP e142
+t142: LI r0, 1
+e142: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, -1, t143
+    JMP e143
+t143: LI r0, 1
+e143: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, -1, t144
+    JMP e144
+t144: LI r0, 1
+e144: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, -1, t145
+    JMP e145
+t145: LI r0, 1
+e145: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, -1, t146
+    JMP e146
+t146: LI r0, 1
+e146: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, -1, t147
+    JMP e147
+t147: LI r0, 1
+e147: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, -1, t148
+    JMP e148
+t148: LI r0, 1
+e148: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, -1, t149
+    JMP e149
+t149: LI r0, 1
+e149: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, -1, t150
+    JMP e150
+t150: LI r0, 1
+e150: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, 40000, t151
+    JMP e151
+t151: LI r0, 1
+e151: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, 40000, t152
+    JMP e152
+t152: LI r0, 1
+e152: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, 40000, t153
+    JMP e153
+t153: LI r0, 1
+e153: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, 40000, t154
+    JMP e154
+t154: LI r0, 1
+e154: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, 40000, t155
+    JMP e155
+t155: LI r0, 1
+e155: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, 40000, t156
+    JMP e156
+t156: LI r0, 1
+e156: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, 40000, t157
+    JMP e157
+t157: LI r0, 1
+e157: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, 40000, t158
+    JMP e158
+t158: LI r0, 1
+e158: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, 40000, t159
+    JMP e159
+t159: LI r0, 1
+e159: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, 40000, t160
+    JMP e160
+t160: LI r0, 1
+e160: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, -40000, t161
+    JMP e161
+t161: LI r0, 1
+e161: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, -40000, t162
+    JMP e162
+t162: LI r0, 1
+e162: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, -40000, t163
+    JMP e163
+t163: LI r0, 1
+e163: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, -40000, t164
+    JMP e164
+t164: LI r0, 1
+e164: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, -40000, t165
+    JMP e165
+t165: LI r0, 1
+e165: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, -40000, t166
+    JMP e166
+t166: LI r0, 1
+e166: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, -40000, t167
+    JMP e167
+t167: LI r0, 1
+e167: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, -40000, t168
+    JMP e168
+t168: LI r0, 1
+e168: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, -40000, t169
+    JMP e169
+t169: LI r0, 1
+e169: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, -40000, t170
+    JMP e170
+t170: LI r0, 1
+e170: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, 50000000, t171
+    JMP e171
+t171: LI r0, 1
+e171: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, 50000000, t172
+    JMP e172
+t172: LI r0, 1
+e172: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, 50000000, t173
+    JMP e173
+t173: LI r0, 1
+e173: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, 50000000, t174
+    JMP e174
+t174: LI r0, 1
+e174: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, 50000000, t175
+    JMP e175
+t175: LI r0, 1
+e175: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, 50000000, t176
+    JMP e176
+t176: LI r0, 1
+e176: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, 50000000, t177
+    JMP e177
+t177: LI r0, 1
+e177: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, 50000000, t178
+    JMP e178
+t178: LI r0, 1
+e178: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, 50000000, t179
+    JMP e179
+t179: LI r0, 1
+e179: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, 50000000, t180
+    JMP e180
+t180: LI r0, 1
+e180: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, -50000000, t181
+    JMP e181
+t181: LI r0, 1
+e181: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, -50000000, t182
+    JMP e182
+t182: LI r0, 1
+e182: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, -50000000, t183
+    JMP e183
+t183: LI r0, 1
+e183: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, -50000000, t184
+    JMP e184
+t184: LI r0, 1
+e184: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, -50000000, t185
+    JMP e185
+t185: LI r0, 1
+e185: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, -50000000, t186
+    JMP e186
+t186: LI r0, 1
+e186: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, -50000000, t187
+    JMP e187
+t187: LI r0, 1
+e187: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, -50000000, t188
+    JMP e188
+t188: LI r0, 1
+e188: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, -50000000, t189
+    JMP e189
+t189: LI r0, 1
+e189: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, -50000000, t190
+    JMP e190
+t190: LI r0, 1
+e190: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, 2147483647, t191
+    JMP e191
+t191: LI r0, 1
+e191: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, 2147483647, t192
+    JMP e192
+t192: LI r0, 1
+e192: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, 2147483647, t193
+    JMP e193
+t193: LI r0, 1
+e193: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, 2147483647, t194
+    JMP e194
+t194: LI r0, 1
+e194: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, 2147483647, t195
+    JMP e195
+t195: LI r0, 1
+e195: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, 2147483647, t196
+    JMP e196
+t196: LI r0, 1
+e196: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, 2147483647, t197
+    JMP e197
+t197: LI r0, 1
+e197: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, 2147483647, t198
+    JMP e198
+t198: LI r0, 1
+e198: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, 2147483647, t199
+    JMP e199
+t199: LI r0, 1
+e199: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, 2147483647, t200
+    JMP e200
+t200: LI r0, 1
+e200: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, -2147483648, t201
+    JMP e201
+t201: LI r0, 1
+e201: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, -2147483648, t202
+    JMP e202
+t202: LI r0, 1
+e202: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, -2147483648, t203
+    JMP e203
+t203: LI r0, 1
+e203: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, -2147483648, t204
+    JMP e204
+t204: LI r0, 1
+e204: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, -2147483648, t205
+    JMP e205
+t205: LI r0, 1
+e205: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, -2147483648, t206
+    JMP e206
+t206: LI r0, 1
+e206: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, -2147483648, t207
+    JMP e207
+t207: LI r0, 1
+e207: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, -2147483648, t208
+    JMP e208
+t208: LI r0, 1
+e208: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, -2147483648, t209
+    JMP e209
+t209: LI r0, 1
+e209: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, -2147483648, t210
+    JMP e210
+t210: LI r0, 1
+e210: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, 32768, t211
+    JMP e211
+t211: LI r0, 1
+e211: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, 32768, t212
+    JMP e212
+t212: LI r0, 1
+e212: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, 32768, t213
+    JMP e213
+t213: LI r0, 1
+e213: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, 32768, t214
+    JMP e214
+t214: LI r0, 1
+e214: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, 32768, t215
+    JMP e215
+t215: LI r0, 1
+e215: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, 32768, t216
+    JMP e216
+t216: LI r0, 1
+e216: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, 32768, t217
+    JMP e217
+t217: LI r0, 1
+e217: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, 32768, t218
+    JMP e218
+t218: LI r0, 1
+e218: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, 32768, t219
+    JMP e219
+t219: LI r0, 1
+e219: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, 32768, t220
+    JMP e220
+t220: LI r0, 1
+e220: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, -32769, t221
+    JMP e221
+t221: LI r0, 1
+e221: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, -32769, t222
+    JMP e222
+t222: LI r0, 1
+e222: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, -32769, t223
+    JMP e223
+t223: LI r0, 1
+e223: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, -32769, t224
+    JMP e224
+t224: LI r0, 1
+e224: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, -32769, t225
+    JMP e225
+t225: LI r0, 1
+e225: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, -32769, t226
+    JMP e226
+t226: LI r0, 1
+e226: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, -32769, t227
+    JMP e227
+t227: LI r0, 1
+e227: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, -32769, t228
+    JMP e228
+t228: LI r0, 1
+e228: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, -32769, t229
+    JMP e229
+t229: LI r0, 1
+e229: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, -32769, t230
+    JMP e230
+t230: LI r0, 1
+e230: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLTK r5, 100, t231
+    JMP e231
+t231: LI r0, 1
+e231: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFLEK r5, 100, t232
+    JMP e232
+t232: LI r0, 1
+e232: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGTK r5, 100, t233
+    JMP e233
+t233: LI r0, 1
+e233: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFGEK r5, 100, t234
+    JMP e234
+t234: LI r0, 1
+e234: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLTK r5, 100, t235
+    JMP e235
+t235: LI r0, 1
+e235: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNLEK r5, 100, t236
+    JMP e236
+t236: LI r0, 1
+e236: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGTK r5, 100, t237
+    JMP e237
+t237: LI r0, 1
+e237: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNGEK r5, 100, t238
+    JMP e238
+t238: LI r0, 1
+e238: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFEQK r5, 100, t239
+    JMP e239
+t239: LI r0, 1
+e239: PRINT r0
+    LI r5, -9223372036854775808
+    LI r0, 0
+    BFNEK r5, 100, t240
+    JMP e240
+t240: LI r0, 1
+e240: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, 0, t241
+    JMP e241
+t241: LI r0, 1
+e241: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, 0, t242
+    JMP e242
+t242: LI r0, 1
+e242: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, 0, t243
+    JMP e243
+t243: LI r0, 1
+e243: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, 0, t244
+    JMP e244
+t244: LI r0, 1
+e244: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, 0, t245
+    JMP e245
+t245: LI r0, 1
+e245: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, 0, t246
+    JMP e246
+t246: LI r0, 1
+e246: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, 0, t247
+    JMP e247
+t247: LI r0, 1
+e247: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, 0, t248
+    JMP e248
+t248: LI r0, 1
+e248: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, 0, t249
+    JMP e249
+t249: LI r0, 1
+e249: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, 0, t250
+    JMP e250
+t250: LI r0, 1
+e250: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, 1, t251
+    JMP e251
+t251: LI r0, 1
+e251: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, 1, t252
+    JMP e252
+t252: LI r0, 1
+e252: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, 1, t253
+    JMP e253
+t253: LI r0, 1
+e253: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, 1, t254
+    JMP e254
+t254: LI r0, 1
+e254: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, 1, t255
+    JMP e255
+t255: LI r0, 1
+e255: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, 1, t256
+    JMP e256
+t256: LI r0, 1
+e256: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, 1, t257
+    JMP e257
+t257: LI r0, 1
+e257: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, 1, t258
+    JMP e258
+t258: LI r0, 1
+e258: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, 1, t259
+    JMP e259
+t259: LI r0, 1
+e259: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, 1, t260
+    JMP e260
+t260: LI r0, 1
+e260: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, -1, t261
+    JMP e261
+t261: LI r0, 1
+e261: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, -1, t262
+    JMP e262
+t262: LI r0, 1
+e262: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, -1, t263
+    JMP e263
+t263: LI r0, 1
+e263: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, -1, t264
+    JMP e264
+t264: LI r0, 1
+e264: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, -1, t265
+    JMP e265
+t265: LI r0, 1
+e265: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, -1, t266
+    JMP e266
+t266: LI r0, 1
+e266: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, -1, t267
+    JMP e267
+t267: LI r0, 1
+e267: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, -1, t268
+    JMP e268
+t268: LI r0, 1
+e268: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, -1, t269
+    JMP e269
+t269: LI r0, 1
+e269: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, -1, t270
+    JMP e270
+t270: LI r0, 1
+e270: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, 40000, t271
+    JMP e271
+t271: LI r0, 1
+e271: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, 40000, t272
+    JMP e272
+t272: LI r0, 1
+e272: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, 40000, t273
+    JMP e273
+t273: LI r0, 1
+e273: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, 40000, t274
+    JMP e274
+t274: LI r0, 1
+e274: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, 40000, t275
+    JMP e275
+t275: LI r0, 1
+e275: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, 40000, t276
+    JMP e276
+t276: LI r0, 1
+e276: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, 40000, t277
+    JMP e277
+t277: LI r0, 1
+e277: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, 40000, t278
+    JMP e278
+t278: LI r0, 1
+e278: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, 40000, t279
+    JMP e279
+t279: LI r0, 1
+e279: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, 40000, t280
+    JMP e280
+t280: LI r0, 1
+e280: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, -40000, t281
+    JMP e281
+t281: LI r0, 1
+e281: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, -40000, t282
+    JMP e282
+t282: LI r0, 1
+e282: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, -40000, t283
+    JMP e283
+t283: LI r0, 1
+e283: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, -40000, t284
+    JMP e284
+t284: LI r0, 1
+e284: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, -40000, t285
+    JMP e285
+t285: LI r0, 1
+e285: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, -40000, t286
+    JMP e286
+t286: LI r0, 1
+e286: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, -40000, t287
+    JMP e287
+t287: LI r0, 1
+e287: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, -40000, t288
+    JMP e288
+t288: LI r0, 1
+e288: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, -40000, t289
+    JMP e289
+t289: LI r0, 1
+e289: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, -40000, t290
+    JMP e290
+t290: LI r0, 1
+e290: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, 50000000, t291
+    JMP e291
+t291: LI r0, 1
+e291: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, 50000000, t292
+    JMP e292
+t292: LI r0, 1
+e292: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, 50000000, t293
+    JMP e293
+t293: LI r0, 1
+e293: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, 50000000, t294
+    JMP e294
+t294: LI r0, 1
+e294: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, 50000000, t295
+    JMP e295
+t295: LI r0, 1
+e295: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, 50000000, t296
+    JMP e296
+t296: LI r0, 1
+e296: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, 50000000, t297
+    JMP e297
+t297: LI r0, 1
+e297: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, 50000000, t298
+    JMP e298
+t298: LI r0, 1
+e298: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, 50000000, t299
+    JMP e299
+t299: LI r0, 1
+e299: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, 50000000, t300
+    JMP e300
+t300: LI r0, 1
+e300: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, -50000000, t301
+    JMP e301
+t301: LI r0, 1
+e301: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, -50000000, t302
+    JMP e302
+t302: LI r0, 1
+e302: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, -50000000, t303
+    JMP e303
+t303: LI r0, 1
+e303: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, -50000000, t304
+    JMP e304
+t304: LI r0, 1
+e304: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, -50000000, t305
+    JMP e305
+t305: LI r0, 1
+e305: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, -50000000, t306
+    JMP e306
+t306: LI r0, 1
+e306: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, -50000000, t307
+    JMP e307
+t307: LI r0, 1
+e307: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, -50000000, t308
+    JMP e308
+t308: LI r0, 1
+e308: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, -50000000, t309
+    JMP e309
+t309: LI r0, 1
+e309: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, -50000000, t310
+    JMP e310
+t310: LI r0, 1
+e310: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, 2147483647, t311
+    JMP e311
+t311: LI r0, 1
+e311: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, 2147483647, t312
+    JMP e312
+t312: LI r0, 1
+e312: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, 2147483647, t313
+    JMP e313
+t313: LI r0, 1
+e313: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, 2147483647, t314
+    JMP e314
+t314: LI r0, 1
+e314: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, 2147483647, t315
+    JMP e315
+t315: LI r0, 1
+e315: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, 2147483647, t316
+    JMP e316
+t316: LI r0, 1
+e316: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, 2147483647, t317
+    JMP e317
+t317: LI r0, 1
+e317: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, 2147483647, t318
+    JMP e318
+t318: LI r0, 1
+e318: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, 2147483647, t319
+    JMP e319
+t319: LI r0, 1
+e319: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, 2147483647, t320
+    JMP e320
+t320: LI r0, 1
+e320: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, -2147483648, t321
+    JMP e321
+t321: LI r0, 1
+e321: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, -2147483648, t322
+    JMP e322
+t322: LI r0, 1
+e322: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, -2147483648, t323
+    JMP e323
+t323: LI r0, 1
+e323: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, -2147483648, t324
+    JMP e324
+t324: LI r0, 1
+e324: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, -2147483648, t325
+    JMP e325
+t325: LI r0, 1
+e325: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, -2147483648, t326
+    JMP e326
+t326: LI r0, 1
+e326: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, -2147483648, t327
+    JMP e327
+t327: LI r0, 1
+e327: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, -2147483648, t328
+    JMP e328
+t328: LI r0, 1
+e328: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, -2147483648, t329
+    JMP e329
+t329: LI r0, 1
+e329: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, -2147483648, t330
+    JMP e330
+t330: LI r0, 1
+e330: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, 32768, t331
+    JMP e331
+t331: LI r0, 1
+e331: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, 32768, t332
+    JMP e332
+t332: LI r0, 1
+e332: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, 32768, t333
+    JMP e333
+t333: LI r0, 1
+e333: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, 32768, t334
+    JMP e334
+t334: LI r0, 1
+e334: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, 32768, t335
+    JMP e335
+t335: LI r0, 1
+e335: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, 32768, t336
+    JMP e336
+t336: LI r0, 1
+e336: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, 32768, t337
+    JMP e337
+t337: LI r0, 1
+e337: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, 32768, t338
+    JMP e338
+t338: LI r0, 1
+e338: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, 32768, t339
+    JMP e339
+t339: LI r0, 1
+e339: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, 32768, t340
+    JMP e340
+t340: LI r0, 1
+e340: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, -32769, t341
+    JMP e341
+t341: LI r0, 1
+e341: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, -32769, t342
+    JMP e342
+t342: LI r0, 1
+e342: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, -32769, t343
+    JMP e343
+t343: LI r0, 1
+e343: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, -32769, t344
+    JMP e344
+t344: LI r0, 1
+e344: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, -32769, t345
+    JMP e345
+t345: LI r0, 1
+e345: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, -32769, t346
+    JMP e346
+t346: LI r0, 1
+e346: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, -32769, t347
+    JMP e347
+t347: LI r0, 1
+e347: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, -32769, t348
+    JMP e348
+t348: LI r0, 1
+e348: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, -32769, t349
+    JMP e349
+t349: LI r0, 1
+e349: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, -32769, t350
+    JMP e350
+t350: LI r0, 1
+e350: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLTK r5, 100, t351
+    JMP e351
+t351: LI r0, 1
+e351: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFLEK r5, 100, t352
+    JMP e352
+t352: LI r0, 1
+e352: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGTK r5, 100, t353
+    JMP e353
+t353: LI r0, 1
+e353: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFGEK r5, 100, t354
+    JMP e354
+t354: LI r0, 1
+e354: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLTK r5, 100, t355
+    JMP e355
+t355: LI r0, 1
+e355: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNLEK r5, 100, t356
+    JMP e356
+t356: LI r0, 1
+e356: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGTK r5, 100, t357
+    JMP e357
+t357: LI r0, 1
+e357: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNGEK r5, 100, t358
+    JMP e358
+t358: LI r0, 1
+e358: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFEQK r5, 100, t359
+    JMP e359
+t359: LI r0, 1
+e359: PRINT r0
+    LI r5, 4607182418800017408
+    LI r0, 0
+    BFNEK r5, 100, t360
+    JMP e360
+t360: LI r0, 1
+e360: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, 0, t361
+    JMP e361
+t361: LI r0, 1
+e361: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, 0, t362
+    JMP e362
+t362: LI r0, 1
+e362: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, 0, t363
+    JMP e363
+t363: LI r0, 1
+e363: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, 0, t364
+    JMP e364
+t364: LI r0, 1
+e364: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, 0, t365
+    JMP e365
+t365: LI r0, 1
+e365: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, 0, t366
+    JMP e366
+t366: LI r0, 1
+e366: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, 0, t367
+    JMP e367
+t367: LI r0, 1
+e367: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, 0, t368
+    JMP e368
+t368: LI r0, 1
+e368: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, 0, t369
+    JMP e369
+t369: LI r0, 1
+e369: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, 0, t370
+    JMP e370
+t370: LI r0, 1
+e370: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, 1, t371
+    JMP e371
+t371: LI r0, 1
+e371: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, 1, t372
+    JMP e372
+t372: LI r0, 1
+e372: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, 1, t373
+    JMP e373
+t373: LI r0, 1
+e373: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, 1, t374
+    JMP e374
+t374: LI r0, 1
+e374: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, 1, t375
+    JMP e375
+t375: LI r0, 1
+e375: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, 1, t376
+    JMP e376
+t376: LI r0, 1
+e376: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, 1, t377
+    JMP e377
+t377: LI r0, 1
+e377: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, 1, t378
+    JMP e378
+t378: LI r0, 1
+e378: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, 1, t379
+    JMP e379
+t379: LI r0, 1
+e379: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, 1, t380
+    JMP e380
+t380: LI r0, 1
+e380: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, -1, t381
+    JMP e381
+t381: LI r0, 1
+e381: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, -1, t382
+    JMP e382
+t382: LI r0, 1
+e382: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, -1, t383
+    JMP e383
+t383: LI r0, 1
+e383: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, -1, t384
+    JMP e384
+t384: LI r0, 1
+e384: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, -1, t385
+    JMP e385
+t385: LI r0, 1
+e385: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, -1, t386
+    JMP e386
+t386: LI r0, 1
+e386: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, -1, t387
+    JMP e387
+t387: LI r0, 1
+e387: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, -1, t388
+    JMP e388
+t388: LI r0, 1
+e388: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, -1, t389
+    JMP e389
+t389: LI r0, 1
+e389: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, -1, t390
+    JMP e390
+t390: LI r0, 1
+e390: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, 40000, t391
+    JMP e391
+t391: LI r0, 1
+e391: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, 40000, t392
+    JMP e392
+t392: LI r0, 1
+e392: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, 40000, t393
+    JMP e393
+t393: LI r0, 1
+e393: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, 40000, t394
+    JMP e394
+t394: LI r0, 1
+e394: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, 40000, t395
+    JMP e395
+t395: LI r0, 1
+e395: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, 40000, t396
+    JMP e396
+t396: LI r0, 1
+e396: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, 40000, t397
+    JMP e397
+t397: LI r0, 1
+e397: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, 40000, t398
+    JMP e398
+t398: LI r0, 1
+e398: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, 40000, t399
+    JMP e399
+t399: LI r0, 1
+e399: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, 40000, t400
+    JMP e400
+t400: LI r0, 1
+e400: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, -40000, t401
+    JMP e401
+t401: LI r0, 1
+e401: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, -40000, t402
+    JMP e402
+t402: LI r0, 1
+e402: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, -40000, t403
+    JMP e403
+t403: LI r0, 1
+e403: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, -40000, t404
+    JMP e404
+t404: LI r0, 1
+e404: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, -40000, t405
+    JMP e405
+t405: LI r0, 1
+e405: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, -40000, t406
+    JMP e406
+t406: LI r0, 1
+e406: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, -40000, t407
+    JMP e407
+t407: LI r0, 1
+e407: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, -40000, t408
+    JMP e408
+t408: LI r0, 1
+e408: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, -40000, t409
+    JMP e409
+t409: LI r0, 1
+e409: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, -40000, t410
+    JMP e410
+t410: LI r0, 1
+e410: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, 50000000, t411
+    JMP e411
+t411: LI r0, 1
+e411: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, 50000000, t412
+    JMP e412
+t412: LI r0, 1
+e412: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, 50000000, t413
+    JMP e413
+t413: LI r0, 1
+e413: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, 50000000, t414
+    JMP e414
+t414: LI r0, 1
+e414: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, 50000000, t415
+    JMP e415
+t415: LI r0, 1
+e415: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, 50000000, t416
+    JMP e416
+t416: LI r0, 1
+e416: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, 50000000, t417
+    JMP e417
+t417: LI r0, 1
+e417: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, 50000000, t418
+    JMP e418
+t418: LI r0, 1
+e418: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, 50000000, t419
+    JMP e419
+t419: LI r0, 1
+e419: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, 50000000, t420
+    JMP e420
+t420: LI r0, 1
+e420: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, -50000000, t421
+    JMP e421
+t421: LI r0, 1
+e421: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, -50000000, t422
+    JMP e422
+t422: LI r0, 1
+e422: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, -50000000, t423
+    JMP e423
+t423: LI r0, 1
+e423: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, -50000000, t424
+    JMP e424
+t424: LI r0, 1
+e424: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, -50000000, t425
+    JMP e425
+t425: LI r0, 1
+e425: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, -50000000, t426
+    JMP e426
+t426: LI r0, 1
+e426: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, -50000000, t427
+    JMP e427
+t427: LI r0, 1
+e427: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, -50000000, t428
+    JMP e428
+t428: LI r0, 1
+e428: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, -50000000, t429
+    JMP e429
+t429: LI r0, 1
+e429: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, -50000000, t430
+    JMP e430
+t430: LI r0, 1
+e430: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, 2147483647, t431
+    JMP e431
+t431: LI r0, 1
+e431: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, 2147483647, t432
+    JMP e432
+t432: LI r0, 1
+e432: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, 2147483647, t433
+    JMP e433
+t433: LI r0, 1
+e433: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, 2147483647, t434
+    JMP e434
+t434: LI r0, 1
+e434: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, 2147483647, t435
+    JMP e435
+t435: LI r0, 1
+e435: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, 2147483647, t436
+    JMP e436
+t436: LI r0, 1
+e436: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, 2147483647, t437
+    JMP e437
+t437: LI r0, 1
+e437: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, 2147483647, t438
+    JMP e438
+t438: LI r0, 1
+e438: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, 2147483647, t439
+    JMP e439
+t439: LI r0, 1
+e439: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, 2147483647, t440
+    JMP e440
+t440: LI r0, 1
+e440: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, -2147483648, t441
+    JMP e441
+t441: LI r0, 1
+e441: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, -2147483648, t442
+    JMP e442
+t442: LI r0, 1
+e442: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, -2147483648, t443
+    JMP e443
+t443: LI r0, 1
+e443: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, -2147483648, t444
+    JMP e444
+t444: LI r0, 1
+e444: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, -2147483648, t445
+    JMP e445
+t445: LI r0, 1
+e445: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, -2147483648, t446
+    JMP e446
+t446: LI r0, 1
+e446: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, -2147483648, t447
+    JMP e447
+t447: LI r0, 1
+e447: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, -2147483648, t448
+    JMP e448
+t448: LI r0, 1
+e448: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, -2147483648, t449
+    JMP e449
+t449: LI r0, 1
+e449: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, -2147483648, t450
+    JMP e450
+t450: LI r0, 1
+e450: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, 32768, t451
+    JMP e451
+t451: LI r0, 1
+e451: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, 32768, t452
+    JMP e452
+t452: LI r0, 1
+e452: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, 32768, t453
+    JMP e453
+t453: LI r0, 1
+e453: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, 32768, t454
+    JMP e454
+t454: LI r0, 1
+e454: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, 32768, t455
+    JMP e455
+t455: LI r0, 1
+e455: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, 32768, t456
+    JMP e456
+t456: LI r0, 1
+e456: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, 32768, t457
+    JMP e457
+t457: LI r0, 1
+e457: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, 32768, t458
+    JMP e458
+t458: LI r0, 1
+e458: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, 32768, t459
+    JMP e459
+t459: LI r0, 1
+e459: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, 32768, t460
+    JMP e460
+t460: LI r0, 1
+e460: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, -32769, t461
+    JMP e461
+t461: LI r0, 1
+e461: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, -32769, t462
+    JMP e462
+t462: LI r0, 1
+e462: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, -32769, t463
+    JMP e463
+t463: LI r0, 1
+e463: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, -32769, t464
+    JMP e464
+t464: LI r0, 1
+e464: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, -32769, t465
+    JMP e465
+t465: LI r0, 1
+e465: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, -32769, t466
+    JMP e466
+t466: LI r0, 1
+e466: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, -32769, t467
+    JMP e467
+t467: LI r0, 1
+e467: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, -32769, t468
+    JMP e468
+t468: LI r0, 1
+e468: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, -32769, t469
+    JMP e469
+t469: LI r0, 1
+e469: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, -32769, t470
+    JMP e470
+t470: LI r0, 1
+e470: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLTK r5, 100, t471
+    JMP e471
+t471: LI r0, 1
+e471: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFLEK r5, 100, t472
+    JMP e472
+t472: LI r0, 1
+e472: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGTK r5, 100, t473
+    JMP e473
+t473: LI r0, 1
+e473: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFGEK r5, 100, t474
+    JMP e474
+t474: LI r0, 1
+e474: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLTK r5, 100, t475
+    JMP e475
+t475: LI r0, 1
+e475: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNLEK r5, 100, t476
+    JMP e476
+t476: LI r0, 1
+e476: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGTK r5, 100, t477
+    JMP e477
+t477: LI r0, 1
+e477: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNGEK r5, 100, t478
+    JMP e478
+t478: LI r0, 1
+e478: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFEQK r5, 100, t479
+    JMP e479
+t479: LI r0, 1
+e479: PRINT r0
+    LI r5, -4616189618054758400
+    LI r0, 0
+    BFNEK r5, 100, t480
+    JMP e480
+t480: LI r0, 1
+e480: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, 0, t481
+    JMP e481
+t481: LI r0, 1
+e481: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, 0, t482
+    JMP e482
+t482: LI r0, 1
+e482: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, 0, t483
+    JMP e483
+t483: LI r0, 1
+e483: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, 0, t484
+    JMP e484
+t484: LI r0, 1
+e484: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, 0, t485
+    JMP e485
+t485: LI r0, 1
+e485: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, 0, t486
+    JMP e486
+t486: LI r0, 1
+e486: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, 0, t487
+    JMP e487
+t487: LI r0, 1
+e487: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, 0, t488
+    JMP e488
+t488: LI r0, 1
+e488: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, 0, t489
+    JMP e489
+t489: LI r0, 1
+e489: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, 0, t490
+    JMP e490
+t490: LI r0, 1
+e490: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, 1, t491
+    JMP e491
+t491: LI r0, 1
+e491: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, 1, t492
+    JMP e492
+t492: LI r0, 1
+e492: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, 1, t493
+    JMP e493
+t493: LI r0, 1
+e493: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, 1, t494
+    JMP e494
+t494: LI r0, 1
+e494: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, 1, t495
+    JMP e495
+t495: LI r0, 1
+e495: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, 1, t496
+    JMP e496
+t496: LI r0, 1
+e496: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, 1, t497
+    JMP e497
+t497: LI r0, 1
+e497: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, 1, t498
+    JMP e498
+t498: LI r0, 1
+e498: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, 1, t499
+    JMP e499
+t499: LI r0, 1
+e499: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, 1, t500
+    JMP e500
+t500: LI r0, 1
+e500: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, -1, t501
+    JMP e501
+t501: LI r0, 1
+e501: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, -1, t502
+    JMP e502
+t502: LI r0, 1
+e502: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, -1, t503
+    JMP e503
+t503: LI r0, 1
+e503: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, -1, t504
+    JMP e504
+t504: LI r0, 1
+e504: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, -1, t505
+    JMP e505
+t505: LI r0, 1
+e505: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, -1, t506
+    JMP e506
+t506: LI r0, 1
+e506: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, -1, t507
+    JMP e507
+t507: LI r0, 1
+e507: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, -1, t508
+    JMP e508
+t508: LI r0, 1
+e508: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, -1, t509
+    JMP e509
+t509: LI r0, 1
+e509: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, -1, t510
+    JMP e510
+t510: LI r0, 1
+e510: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, 40000, t511
+    JMP e511
+t511: LI r0, 1
+e511: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, 40000, t512
+    JMP e512
+t512: LI r0, 1
+e512: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, 40000, t513
+    JMP e513
+t513: LI r0, 1
+e513: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, 40000, t514
+    JMP e514
+t514: LI r0, 1
+e514: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, 40000, t515
+    JMP e515
+t515: LI r0, 1
+e515: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, 40000, t516
+    JMP e516
+t516: LI r0, 1
+e516: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, 40000, t517
+    JMP e517
+t517: LI r0, 1
+e517: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, 40000, t518
+    JMP e518
+t518: LI r0, 1
+e518: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, 40000, t519
+    JMP e519
+t519: LI r0, 1
+e519: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, 40000, t520
+    JMP e520
+t520: LI r0, 1
+e520: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, -40000, t521
+    JMP e521
+t521: LI r0, 1
+e521: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, -40000, t522
+    JMP e522
+t522: LI r0, 1
+e522: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, -40000, t523
+    JMP e523
+t523: LI r0, 1
+e523: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, -40000, t524
+    JMP e524
+t524: LI r0, 1
+e524: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, -40000, t525
+    JMP e525
+t525: LI r0, 1
+e525: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, -40000, t526
+    JMP e526
+t526: LI r0, 1
+e526: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, -40000, t527
+    JMP e527
+t527: LI r0, 1
+e527: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, -40000, t528
+    JMP e528
+t528: LI r0, 1
+e528: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, -40000, t529
+    JMP e529
+t529: LI r0, 1
+e529: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, -40000, t530
+    JMP e530
+t530: LI r0, 1
+e530: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, 50000000, t531
+    JMP e531
+t531: LI r0, 1
+e531: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, 50000000, t532
+    JMP e532
+t532: LI r0, 1
+e532: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, 50000000, t533
+    JMP e533
+t533: LI r0, 1
+e533: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, 50000000, t534
+    JMP e534
+t534: LI r0, 1
+e534: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, 50000000, t535
+    JMP e535
+t535: LI r0, 1
+e535: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, 50000000, t536
+    JMP e536
+t536: LI r0, 1
+e536: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, 50000000, t537
+    JMP e537
+t537: LI r0, 1
+e537: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, 50000000, t538
+    JMP e538
+t538: LI r0, 1
+e538: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, 50000000, t539
+    JMP e539
+t539: LI r0, 1
+e539: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, 50000000, t540
+    JMP e540
+t540: LI r0, 1
+e540: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, -50000000, t541
+    JMP e541
+t541: LI r0, 1
+e541: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, -50000000, t542
+    JMP e542
+t542: LI r0, 1
+e542: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, -50000000, t543
+    JMP e543
+t543: LI r0, 1
+e543: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, -50000000, t544
+    JMP e544
+t544: LI r0, 1
+e544: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, -50000000, t545
+    JMP e545
+t545: LI r0, 1
+e545: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, -50000000, t546
+    JMP e546
+t546: LI r0, 1
+e546: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, -50000000, t547
+    JMP e547
+t547: LI r0, 1
+e547: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, -50000000, t548
+    JMP e548
+t548: LI r0, 1
+e548: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, -50000000, t549
+    JMP e549
+t549: LI r0, 1
+e549: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, -50000000, t550
+    JMP e550
+t550: LI r0, 1
+e550: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, 2147483647, t551
+    JMP e551
+t551: LI r0, 1
+e551: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, 2147483647, t552
+    JMP e552
+t552: LI r0, 1
+e552: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, 2147483647, t553
+    JMP e553
+t553: LI r0, 1
+e553: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, 2147483647, t554
+    JMP e554
+t554: LI r0, 1
+e554: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, 2147483647, t555
+    JMP e555
+t555: LI r0, 1
+e555: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, 2147483647, t556
+    JMP e556
+t556: LI r0, 1
+e556: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, 2147483647, t557
+    JMP e557
+t557: LI r0, 1
+e557: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, 2147483647, t558
+    JMP e558
+t558: LI r0, 1
+e558: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, 2147483647, t559
+    JMP e559
+t559: LI r0, 1
+e559: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, 2147483647, t560
+    JMP e560
+t560: LI r0, 1
+e560: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, -2147483648, t561
+    JMP e561
+t561: LI r0, 1
+e561: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, -2147483648, t562
+    JMP e562
+t562: LI r0, 1
+e562: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, -2147483648, t563
+    JMP e563
+t563: LI r0, 1
+e563: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, -2147483648, t564
+    JMP e564
+t564: LI r0, 1
+e564: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, -2147483648, t565
+    JMP e565
+t565: LI r0, 1
+e565: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, -2147483648, t566
+    JMP e566
+t566: LI r0, 1
+e566: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, -2147483648, t567
+    JMP e567
+t567: LI r0, 1
+e567: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, -2147483648, t568
+    JMP e568
+t568: LI r0, 1
+e568: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, -2147483648, t569
+    JMP e569
+t569: LI r0, 1
+e569: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, -2147483648, t570
+    JMP e570
+t570: LI r0, 1
+e570: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, 32768, t571
+    JMP e571
+t571: LI r0, 1
+e571: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, 32768, t572
+    JMP e572
+t572: LI r0, 1
+e572: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, 32768, t573
+    JMP e573
+t573: LI r0, 1
+e573: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, 32768, t574
+    JMP e574
+t574: LI r0, 1
+e574: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, 32768, t575
+    JMP e575
+t575: LI r0, 1
+e575: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, 32768, t576
+    JMP e576
+t576: LI r0, 1
+e576: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, 32768, t577
+    JMP e577
+t577: LI r0, 1
+e577: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, 32768, t578
+    JMP e578
+t578: LI r0, 1
+e578: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, 32768, t579
+    JMP e579
+t579: LI r0, 1
+e579: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, 32768, t580
+    JMP e580
+t580: LI r0, 1
+e580: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, -32769, t581
+    JMP e581
+t581: LI r0, 1
+e581: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, -32769, t582
+    JMP e582
+t582: LI r0, 1
+e582: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, -32769, t583
+    JMP e583
+t583: LI r0, 1
+e583: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, -32769, t584
+    JMP e584
+t584: LI r0, 1
+e584: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, -32769, t585
+    JMP e585
+t585: LI r0, 1
+e585: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, -32769, t586
+    JMP e586
+t586: LI r0, 1
+e586: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, -32769, t587
+    JMP e587
+t587: LI r0, 1
+e587: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, -32769, t588
+    JMP e588
+t588: LI r0, 1
+e588: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, -32769, t589
+    JMP e589
+t589: LI r0, 1
+e589: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, -32769, t590
+    JMP e590
+t590: LI r0, 1
+e590: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLTK r5, 100, t591
+    JMP e591
+t591: LI r0, 1
+e591: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFLEK r5, 100, t592
+    JMP e592
+t592: LI r0, 1
+e592: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGTK r5, 100, t593
+    JMP e593
+t593: LI r0, 1
+e593: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFGEK r5, 100, t594
+    JMP e594
+t594: LI r0, 1
+e594: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLTK r5, 100, t595
+    JMP e595
+t595: LI r0, 1
+e595: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNLEK r5, 100, t596
+    JMP e596
+t596: LI r0, 1
+e596: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGTK r5, 100, t597
+    JMP e597
+t597: LI r0, 1
+e597: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNGEK r5, 100, t598
+    JMP e598
+t598: LI r0, 1
+e598: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFEQK r5, 100, t599
+    JMP e599
+t599: LI r0, 1
+e599: PRINT r0
+    LI r5, 4612811918334230528
+    LI r0, 0
+    BFNEK r5, 100, t600
+    JMP e600
+t600: LI r0, 1
+e600: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, 0, t601
+    JMP e601
+t601: LI r0, 1
+e601: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, 0, t602
+    JMP e602
+t602: LI r0, 1
+e602: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, 0, t603
+    JMP e603
+t603: LI r0, 1
+e603: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, 0, t604
+    JMP e604
+t604: LI r0, 1
+e604: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, 0, t605
+    JMP e605
+t605: LI r0, 1
+e605: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, 0, t606
+    JMP e606
+t606: LI r0, 1
+e606: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, 0, t607
+    JMP e607
+t607: LI r0, 1
+e607: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, 0, t608
+    JMP e608
+t608: LI r0, 1
+e608: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, 0, t609
+    JMP e609
+t609: LI r0, 1
+e609: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, 0, t610
+    JMP e610
+t610: LI r0, 1
+e610: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, 1, t611
+    JMP e611
+t611: LI r0, 1
+e611: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, 1, t612
+    JMP e612
+t612: LI r0, 1
+e612: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, 1, t613
+    JMP e613
+t613: LI r0, 1
+e613: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, 1, t614
+    JMP e614
+t614: LI r0, 1
+e614: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, 1, t615
+    JMP e615
+t615: LI r0, 1
+e615: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, 1, t616
+    JMP e616
+t616: LI r0, 1
+e616: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, 1, t617
+    JMP e617
+t617: LI r0, 1
+e617: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, 1, t618
+    JMP e618
+t618: LI r0, 1
+e618: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, 1, t619
+    JMP e619
+t619: LI r0, 1
+e619: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, 1, t620
+    JMP e620
+t620: LI r0, 1
+e620: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, -1, t621
+    JMP e621
+t621: LI r0, 1
+e621: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, -1, t622
+    JMP e622
+t622: LI r0, 1
+e622: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, -1, t623
+    JMP e623
+t623: LI r0, 1
+e623: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, -1, t624
+    JMP e624
+t624: LI r0, 1
+e624: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, -1, t625
+    JMP e625
+t625: LI r0, 1
+e625: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, -1, t626
+    JMP e626
+t626: LI r0, 1
+e626: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, -1, t627
+    JMP e627
+t627: LI r0, 1
+e627: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, -1, t628
+    JMP e628
+t628: LI r0, 1
+e628: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, -1, t629
+    JMP e629
+t629: LI r0, 1
+e629: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, -1, t630
+    JMP e630
+t630: LI r0, 1
+e630: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, 40000, t631
+    JMP e631
+t631: LI r0, 1
+e631: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, 40000, t632
+    JMP e632
+t632: LI r0, 1
+e632: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, 40000, t633
+    JMP e633
+t633: LI r0, 1
+e633: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, 40000, t634
+    JMP e634
+t634: LI r0, 1
+e634: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, 40000, t635
+    JMP e635
+t635: LI r0, 1
+e635: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, 40000, t636
+    JMP e636
+t636: LI r0, 1
+e636: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, 40000, t637
+    JMP e637
+t637: LI r0, 1
+e637: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, 40000, t638
+    JMP e638
+t638: LI r0, 1
+e638: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, 40000, t639
+    JMP e639
+t639: LI r0, 1
+e639: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, 40000, t640
+    JMP e640
+t640: LI r0, 1
+e640: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, -40000, t641
+    JMP e641
+t641: LI r0, 1
+e641: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, -40000, t642
+    JMP e642
+t642: LI r0, 1
+e642: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, -40000, t643
+    JMP e643
+t643: LI r0, 1
+e643: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, -40000, t644
+    JMP e644
+t644: LI r0, 1
+e644: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, -40000, t645
+    JMP e645
+t645: LI r0, 1
+e645: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, -40000, t646
+    JMP e646
+t646: LI r0, 1
+e646: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, -40000, t647
+    JMP e647
+t647: LI r0, 1
+e647: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, -40000, t648
+    JMP e648
+t648: LI r0, 1
+e648: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, -40000, t649
+    JMP e649
+t649: LI r0, 1
+e649: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, -40000, t650
+    JMP e650
+t650: LI r0, 1
+e650: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, 50000000, t651
+    JMP e651
+t651: LI r0, 1
+e651: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, 50000000, t652
+    JMP e652
+t652: LI r0, 1
+e652: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, 50000000, t653
+    JMP e653
+t653: LI r0, 1
+e653: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, 50000000, t654
+    JMP e654
+t654: LI r0, 1
+e654: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, 50000000, t655
+    JMP e655
+t655: LI r0, 1
+e655: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, 50000000, t656
+    JMP e656
+t656: LI r0, 1
+e656: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, 50000000, t657
+    JMP e657
+t657: LI r0, 1
+e657: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, 50000000, t658
+    JMP e658
+t658: LI r0, 1
+e658: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, 50000000, t659
+    JMP e659
+t659: LI r0, 1
+e659: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, 50000000, t660
+    JMP e660
+t660: LI r0, 1
+e660: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, -50000000, t661
+    JMP e661
+t661: LI r0, 1
+e661: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, -50000000, t662
+    JMP e662
+t662: LI r0, 1
+e662: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, -50000000, t663
+    JMP e663
+t663: LI r0, 1
+e663: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, -50000000, t664
+    JMP e664
+t664: LI r0, 1
+e664: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, -50000000, t665
+    JMP e665
+t665: LI r0, 1
+e665: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, -50000000, t666
+    JMP e666
+t666: LI r0, 1
+e666: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, -50000000, t667
+    JMP e667
+t667: LI r0, 1
+e667: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, -50000000, t668
+    JMP e668
+t668: LI r0, 1
+e668: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, -50000000, t669
+    JMP e669
+t669: LI r0, 1
+e669: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, -50000000, t670
+    JMP e670
+t670: LI r0, 1
+e670: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, 2147483647, t671
+    JMP e671
+t671: LI r0, 1
+e671: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, 2147483647, t672
+    JMP e672
+t672: LI r0, 1
+e672: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, 2147483647, t673
+    JMP e673
+t673: LI r0, 1
+e673: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, 2147483647, t674
+    JMP e674
+t674: LI r0, 1
+e674: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, 2147483647, t675
+    JMP e675
+t675: LI r0, 1
+e675: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, 2147483647, t676
+    JMP e676
+t676: LI r0, 1
+e676: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, 2147483647, t677
+    JMP e677
+t677: LI r0, 1
+e677: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, 2147483647, t678
+    JMP e678
+t678: LI r0, 1
+e678: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, 2147483647, t679
+    JMP e679
+t679: LI r0, 1
+e679: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, 2147483647, t680
+    JMP e680
+t680: LI r0, 1
+e680: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, -2147483648, t681
+    JMP e681
+t681: LI r0, 1
+e681: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, -2147483648, t682
+    JMP e682
+t682: LI r0, 1
+e682: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, -2147483648, t683
+    JMP e683
+t683: LI r0, 1
+e683: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, -2147483648, t684
+    JMP e684
+t684: LI r0, 1
+e684: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, -2147483648, t685
+    JMP e685
+t685: LI r0, 1
+e685: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, -2147483648, t686
+    JMP e686
+t686: LI r0, 1
+e686: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, -2147483648, t687
+    JMP e687
+t687: LI r0, 1
+e687: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, -2147483648, t688
+    JMP e688
+t688: LI r0, 1
+e688: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, -2147483648, t689
+    JMP e689
+t689: LI r0, 1
+e689: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, -2147483648, t690
+    JMP e690
+t690: LI r0, 1
+e690: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, 32768, t691
+    JMP e691
+t691: LI r0, 1
+e691: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, 32768, t692
+    JMP e692
+t692: LI r0, 1
+e692: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, 32768, t693
+    JMP e693
+t693: LI r0, 1
+e693: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, 32768, t694
+    JMP e694
+t694: LI r0, 1
+e694: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, 32768, t695
+    JMP e695
+t695: LI r0, 1
+e695: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, 32768, t696
+    JMP e696
+t696: LI r0, 1
+e696: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, 32768, t697
+    JMP e697
+t697: LI r0, 1
+e697: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, 32768, t698
+    JMP e698
+t698: LI r0, 1
+e698: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, 32768, t699
+    JMP e699
+t699: LI r0, 1
+e699: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, 32768, t700
+    JMP e700
+t700: LI r0, 1
+e700: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, -32769, t701
+    JMP e701
+t701: LI r0, 1
+e701: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, -32769, t702
+    JMP e702
+t702: LI r0, 1
+e702: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, -32769, t703
+    JMP e703
+t703: LI r0, 1
+e703: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, -32769, t704
+    JMP e704
+t704: LI r0, 1
+e704: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, -32769, t705
+    JMP e705
+t705: LI r0, 1
+e705: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, -32769, t706
+    JMP e706
+t706: LI r0, 1
+e706: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, -32769, t707
+    JMP e707
+t707: LI r0, 1
+e707: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, -32769, t708
+    JMP e708
+t708: LI r0, 1
+e708: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, -32769, t709
+    JMP e709
+t709: LI r0, 1
+e709: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, -32769, t710
+    JMP e710
+t710: LI r0, 1
+e710: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLTK r5, 100, t711
+    JMP e711
+t711: LI r0, 1
+e711: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFLEK r5, 100, t712
+    JMP e712
+t712: LI r0, 1
+e712: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGTK r5, 100, t713
+    JMP e713
+t713: LI r0, 1
+e713: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFGEK r5, 100, t714
+    JMP e714
+t714: LI r0, 1
+e714: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLTK r5, 100, t715
+    JMP e715
+t715: LI r0, 1
+e715: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNLEK r5, 100, t716
+    JMP e716
+t716: LI r0, 1
+e716: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGTK r5, 100, t717
+    JMP e717
+t717: LI r0, 1
+e717: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNGEK r5, 100, t718
+    JMP e718
+t718: LI r0, 1
+e718: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFEQK r5, 100, t719
+    JMP e719
+t719: LI r0, 1
+e719: PRINT r0
+    LI r5, -4610560118520545280
+    LI r0, 0
+    BFNEK r5, 100, t720
+    JMP e720
+t720: LI r0, 1
+e720: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, 0, t721
+    JMP e721
+t721: LI r0, 1
+e721: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, 0, t722
+    JMP e722
+t722: LI r0, 1
+e722: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, 0, t723
+    JMP e723
+t723: LI r0, 1
+e723: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, 0, t724
+    JMP e724
+t724: LI r0, 1
+e724: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, 0, t725
+    JMP e725
+t725: LI r0, 1
+e725: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, 0, t726
+    JMP e726
+t726: LI r0, 1
+e726: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, 0, t727
+    JMP e727
+t727: LI r0, 1
+e727: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, 0, t728
+    JMP e728
+t728: LI r0, 1
+e728: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, 0, t729
+    JMP e729
+t729: LI r0, 1
+e729: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, 0, t730
+    JMP e730
+t730: LI r0, 1
+e730: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, 1, t731
+    JMP e731
+t731: LI r0, 1
+e731: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, 1, t732
+    JMP e732
+t732: LI r0, 1
+e732: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, 1, t733
+    JMP e733
+t733: LI r0, 1
+e733: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, 1, t734
+    JMP e734
+t734: LI r0, 1
+e734: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, 1, t735
+    JMP e735
+t735: LI r0, 1
+e735: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, 1, t736
+    JMP e736
+t736: LI r0, 1
+e736: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, 1, t737
+    JMP e737
+t737: LI r0, 1
+e737: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, 1, t738
+    JMP e738
+t738: LI r0, 1
+e738: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, 1, t739
+    JMP e739
+t739: LI r0, 1
+e739: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, 1, t740
+    JMP e740
+t740: LI r0, 1
+e740: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, -1, t741
+    JMP e741
+t741: LI r0, 1
+e741: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, -1, t742
+    JMP e742
+t742: LI r0, 1
+e742: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, -1, t743
+    JMP e743
+t743: LI r0, 1
+e743: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, -1, t744
+    JMP e744
+t744: LI r0, 1
+e744: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, -1, t745
+    JMP e745
+t745: LI r0, 1
+e745: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, -1, t746
+    JMP e746
+t746: LI r0, 1
+e746: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, -1, t747
+    JMP e747
+t747: LI r0, 1
+e747: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, -1, t748
+    JMP e748
+t748: LI r0, 1
+e748: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, -1, t749
+    JMP e749
+t749: LI r0, 1
+e749: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, -1, t750
+    JMP e750
+t750: LI r0, 1
+e750: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, 40000, t751
+    JMP e751
+t751: LI r0, 1
+e751: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, 40000, t752
+    JMP e752
+t752: LI r0, 1
+e752: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, 40000, t753
+    JMP e753
+t753: LI r0, 1
+e753: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, 40000, t754
+    JMP e754
+t754: LI r0, 1
+e754: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, 40000, t755
+    JMP e755
+t755: LI r0, 1
+e755: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, 40000, t756
+    JMP e756
+t756: LI r0, 1
+e756: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, 40000, t757
+    JMP e757
+t757: LI r0, 1
+e757: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, 40000, t758
+    JMP e758
+t758: LI r0, 1
+e758: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, 40000, t759
+    JMP e759
+t759: LI r0, 1
+e759: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, 40000, t760
+    JMP e760
+t760: LI r0, 1
+e760: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, -40000, t761
+    JMP e761
+t761: LI r0, 1
+e761: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, -40000, t762
+    JMP e762
+t762: LI r0, 1
+e762: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, -40000, t763
+    JMP e763
+t763: LI r0, 1
+e763: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, -40000, t764
+    JMP e764
+t764: LI r0, 1
+e764: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, -40000, t765
+    JMP e765
+t765: LI r0, 1
+e765: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, -40000, t766
+    JMP e766
+t766: LI r0, 1
+e766: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, -40000, t767
+    JMP e767
+t767: LI r0, 1
+e767: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, -40000, t768
+    JMP e768
+t768: LI r0, 1
+e768: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, -40000, t769
+    JMP e769
+t769: LI r0, 1
+e769: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, -40000, t770
+    JMP e770
+t770: LI r0, 1
+e770: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, 50000000, t771
+    JMP e771
+t771: LI r0, 1
+e771: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, 50000000, t772
+    JMP e772
+t772: LI r0, 1
+e772: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, 50000000, t773
+    JMP e773
+t773: LI r0, 1
+e773: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, 50000000, t774
+    JMP e774
+t774: LI r0, 1
+e774: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, 50000000, t775
+    JMP e775
+t775: LI r0, 1
+e775: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, 50000000, t776
+    JMP e776
+t776: LI r0, 1
+e776: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, 50000000, t777
+    JMP e777
+t777: LI r0, 1
+e777: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, 50000000, t778
+    JMP e778
+t778: LI r0, 1
+e778: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, 50000000, t779
+    JMP e779
+t779: LI r0, 1
+e779: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, 50000000, t780
+    JMP e780
+t780: LI r0, 1
+e780: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, -50000000, t781
+    JMP e781
+t781: LI r0, 1
+e781: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, -50000000, t782
+    JMP e782
+t782: LI r0, 1
+e782: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, -50000000, t783
+    JMP e783
+t783: LI r0, 1
+e783: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, -50000000, t784
+    JMP e784
+t784: LI r0, 1
+e784: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, -50000000, t785
+    JMP e785
+t785: LI r0, 1
+e785: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, -50000000, t786
+    JMP e786
+t786: LI r0, 1
+e786: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, -50000000, t787
+    JMP e787
+t787: LI r0, 1
+e787: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, -50000000, t788
+    JMP e788
+t788: LI r0, 1
+e788: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, -50000000, t789
+    JMP e789
+t789: LI r0, 1
+e789: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, -50000000, t790
+    JMP e790
+t790: LI r0, 1
+e790: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, 2147483647, t791
+    JMP e791
+t791: LI r0, 1
+e791: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, 2147483647, t792
+    JMP e792
+t792: LI r0, 1
+e792: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, 2147483647, t793
+    JMP e793
+t793: LI r0, 1
+e793: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, 2147483647, t794
+    JMP e794
+t794: LI r0, 1
+e794: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, 2147483647, t795
+    JMP e795
+t795: LI r0, 1
+e795: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, 2147483647, t796
+    JMP e796
+t796: LI r0, 1
+e796: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, 2147483647, t797
+    JMP e797
+t797: LI r0, 1
+e797: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, 2147483647, t798
+    JMP e798
+t798: LI r0, 1
+e798: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, 2147483647, t799
+    JMP e799
+t799: LI r0, 1
+e799: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, 2147483647, t800
+    JMP e800
+t800: LI r0, 1
+e800: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, -2147483648, t801
+    JMP e801
+t801: LI r0, 1
+e801: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, -2147483648, t802
+    JMP e802
+t802: LI r0, 1
+e802: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, -2147483648, t803
+    JMP e803
+t803: LI r0, 1
+e803: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, -2147483648, t804
+    JMP e804
+t804: LI r0, 1
+e804: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, -2147483648, t805
+    JMP e805
+t805: LI r0, 1
+e805: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, -2147483648, t806
+    JMP e806
+t806: LI r0, 1
+e806: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, -2147483648, t807
+    JMP e807
+t807: LI r0, 1
+e807: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, -2147483648, t808
+    JMP e808
+t808: LI r0, 1
+e808: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, -2147483648, t809
+    JMP e809
+t809: LI r0, 1
+e809: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, -2147483648, t810
+    JMP e810
+t810: LI r0, 1
+e810: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, 32768, t811
+    JMP e811
+t811: LI r0, 1
+e811: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, 32768, t812
+    JMP e812
+t812: LI r0, 1
+e812: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, 32768, t813
+    JMP e813
+t813: LI r0, 1
+e813: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, 32768, t814
+    JMP e814
+t814: LI r0, 1
+e814: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, 32768, t815
+    JMP e815
+t815: LI r0, 1
+e815: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, 32768, t816
+    JMP e816
+t816: LI r0, 1
+e816: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, 32768, t817
+    JMP e817
+t817: LI r0, 1
+e817: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, 32768, t818
+    JMP e818
+t818: LI r0, 1
+e818: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, 32768, t819
+    JMP e819
+t819: LI r0, 1
+e819: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, 32768, t820
+    JMP e820
+t820: LI r0, 1
+e820: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, -32769, t821
+    JMP e821
+t821: LI r0, 1
+e821: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, -32769, t822
+    JMP e822
+t822: LI r0, 1
+e822: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, -32769, t823
+    JMP e823
+t823: LI r0, 1
+e823: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, -32769, t824
+    JMP e824
+t824: LI r0, 1
+e824: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, -32769, t825
+    JMP e825
+t825: LI r0, 1
+e825: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, -32769, t826
+    JMP e826
+t826: LI r0, 1
+e826: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, -32769, t827
+    JMP e827
+t827: LI r0, 1
+e827: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, -32769, t828
+    JMP e828
+t828: LI r0, 1
+e828: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, -32769, t829
+    JMP e829
+t829: LI r0, 1
+e829: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, -32769, t830
+    JMP e830
+t830: LI r0, 1
+e830: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLTK r5, 100, t831
+    JMP e831
+t831: LI r0, 1
+e831: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFLEK r5, 100, t832
+    JMP e832
+t832: LI r0, 1
+e832: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGTK r5, 100, t833
+    JMP e833
+t833: LI r0, 1
+e833: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFGEK r5, 100, t834
+    JMP e834
+t834: LI r0, 1
+e834: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLTK r5, 100, t835
+    JMP e835
+t835: LI r0, 1
+e835: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNLEK r5, 100, t836
+    JMP e836
+t836: LI r0, 1
+e836: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGTK r5, 100, t837
+    JMP e837
+t837: LI r0, 1
+e837: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNGEK r5, 100, t838
+    JMP e838
+t838: LI r0, 1
+e838: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFEQK r5, 100, t839
+    JMP e839
+t839: LI r0, 1
+e839: PRINT r0
+    LI r5, 4721979696122691584
+    LI r0, 0
+    BFNEK r5, 100, t840
+    JMP e840
+t840: LI r0, 1
+e840: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, 0, t841
+    JMP e841
+t841: LI r0, 1
+e841: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, 0, t842
+    JMP e842
+t842: LI r0, 1
+e842: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, 0, t843
+    JMP e843
+t843: LI r0, 1
+e843: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, 0, t844
+    JMP e844
+t844: LI r0, 1
+e844: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, 0, t845
+    JMP e845
+t845: LI r0, 1
+e845: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, 0, t846
+    JMP e846
+t846: LI r0, 1
+e846: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, 0, t847
+    JMP e847
+t847: LI r0, 1
+e847: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, 0, t848
+    JMP e848
+t848: LI r0, 1
+e848: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, 0, t849
+    JMP e849
+t849: LI r0, 1
+e849: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, 0, t850
+    JMP e850
+t850: LI r0, 1
+e850: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, 1, t851
+    JMP e851
+t851: LI r0, 1
+e851: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, 1, t852
+    JMP e852
+t852: LI r0, 1
+e852: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, 1, t853
+    JMP e853
+t853: LI r0, 1
+e853: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, 1, t854
+    JMP e854
+t854: LI r0, 1
+e854: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, 1, t855
+    JMP e855
+t855: LI r0, 1
+e855: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, 1, t856
+    JMP e856
+t856: LI r0, 1
+e856: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, 1, t857
+    JMP e857
+t857: LI r0, 1
+e857: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, 1, t858
+    JMP e858
+t858: LI r0, 1
+e858: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, 1, t859
+    JMP e859
+t859: LI r0, 1
+e859: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, 1, t860
+    JMP e860
+t860: LI r0, 1
+e860: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, -1, t861
+    JMP e861
+t861: LI r0, 1
+e861: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, -1, t862
+    JMP e862
+t862: LI r0, 1
+e862: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, -1, t863
+    JMP e863
+t863: LI r0, 1
+e863: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, -1, t864
+    JMP e864
+t864: LI r0, 1
+e864: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, -1, t865
+    JMP e865
+t865: LI r0, 1
+e865: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, -1, t866
+    JMP e866
+t866: LI r0, 1
+e866: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, -1, t867
+    JMP e867
+t867: LI r0, 1
+e867: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, -1, t868
+    JMP e868
+t868: LI r0, 1
+e868: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, -1, t869
+    JMP e869
+t869: LI r0, 1
+e869: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, -1, t870
+    JMP e870
+t870: LI r0, 1
+e870: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, 40000, t871
+    JMP e871
+t871: LI r0, 1
+e871: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, 40000, t872
+    JMP e872
+t872: LI r0, 1
+e872: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, 40000, t873
+    JMP e873
+t873: LI r0, 1
+e873: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, 40000, t874
+    JMP e874
+t874: LI r0, 1
+e874: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, 40000, t875
+    JMP e875
+t875: LI r0, 1
+e875: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, 40000, t876
+    JMP e876
+t876: LI r0, 1
+e876: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, 40000, t877
+    JMP e877
+t877: LI r0, 1
+e877: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, 40000, t878
+    JMP e878
+t878: LI r0, 1
+e878: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, 40000, t879
+    JMP e879
+t879: LI r0, 1
+e879: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, 40000, t880
+    JMP e880
+t880: LI r0, 1
+e880: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, -40000, t881
+    JMP e881
+t881: LI r0, 1
+e881: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, -40000, t882
+    JMP e882
+t882: LI r0, 1
+e882: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, -40000, t883
+    JMP e883
+t883: LI r0, 1
+e883: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, -40000, t884
+    JMP e884
+t884: LI r0, 1
+e884: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, -40000, t885
+    JMP e885
+t885: LI r0, 1
+e885: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, -40000, t886
+    JMP e886
+t886: LI r0, 1
+e886: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, -40000, t887
+    JMP e887
+t887: LI r0, 1
+e887: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, -40000, t888
+    JMP e888
+t888: LI r0, 1
+e888: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, -40000, t889
+    JMP e889
+t889: LI r0, 1
+e889: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, -40000, t890
+    JMP e890
+t890: LI r0, 1
+e890: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, 50000000, t891
+    JMP e891
+t891: LI r0, 1
+e891: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, 50000000, t892
+    JMP e892
+t892: LI r0, 1
+e892: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, 50000000, t893
+    JMP e893
+t893: LI r0, 1
+e893: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, 50000000, t894
+    JMP e894
+t894: LI r0, 1
+e894: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, 50000000, t895
+    JMP e895
+t895: LI r0, 1
+e895: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, 50000000, t896
+    JMP e896
+t896: LI r0, 1
+e896: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, 50000000, t897
+    JMP e897
+t897: LI r0, 1
+e897: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, 50000000, t898
+    JMP e898
+t898: LI r0, 1
+e898: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, 50000000, t899
+    JMP e899
+t899: LI r0, 1
+e899: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, 50000000, t900
+    JMP e900
+t900: LI r0, 1
+e900: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, -50000000, t901
+    JMP e901
+t901: LI r0, 1
+e901: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, -50000000, t902
+    JMP e902
+t902: LI r0, 1
+e902: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, -50000000, t903
+    JMP e903
+t903: LI r0, 1
+e903: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, -50000000, t904
+    JMP e904
+t904: LI r0, 1
+e904: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, -50000000, t905
+    JMP e905
+t905: LI r0, 1
+e905: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, -50000000, t906
+    JMP e906
+t906: LI r0, 1
+e906: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, -50000000, t907
+    JMP e907
+t907: LI r0, 1
+e907: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, -50000000, t908
+    JMP e908
+t908: LI r0, 1
+e908: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, -50000000, t909
+    JMP e909
+t909: LI r0, 1
+e909: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, -50000000, t910
+    JMP e910
+t910: LI r0, 1
+e910: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, 2147483647, t911
+    JMP e911
+t911: LI r0, 1
+e911: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, 2147483647, t912
+    JMP e912
+t912: LI r0, 1
+e912: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, 2147483647, t913
+    JMP e913
+t913: LI r0, 1
+e913: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, 2147483647, t914
+    JMP e914
+t914: LI r0, 1
+e914: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, 2147483647, t915
+    JMP e915
+t915: LI r0, 1
+e915: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, 2147483647, t916
+    JMP e916
+t916: LI r0, 1
+e916: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, 2147483647, t917
+    JMP e917
+t917: LI r0, 1
+e917: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, 2147483647, t918
+    JMP e918
+t918: LI r0, 1
+e918: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, 2147483647, t919
+    JMP e919
+t919: LI r0, 1
+e919: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, 2147483647, t920
+    JMP e920
+t920: LI r0, 1
+e920: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, -2147483648, t921
+    JMP e921
+t921: LI r0, 1
+e921: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, -2147483648, t922
+    JMP e922
+t922: LI r0, 1
+e922: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, -2147483648, t923
+    JMP e923
+t923: LI r0, 1
+e923: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, -2147483648, t924
+    JMP e924
+t924: LI r0, 1
+e924: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, -2147483648, t925
+    JMP e925
+t925: LI r0, 1
+e925: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, -2147483648, t926
+    JMP e926
+t926: LI r0, 1
+e926: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, -2147483648, t927
+    JMP e927
+t927: LI r0, 1
+e927: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, -2147483648, t928
+    JMP e928
+t928: LI r0, 1
+e928: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, -2147483648, t929
+    JMP e929
+t929: LI r0, 1
+e929: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, -2147483648, t930
+    JMP e930
+t930: LI r0, 1
+e930: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, 32768, t931
+    JMP e931
+t931: LI r0, 1
+e931: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, 32768, t932
+    JMP e932
+t932: LI r0, 1
+e932: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, 32768, t933
+    JMP e933
+t933: LI r0, 1
+e933: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, 32768, t934
+    JMP e934
+t934: LI r0, 1
+e934: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, 32768, t935
+    JMP e935
+t935: LI r0, 1
+e935: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, 32768, t936
+    JMP e936
+t936: LI r0, 1
+e936: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, 32768, t937
+    JMP e937
+t937: LI r0, 1
+e937: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, 32768, t938
+    JMP e938
+t938: LI r0, 1
+e938: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, 32768, t939
+    JMP e939
+t939: LI r0, 1
+e939: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, 32768, t940
+    JMP e940
+t940: LI r0, 1
+e940: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, -32769, t941
+    JMP e941
+t941: LI r0, 1
+e941: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, -32769, t942
+    JMP e942
+t942: LI r0, 1
+e942: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, -32769, t943
+    JMP e943
+t943: LI r0, 1
+e943: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, -32769, t944
+    JMP e944
+t944: LI r0, 1
+e944: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, -32769, t945
+    JMP e945
+t945: LI r0, 1
+e945: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, -32769, t946
+    JMP e946
+t946: LI r0, 1
+e946: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, -32769, t947
+    JMP e947
+t947: LI r0, 1
+e947: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, -32769, t948
+    JMP e948
+t948: LI r0, 1
+e948: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, -32769, t949
+    JMP e949
+t949: LI r0, 1
+e949: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, -32769, t950
+    JMP e950
+t950: LI r0, 1
+e950: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLTK r5, 100, t951
+    JMP e951
+t951: LI r0, 1
+e951: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFLEK r5, 100, t952
+    JMP e952
+t952: LI r0, 1
+e952: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGTK r5, 100, t953
+    JMP e953
+t953: LI r0, 1
+e953: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFGEK r5, 100, t954
+    JMP e954
+t954: LI r0, 1
+e954: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLTK r5, 100, t955
+    JMP e955
+t955: LI r0, 1
+e955: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNLEK r5, 100, t956
+    JMP e956
+t956: LI r0, 1
+e956: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGTK r5, 100, t957
+    JMP e957
+t957: LI r0, 1
+e957: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNGEK r5, 100, t958
+    JMP e958
+t958: LI r0, 1
+e958: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFEQK r5, 100, t959
+    JMP e959
+t959: LI r0, 1
+e959: PRINT r0
+    LI r5, 4721979696256909312
+    LI r0, 0
+    BFNEK r5, 100, t960
+    JMP e960
+t960: LI r0, 1
+e960: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, 0, t961
+    JMP e961
+t961: LI r0, 1
+e961: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, 0, t962
+    JMP e962
+t962: LI r0, 1
+e962: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, 0, t963
+    JMP e963
+t963: LI r0, 1
+e963: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, 0, t964
+    JMP e964
+t964: LI r0, 1
+e964: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, 0, t965
+    JMP e965
+t965: LI r0, 1
+e965: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, 0, t966
+    JMP e966
+t966: LI r0, 1
+e966: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, 0, t967
+    JMP e967
+t967: LI r0, 1
+e967: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, 0, t968
+    JMP e968
+t968: LI r0, 1
+e968: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, 0, t969
+    JMP e969
+t969: LI r0, 1
+e969: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, 0, t970
+    JMP e970
+t970: LI r0, 1
+e970: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, 1, t971
+    JMP e971
+t971: LI r0, 1
+e971: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, 1, t972
+    JMP e972
+t972: LI r0, 1
+e972: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, 1, t973
+    JMP e973
+t973: LI r0, 1
+e973: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, 1, t974
+    JMP e974
+t974: LI r0, 1
+e974: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, 1, t975
+    JMP e975
+t975: LI r0, 1
+e975: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, 1, t976
+    JMP e976
+t976: LI r0, 1
+e976: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, 1, t977
+    JMP e977
+t977: LI r0, 1
+e977: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, 1, t978
+    JMP e978
+t978: LI r0, 1
+e978: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, 1, t979
+    JMP e979
+t979: LI r0, 1
+e979: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, 1, t980
+    JMP e980
+t980: LI r0, 1
+e980: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, -1, t981
+    JMP e981
+t981: LI r0, 1
+e981: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, -1, t982
+    JMP e982
+t982: LI r0, 1
+e982: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, -1, t983
+    JMP e983
+t983: LI r0, 1
+e983: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, -1, t984
+    JMP e984
+t984: LI r0, 1
+e984: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, -1, t985
+    JMP e985
+t985: LI r0, 1
+e985: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, -1, t986
+    JMP e986
+t986: LI r0, 1
+e986: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, -1, t987
+    JMP e987
+t987: LI r0, 1
+e987: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, -1, t988
+    JMP e988
+t988: LI r0, 1
+e988: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, -1, t989
+    JMP e989
+t989: LI r0, 1
+e989: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, -1, t990
+    JMP e990
+t990: LI r0, 1
+e990: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, 40000, t991
+    JMP e991
+t991: LI r0, 1
+e991: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, 40000, t992
+    JMP e992
+t992: LI r0, 1
+e992: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, 40000, t993
+    JMP e993
+t993: LI r0, 1
+e993: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, 40000, t994
+    JMP e994
+t994: LI r0, 1
+e994: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, 40000, t995
+    JMP e995
+t995: LI r0, 1
+e995: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, 40000, t996
+    JMP e996
+t996: LI r0, 1
+e996: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, 40000, t997
+    JMP e997
+t997: LI r0, 1
+e997: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, 40000, t998
+    JMP e998
+t998: LI r0, 1
+e998: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, 40000, t999
+    JMP e999
+t999: LI r0, 1
+e999: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, 40000, t1000
+    JMP e1000
+t1000: LI r0, 1
+e1000: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, -40000, t1001
+    JMP e1001
+t1001: LI r0, 1
+e1001: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, -40000, t1002
+    JMP e1002
+t1002: LI r0, 1
+e1002: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, -40000, t1003
+    JMP e1003
+t1003: LI r0, 1
+e1003: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, -40000, t1004
+    JMP e1004
+t1004: LI r0, 1
+e1004: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, -40000, t1005
+    JMP e1005
+t1005: LI r0, 1
+e1005: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, -40000, t1006
+    JMP e1006
+t1006: LI r0, 1
+e1006: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, -40000, t1007
+    JMP e1007
+t1007: LI r0, 1
+e1007: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, -40000, t1008
+    JMP e1008
+t1008: LI r0, 1
+e1008: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, -40000, t1009
+    JMP e1009
+t1009: LI r0, 1
+e1009: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, -40000, t1010
+    JMP e1010
+t1010: LI r0, 1
+e1010: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, 50000000, t1011
+    JMP e1011
+t1011: LI r0, 1
+e1011: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, 50000000, t1012
+    JMP e1012
+t1012: LI r0, 1
+e1012: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, 50000000, t1013
+    JMP e1013
+t1013: LI r0, 1
+e1013: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, 50000000, t1014
+    JMP e1014
+t1014: LI r0, 1
+e1014: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, 50000000, t1015
+    JMP e1015
+t1015: LI r0, 1
+e1015: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, 50000000, t1016
+    JMP e1016
+t1016: LI r0, 1
+e1016: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, 50000000, t1017
+    JMP e1017
+t1017: LI r0, 1
+e1017: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, 50000000, t1018
+    JMP e1018
+t1018: LI r0, 1
+e1018: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, 50000000, t1019
+    JMP e1019
+t1019: LI r0, 1
+e1019: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, 50000000, t1020
+    JMP e1020
+t1020: LI r0, 1
+e1020: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, -50000000, t1021
+    JMP e1021
+t1021: LI r0, 1
+e1021: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, -50000000, t1022
+    JMP e1022
+t1022: LI r0, 1
+e1022: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, -50000000, t1023
+    JMP e1023
+t1023: LI r0, 1
+e1023: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, -50000000, t1024
+    JMP e1024
+t1024: LI r0, 1
+e1024: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, -50000000, t1025
+    JMP e1025
+t1025: LI r0, 1
+e1025: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, -50000000, t1026
+    JMP e1026
+t1026: LI r0, 1
+e1026: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, -50000000, t1027
+    JMP e1027
+t1027: LI r0, 1
+e1027: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, -50000000, t1028
+    JMP e1028
+t1028: LI r0, 1
+e1028: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, -50000000, t1029
+    JMP e1029
+t1029: LI r0, 1
+e1029: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, -50000000, t1030
+    JMP e1030
+t1030: LI r0, 1
+e1030: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, 2147483647, t1031
+    JMP e1031
+t1031: LI r0, 1
+e1031: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, 2147483647, t1032
+    JMP e1032
+t1032: LI r0, 1
+e1032: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, 2147483647, t1033
+    JMP e1033
+t1033: LI r0, 1
+e1033: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, 2147483647, t1034
+    JMP e1034
+t1034: LI r0, 1
+e1034: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, 2147483647, t1035
+    JMP e1035
+t1035: LI r0, 1
+e1035: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, 2147483647, t1036
+    JMP e1036
+t1036: LI r0, 1
+e1036: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, 2147483647, t1037
+    JMP e1037
+t1037: LI r0, 1
+e1037: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, 2147483647, t1038
+    JMP e1038
+t1038: LI r0, 1
+e1038: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, 2147483647, t1039
+    JMP e1039
+t1039: LI r0, 1
+e1039: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, 2147483647, t1040
+    JMP e1040
+t1040: LI r0, 1
+e1040: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, -2147483648, t1041
+    JMP e1041
+t1041: LI r0, 1
+e1041: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, -2147483648, t1042
+    JMP e1042
+t1042: LI r0, 1
+e1042: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, -2147483648, t1043
+    JMP e1043
+t1043: LI r0, 1
+e1043: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, -2147483648, t1044
+    JMP e1044
+t1044: LI r0, 1
+e1044: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, -2147483648, t1045
+    JMP e1045
+t1045: LI r0, 1
+e1045: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, -2147483648, t1046
+    JMP e1046
+t1046: LI r0, 1
+e1046: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, -2147483648, t1047
+    JMP e1047
+t1047: LI r0, 1
+e1047: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, -2147483648, t1048
+    JMP e1048
+t1048: LI r0, 1
+e1048: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, -2147483648, t1049
+    JMP e1049
+t1049: LI r0, 1
+e1049: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, -2147483648, t1050
+    JMP e1050
+t1050: LI r0, 1
+e1050: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, 32768, t1051
+    JMP e1051
+t1051: LI r0, 1
+e1051: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, 32768, t1052
+    JMP e1052
+t1052: LI r0, 1
+e1052: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, 32768, t1053
+    JMP e1053
+t1053: LI r0, 1
+e1053: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, 32768, t1054
+    JMP e1054
+t1054: LI r0, 1
+e1054: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, 32768, t1055
+    JMP e1055
+t1055: LI r0, 1
+e1055: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, 32768, t1056
+    JMP e1056
+t1056: LI r0, 1
+e1056: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, 32768, t1057
+    JMP e1057
+t1057: LI r0, 1
+e1057: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, 32768, t1058
+    JMP e1058
+t1058: LI r0, 1
+e1058: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, 32768, t1059
+    JMP e1059
+t1059: LI r0, 1
+e1059: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, 32768, t1060
+    JMP e1060
+t1060: LI r0, 1
+e1060: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, -32769, t1061
+    JMP e1061
+t1061: LI r0, 1
+e1061: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, -32769, t1062
+    JMP e1062
+t1062: LI r0, 1
+e1062: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, -32769, t1063
+    JMP e1063
+t1063: LI r0, 1
+e1063: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, -32769, t1064
+    JMP e1064
+t1064: LI r0, 1
+e1064: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, -32769, t1065
+    JMP e1065
+t1065: LI r0, 1
+e1065: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, -32769, t1066
+    JMP e1066
+t1066: LI r0, 1
+e1066: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, -32769, t1067
+    JMP e1067
+t1067: LI r0, 1
+e1067: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, -32769, t1068
+    JMP e1068
+t1068: LI r0, 1
+e1068: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, -32769, t1069
+    JMP e1069
+t1069: LI r0, 1
+e1069: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, -32769, t1070
+    JMP e1070
+t1070: LI r0, 1
+e1070: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLTK r5, 100, t1071
+    JMP e1071
+t1071: LI r0, 1
+e1071: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFLEK r5, 100, t1072
+    JMP e1072
+t1072: LI r0, 1
+e1072: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGTK r5, 100, t1073
+    JMP e1073
+t1073: LI r0, 1
+e1073: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFGEK r5, 100, t1074
+    JMP e1074
+t1074: LI r0, 1
+e1074: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLTK r5, 100, t1075
+    JMP e1075
+t1075: LI r0, 1
+e1075: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNLEK r5, 100, t1076
+    JMP e1076
+t1076: LI r0, 1
+e1076: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGTK r5, 100, t1077
+    JMP e1077
+t1077: LI r0, 1
+e1077: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNGEK r5, 100, t1078
+    JMP e1078
+t1078: LI r0, 1
+e1078: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFEQK r5, 100, t1079
+    JMP e1079
+t1079: LI r0, 1
+e1079: PRINT r0
+    LI r5, 4721979696391127040
+    LI r0, 0
+    BFNEK r5, 100, t1080
+    JMP e1080
+t1080: LI r0, 1
+e1080: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, 0, t1081
+    JMP e1081
+t1081: LI r0, 1
+e1081: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, 0, t1082
+    JMP e1082
+t1082: LI r0, 1
+e1082: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, 0, t1083
+    JMP e1083
+t1083: LI r0, 1
+e1083: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, 0, t1084
+    JMP e1084
+t1084: LI r0, 1
+e1084: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, 0, t1085
+    JMP e1085
+t1085: LI r0, 1
+e1085: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, 0, t1086
+    JMP e1086
+t1086: LI r0, 1
+e1086: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, 0, t1087
+    JMP e1087
+t1087: LI r0, 1
+e1087: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, 0, t1088
+    JMP e1088
+t1088: LI r0, 1
+e1088: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, 0, t1089
+    JMP e1089
+t1089: LI r0, 1
+e1089: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, 0, t1090
+    JMP e1090
+t1090: LI r0, 1
+e1090: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, 1, t1091
+    JMP e1091
+t1091: LI r0, 1
+e1091: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, 1, t1092
+    JMP e1092
+t1092: LI r0, 1
+e1092: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, 1, t1093
+    JMP e1093
+t1093: LI r0, 1
+e1093: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, 1, t1094
+    JMP e1094
+t1094: LI r0, 1
+e1094: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, 1, t1095
+    JMP e1095
+t1095: LI r0, 1
+e1095: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, 1, t1096
+    JMP e1096
+t1096: LI r0, 1
+e1096: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, 1, t1097
+    JMP e1097
+t1097: LI r0, 1
+e1097: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, 1, t1098
+    JMP e1098
+t1098: LI r0, 1
+e1098: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, 1, t1099
+    JMP e1099
+t1099: LI r0, 1
+e1099: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, 1, t1100
+    JMP e1100
+t1100: LI r0, 1
+e1100: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, -1, t1101
+    JMP e1101
+t1101: LI r0, 1
+e1101: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, -1, t1102
+    JMP e1102
+t1102: LI r0, 1
+e1102: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, -1, t1103
+    JMP e1103
+t1103: LI r0, 1
+e1103: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, -1, t1104
+    JMP e1104
+t1104: LI r0, 1
+e1104: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, -1, t1105
+    JMP e1105
+t1105: LI r0, 1
+e1105: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, -1, t1106
+    JMP e1106
+t1106: LI r0, 1
+e1106: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, -1, t1107
+    JMP e1107
+t1107: LI r0, 1
+e1107: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, -1, t1108
+    JMP e1108
+t1108: LI r0, 1
+e1108: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, -1, t1109
+    JMP e1109
+t1109: LI r0, 1
+e1109: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, -1, t1110
+    JMP e1110
+t1110: LI r0, 1
+e1110: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, 40000, t1111
+    JMP e1111
+t1111: LI r0, 1
+e1111: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, 40000, t1112
+    JMP e1112
+t1112: LI r0, 1
+e1112: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, 40000, t1113
+    JMP e1113
+t1113: LI r0, 1
+e1113: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, 40000, t1114
+    JMP e1114
+t1114: LI r0, 1
+e1114: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, 40000, t1115
+    JMP e1115
+t1115: LI r0, 1
+e1115: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, 40000, t1116
+    JMP e1116
+t1116: LI r0, 1
+e1116: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, 40000, t1117
+    JMP e1117
+t1117: LI r0, 1
+e1117: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, 40000, t1118
+    JMP e1118
+t1118: LI r0, 1
+e1118: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, 40000, t1119
+    JMP e1119
+t1119: LI r0, 1
+e1119: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, 40000, t1120
+    JMP e1120
+t1120: LI r0, 1
+e1120: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, -40000, t1121
+    JMP e1121
+t1121: LI r0, 1
+e1121: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, -40000, t1122
+    JMP e1122
+t1122: LI r0, 1
+e1122: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, -40000, t1123
+    JMP e1123
+t1123: LI r0, 1
+e1123: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, -40000, t1124
+    JMP e1124
+t1124: LI r0, 1
+e1124: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, -40000, t1125
+    JMP e1125
+t1125: LI r0, 1
+e1125: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, -40000, t1126
+    JMP e1126
+t1126: LI r0, 1
+e1126: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, -40000, t1127
+    JMP e1127
+t1127: LI r0, 1
+e1127: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, -40000, t1128
+    JMP e1128
+t1128: LI r0, 1
+e1128: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, -40000, t1129
+    JMP e1129
+t1129: LI r0, 1
+e1129: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, -40000, t1130
+    JMP e1130
+t1130: LI r0, 1
+e1130: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, 50000000, t1131
+    JMP e1131
+t1131: LI r0, 1
+e1131: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, 50000000, t1132
+    JMP e1132
+t1132: LI r0, 1
+e1132: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, 50000000, t1133
+    JMP e1133
+t1133: LI r0, 1
+e1133: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, 50000000, t1134
+    JMP e1134
+t1134: LI r0, 1
+e1134: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, 50000000, t1135
+    JMP e1135
+t1135: LI r0, 1
+e1135: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, 50000000, t1136
+    JMP e1136
+t1136: LI r0, 1
+e1136: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, 50000000, t1137
+    JMP e1137
+t1137: LI r0, 1
+e1137: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, 50000000, t1138
+    JMP e1138
+t1138: LI r0, 1
+e1138: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, 50000000, t1139
+    JMP e1139
+t1139: LI r0, 1
+e1139: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, 50000000, t1140
+    JMP e1140
+t1140: LI r0, 1
+e1140: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, -50000000, t1141
+    JMP e1141
+t1141: LI r0, 1
+e1141: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, -50000000, t1142
+    JMP e1142
+t1142: LI r0, 1
+e1142: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, -50000000, t1143
+    JMP e1143
+t1143: LI r0, 1
+e1143: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, -50000000, t1144
+    JMP e1144
+t1144: LI r0, 1
+e1144: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, -50000000, t1145
+    JMP e1145
+t1145: LI r0, 1
+e1145: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, -50000000, t1146
+    JMP e1146
+t1146: LI r0, 1
+e1146: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, -50000000, t1147
+    JMP e1147
+t1147: LI r0, 1
+e1147: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, -50000000, t1148
+    JMP e1148
+t1148: LI r0, 1
+e1148: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, -50000000, t1149
+    JMP e1149
+t1149: LI r0, 1
+e1149: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, -50000000, t1150
+    JMP e1150
+t1150: LI r0, 1
+e1150: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, 2147483647, t1151
+    JMP e1151
+t1151: LI r0, 1
+e1151: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, 2147483647, t1152
+    JMP e1152
+t1152: LI r0, 1
+e1152: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, 2147483647, t1153
+    JMP e1153
+t1153: LI r0, 1
+e1153: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, 2147483647, t1154
+    JMP e1154
+t1154: LI r0, 1
+e1154: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, 2147483647, t1155
+    JMP e1155
+t1155: LI r0, 1
+e1155: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, 2147483647, t1156
+    JMP e1156
+t1156: LI r0, 1
+e1156: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, 2147483647, t1157
+    JMP e1157
+t1157: LI r0, 1
+e1157: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, 2147483647, t1158
+    JMP e1158
+t1158: LI r0, 1
+e1158: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, 2147483647, t1159
+    JMP e1159
+t1159: LI r0, 1
+e1159: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, 2147483647, t1160
+    JMP e1160
+t1160: LI r0, 1
+e1160: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, -2147483648, t1161
+    JMP e1161
+t1161: LI r0, 1
+e1161: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, -2147483648, t1162
+    JMP e1162
+t1162: LI r0, 1
+e1162: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, -2147483648, t1163
+    JMP e1163
+t1163: LI r0, 1
+e1163: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, -2147483648, t1164
+    JMP e1164
+t1164: LI r0, 1
+e1164: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, -2147483648, t1165
+    JMP e1165
+t1165: LI r0, 1
+e1165: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, -2147483648, t1166
+    JMP e1166
+t1166: LI r0, 1
+e1166: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, -2147483648, t1167
+    JMP e1167
+t1167: LI r0, 1
+e1167: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, -2147483648, t1168
+    JMP e1168
+t1168: LI r0, 1
+e1168: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, -2147483648, t1169
+    JMP e1169
+t1169: LI r0, 1
+e1169: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, -2147483648, t1170
+    JMP e1170
+t1170: LI r0, 1
+e1170: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, 32768, t1171
+    JMP e1171
+t1171: LI r0, 1
+e1171: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, 32768, t1172
+    JMP e1172
+t1172: LI r0, 1
+e1172: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, 32768, t1173
+    JMP e1173
+t1173: LI r0, 1
+e1173: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, 32768, t1174
+    JMP e1174
+t1174: LI r0, 1
+e1174: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, 32768, t1175
+    JMP e1175
+t1175: LI r0, 1
+e1175: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, 32768, t1176
+    JMP e1176
+t1176: LI r0, 1
+e1176: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, 32768, t1177
+    JMP e1177
+t1177: LI r0, 1
+e1177: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, 32768, t1178
+    JMP e1178
+t1178: LI r0, 1
+e1178: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, 32768, t1179
+    JMP e1179
+t1179: LI r0, 1
+e1179: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, 32768, t1180
+    JMP e1180
+t1180: LI r0, 1
+e1180: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, -32769, t1181
+    JMP e1181
+t1181: LI r0, 1
+e1181: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, -32769, t1182
+    JMP e1182
+t1182: LI r0, 1
+e1182: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, -32769, t1183
+    JMP e1183
+t1183: LI r0, 1
+e1183: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, -32769, t1184
+    JMP e1184
+t1184: LI r0, 1
+e1184: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, -32769, t1185
+    JMP e1185
+t1185: LI r0, 1
+e1185: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, -32769, t1186
+    JMP e1186
+t1186: LI r0, 1
+e1186: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, -32769, t1187
+    JMP e1187
+t1187: LI r0, 1
+e1187: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, -32769, t1188
+    JMP e1188
+t1188: LI r0, 1
+e1188: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, -32769, t1189
+    JMP e1189
+t1189: LI r0, 1
+e1189: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, -32769, t1190
+    JMP e1190
+t1190: LI r0, 1
+e1190: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLTK r5, 100, t1191
+    JMP e1191
+t1191: LI r0, 1
+e1191: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFLEK r5, 100, t1192
+    JMP e1192
+t1192: LI r0, 1
+e1192: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGTK r5, 100, t1193
+    JMP e1193
+t1193: LI r0, 1
+e1193: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFGEK r5, 100, t1194
+    JMP e1194
+t1194: LI r0, 1
+e1194: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLTK r5, 100, t1195
+    JMP e1195
+t1195: LI r0, 1
+e1195: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNLEK r5, 100, t1196
+    JMP e1196
+t1196: LI r0, 1
+e1196: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGTK r5, 100, t1197
+    JMP e1197
+t1197: LI r0, 1
+e1197: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNGEK r5, 100, t1198
+    JMP e1198
+t1198: LI r0, 1
+e1198: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFEQK r5, 100, t1199
+    JMP e1199
+t1199: LI r0, 1
+e1199: PRINT r0
+    LI r5, 4746794007244308480
+    LI r0, 0
+    BFNEK r5, 100, t1200
+    JMP e1200
+t1200: LI r0, 1
+e1200: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, 0, t1201
+    JMP e1201
+t1201: LI r0, 1
+e1201: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, 0, t1202
+    JMP e1202
+t1202: LI r0, 1
+e1202: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, 0, t1203
+    JMP e1203
+t1203: LI r0, 1
+e1203: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, 0, t1204
+    JMP e1204
+t1204: LI r0, 1
+e1204: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, 0, t1205
+    JMP e1205
+t1205: LI r0, 1
+e1205: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, 0, t1206
+    JMP e1206
+t1206: LI r0, 1
+e1206: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, 0, t1207
+    JMP e1207
+t1207: LI r0, 1
+e1207: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, 0, t1208
+    JMP e1208
+t1208: LI r0, 1
+e1208: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, 0, t1209
+    JMP e1209
+t1209: LI r0, 1
+e1209: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, 0, t1210
+    JMP e1210
+t1210: LI r0, 1
+e1210: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, 1, t1211
+    JMP e1211
+t1211: LI r0, 1
+e1211: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, 1, t1212
+    JMP e1212
+t1212: LI r0, 1
+e1212: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, 1, t1213
+    JMP e1213
+t1213: LI r0, 1
+e1213: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, 1, t1214
+    JMP e1214
+t1214: LI r0, 1
+e1214: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, 1, t1215
+    JMP e1215
+t1215: LI r0, 1
+e1215: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, 1, t1216
+    JMP e1216
+t1216: LI r0, 1
+e1216: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, 1, t1217
+    JMP e1217
+t1217: LI r0, 1
+e1217: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, 1, t1218
+    JMP e1218
+t1218: LI r0, 1
+e1218: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, 1, t1219
+    JMP e1219
+t1219: LI r0, 1
+e1219: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, 1, t1220
+    JMP e1220
+t1220: LI r0, 1
+e1220: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, -1, t1221
+    JMP e1221
+t1221: LI r0, 1
+e1221: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, -1, t1222
+    JMP e1222
+t1222: LI r0, 1
+e1222: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, -1, t1223
+    JMP e1223
+t1223: LI r0, 1
+e1223: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, -1, t1224
+    JMP e1224
+t1224: LI r0, 1
+e1224: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, -1, t1225
+    JMP e1225
+t1225: LI r0, 1
+e1225: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, -1, t1226
+    JMP e1226
+t1226: LI r0, 1
+e1226: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, -1, t1227
+    JMP e1227
+t1227: LI r0, 1
+e1227: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, -1, t1228
+    JMP e1228
+t1228: LI r0, 1
+e1228: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, -1, t1229
+    JMP e1229
+t1229: LI r0, 1
+e1229: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, -1, t1230
+    JMP e1230
+t1230: LI r0, 1
+e1230: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, 40000, t1231
+    JMP e1231
+t1231: LI r0, 1
+e1231: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, 40000, t1232
+    JMP e1232
+t1232: LI r0, 1
+e1232: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, 40000, t1233
+    JMP e1233
+t1233: LI r0, 1
+e1233: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, 40000, t1234
+    JMP e1234
+t1234: LI r0, 1
+e1234: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, 40000, t1235
+    JMP e1235
+t1235: LI r0, 1
+e1235: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, 40000, t1236
+    JMP e1236
+t1236: LI r0, 1
+e1236: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, 40000, t1237
+    JMP e1237
+t1237: LI r0, 1
+e1237: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, 40000, t1238
+    JMP e1238
+t1238: LI r0, 1
+e1238: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, 40000, t1239
+    JMP e1239
+t1239: LI r0, 1
+e1239: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, 40000, t1240
+    JMP e1240
+t1240: LI r0, 1
+e1240: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, -40000, t1241
+    JMP e1241
+t1241: LI r0, 1
+e1241: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, -40000, t1242
+    JMP e1242
+t1242: LI r0, 1
+e1242: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, -40000, t1243
+    JMP e1243
+t1243: LI r0, 1
+e1243: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, -40000, t1244
+    JMP e1244
+t1244: LI r0, 1
+e1244: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, -40000, t1245
+    JMP e1245
+t1245: LI r0, 1
+e1245: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, -40000, t1246
+    JMP e1246
+t1246: LI r0, 1
+e1246: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, -40000, t1247
+    JMP e1247
+t1247: LI r0, 1
+e1247: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, -40000, t1248
+    JMP e1248
+t1248: LI r0, 1
+e1248: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, -40000, t1249
+    JMP e1249
+t1249: LI r0, 1
+e1249: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, -40000, t1250
+    JMP e1250
+t1250: LI r0, 1
+e1250: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, 50000000, t1251
+    JMP e1251
+t1251: LI r0, 1
+e1251: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, 50000000, t1252
+    JMP e1252
+t1252: LI r0, 1
+e1252: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, 50000000, t1253
+    JMP e1253
+t1253: LI r0, 1
+e1253: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, 50000000, t1254
+    JMP e1254
+t1254: LI r0, 1
+e1254: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, 50000000, t1255
+    JMP e1255
+t1255: LI r0, 1
+e1255: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, 50000000, t1256
+    JMP e1256
+t1256: LI r0, 1
+e1256: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, 50000000, t1257
+    JMP e1257
+t1257: LI r0, 1
+e1257: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, 50000000, t1258
+    JMP e1258
+t1258: LI r0, 1
+e1258: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, 50000000, t1259
+    JMP e1259
+t1259: LI r0, 1
+e1259: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, 50000000, t1260
+    JMP e1260
+t1260: LI r0, 1
+e1260: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, -50000000, t1261
+    JMP e1261
+t1261: LI r0, 1
+e1261: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, -50000000, t1262
+    JMP e1262
+t1262: LI r0, 1
+e1262: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, -50000000, t1263
+    JMP e1263
+t1263: LI r0, 1
+e1263: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, -50000000, t1264
+    JMP e1264
+t1264: LI r0, 1
+e1264: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, -50000000, t1265
+    JMP e1265
+t1265: LI r0, 1
+e1265: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, -50000000, t1266
+    JMP e1266
+t1266: LI r0, 1
+e1266: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, -50000000, t1267
+    JMP e1267
+t1267: LI r0, 1
+e1267: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, -50000000, t1268
+    JMP e1268
+t1268: LI r0, 1
+e1268: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, -50000000, t1269
+    JMP e1269
+t1269: LI r0, 1
+e1269: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, -50000000, t1270
+    JMP e1270
+t1270: LI r0, 1
+e1270: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, 2147483647, t1271
+    JMP e1271
+t1271: LI r0, 1
+e1271: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, 2147483647, t1272
+    JMP e1272
+t1272: LI r0, 1
+e1272: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, 2147483647, t1273
+    JMP e1273
+t1273: LI r0, 1
+e1273: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, 2147483647, t1274
+    JMP e1274
+t1274: LI r0, 1
+e1274: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, 2147483647, t1275
+    JMP e1275
+t1275: LI r0, 1
+e1275: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, 2147483647, t1276
+    JMP e1276
+t1276: LI r0, 1
+e1276: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, 2147483647, t1277
+    JMP e1277
+t1277: LI r0, 1
+e1277: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, 2147483647, t1278
+    JMP e1278
+t1278: LI r0, 1
+e1278: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, 2147483647, t1279
+    JMP e1279
+t1279: LI r0, 1
+e1279: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, 2147483647, t1280
+    JMP e1280
+t1280: LI r0, 1
+e1280: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, -2147483648, t1281
+    JMP e1281
+t1281: LI r0, 1
+e1281: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, -2147483648, t1282
+    JMP e1282
+t1282: LI r0, 1
+e1282: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, -2147483648, t1283
+    JMP e1283
+t1283: LI r0, 1
+e1283: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, -2147483648, t1284
+    JMP e1284
+t1284: LI r0, 1
+e1284: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, -2147483648, t1285
+    JMP e1285
+t1285: LI r0, 1
+e1285: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, -2147483648, t1286
+    JMP e1286
+t1286: LI r0, 1
+e1286: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, -2147483648, t1287
+    JMP e1287
+t1287: LI r0, 1
+e1287: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, -2147483648, t1288
+    JMP e1288
+t1288: LI r0, 1
+e1288: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, -2147483648, t1289
+    JMP e1289
+t1289: LI r0, 1
+e1289: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, -2147483648, t1290
+    JMP e1290
+t1290: LI r0, 1
+e1290: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, 32768, t1291
+    JMP e1291
+t1291: LI r0, 1
+e1291: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, 32768, t1292
+    JMP e1292
+t1292: LI r0, 1
+e1292: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, 32768, t1293
+    JMP e1293
+t1293: LI r0, 1
+e1293: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, 32768, t1294
+    JMP e1294
+t1294: LI r0, 1
+e1294: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, 32768, t1295
+    JMP e1295
+t1295: LI r0, 1
+e1295: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, 32768, t1296
+    JMP e1296
+t1296: LI r0, 1
+e1296: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, 32768, t1297
+    JMP e1297
+t1297: LI r0, 1
+e1297: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, 32768, t1298
+    JMP e1298
+t1298: LI r0, 1
+e1298: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, 32768, t1299
+    JMP e1299
+t1299: LI r0, 1
+e1299: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, 32768, t1300
+    JMP e1300
+t1300: LI r0, 1
+e1300: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, -32769, t1301
+    JMP e1301
+t1301: LI r0, 1
+e1301: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, -32769, t1302
+    JMP e1302
+t1302: LI r0, 1
+e1302: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, -32769, t1303
+    JMP e1303
+t1303: LI r0, 1
+e1303: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, -32769, t1304
+    JMP e1304
+t1304: LI r0, 1
+e1304: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, -32769, t1305
+    JMP e1305
+t1305: LI r0, 1
+e1305: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, -32769, t1306
+    JMP e1306
+t1306: LI r0, 1
+e1306: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, -32769, t1307
+    JMP e1307
+t1307: LI r0, 1
+e1307: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, -32769, t1308
+    JMP e1308
+t1308: LI r0, 1
+e1308: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, -32769, t1309
+    JMP e1309
+t1309: LI r0, 1
+e1309: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, -32769, t1310
+    JMP e1310
+t1310: LI r0, 1
+e1310: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLTK r5, 100, t1311
+    JMP e1311
+t1311: LI r0, 1
+e1311: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFLEK r5, 100, t1312
+    JMP e1312
+t1312: LI r0, 1
+e1312: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGTK r5, 100, t1313
+    JMP e1313
+t1313: LI r0, 1
+e1313: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFGEK r5, 100, t1314
+    JMP e1314
+t1314: LI r0, 1
+e1314: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLTK r5, 100, t1315
+    JMP e1315
+t1315: LI r0, 1
+e1315: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNLEK r5, 100, t1316
+    JMP e1316
+t1316: LI r0, 1
+e1316: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGTK r5, 100, t1317
+    JMP e1317
+t1317: LI r0, 1
+e1317: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNGEK r5, 100, t1318
+    JMP e1318
+t1318: LI r0, 1
+e1318: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFEQK r5, 100, t1319
+    JMP e1319
+t1319: LI r0, 1
+e1319: PRINT r0
+    LI r5, -4476578029606273024
+    LI r0, 0
+    BFNEK r5, 100, t1320
+    JMP e1320
+t1320: LI r0, 1
+e1320: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, 0, t1321
+    JMP e1321
+t1321: LI r0, 1
+e1321: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, 0, t1322
+    JMP e1322
+t1322: LI r0, 1
+e1322: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, 0, t1323
+    JMP e1323
+t1323: LI r0, 1
+e1323: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, 0, t1324
+    JMP e1324
+t1324: LI r0, 1
+e1324: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, 0, t1325
+    JMP e1325
+t1325: LI r0, 1
+e1325: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, 0, t1326
+    JMP e1326
+t1326: LI r0, 1
+e1326: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, 0, t1327
+    JMP e1327
+t1327: LI r0, 1
+e1327: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, 0, t1328
+    JMP e1328
+t1328: LI r0, 1
+e1328: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, 0, t1329
+    JMP e1329
+t1329: LI r0, 1
+e1329: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, 0, t1330
+    JMP e1330
+t1330: LI r0, 1
+e1330: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, 1, t1331
+    JMP e1331
+t1331: LI r0, 1
+e1331: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, 1, t1332
+    JMP e1332
+t1332: LI r0, 1
+e1332: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, 1, t1333
+    JMP e1333
+t1333: LI r0, 1
+e1333: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, 1, t1334
+    JMP e1334
+t1334: LI r0, 1
+e1334: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, 1, t1335
+    JMP e1335
+t1335: LI r0, 1
+e1335: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, 1, t1336
+    JMP e1336
+t1336: LI r0, 1
+e1336: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, 1, t1337
+    JMP e1337
+t1337: LI r0, 1
+e1337: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, 1, t1338
+    JMP e1338
+t1338: LI r0, 1
+e1338: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, 1, t1339
+    JMP e1339
+t1339: LI r0, 1
+e1339: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, 1, t1340
+    JMP e1340
+t1340: LI r0, 1
+e1340: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, -1, t1341
+    JMP e1341
+t1341: LI r0, 1
+e1341: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, -1, t1342
+    JMP e1342
+t1342: LI r0, 1
+e1342: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, -1, t1343
+    JMP e1343
+t1343: LI r0, 1
+e1343: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, -1, t1344
+    JMP e1344
+t1344: LI r0, 1
+e1344: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, -1, t1345
+    JMP e1345
+t1345: LI r0, 1
+e1345: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, -1, t1346
+    JMP e1346
+t1346: LI r0, 1
+e1346: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, -1, t1347
+    JMP e1347
+t1347: LI r0, 1
+e1347: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, -1, t1348
+    JMP e1348
+t1348: LI r0, 1
+e1348: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, -1, t1349
+    JMP e1349
+t1349: LI r0, 1
+e1349: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, -1, t1350
+    JMP e1350
+t1350: LI r0, 1
+e1350: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, 40000, t1351
+    JMP e1351
+t1351: LI r0, 1
+e1351: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, 40000, t1352
+    JMP e1352
+t1352: LI r0, 1
+e1352: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, 40000, t1353
+    JMP e1353
+t1353: LI r0, 1
+e1353: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, 40000, t1354
+    JMP e1354
+t1354: LI r0, 1
+e1354: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, 40000, t1355
+    JMP e1355
+t1355: LI r0, 1
+e1355: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, 40000, t1356
+    JMP e1356
+t1356: LI r0, 1
+e1356: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, 40000, t1357
+    JMP e1357
+t1357: LI r0, 1
+e1357: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, 40000, t1358
+    JMP e1358
+t1358: LI r0, 1
+e1358: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, 40000, t1359
+    JMP e1359
+t1359: LI r0, 1
+e1359: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, 40000, t1360
+    JMP e1360
+t1360: LI r0, 1
+e1360: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, -40000, t1361
+    JMP e1361
+t1361: LI r0, 1
+e1361: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, -40000, t1362
+    JMP e1362
+t1362: LI r0, 1
+e1362: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, -40000, t1363
+    JMP e1363
+t1363: LI r0, 1
+e1363: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, -40000, t1364
+    JMP e1364
+t1364: LI r0, 1
+e1364: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, -40000, t1365
+    JMP e1365
+t1365: LI r0, 1
+e1365: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, -40000, t1366
+    JMP e1366
+t1366: LI r0, 1
+e1366: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, -40000, t1367
+    JMP e1367
+t1367: LI r0, 1
+e1367: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, -40000, t1368
+    JMP e1368
+t1368: LI r0, 1
+e1368: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, -40000, t1369
+    JMP e1369
+t1369: LI r0, 1
+e1369: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, -40000, t1370
+    JMP e1370
+t1370: LI r0, 1
+e1370: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, 50000000, t1371
+    JMP e1371
+t1371: LI r0, 1
+e1371: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, 50000000, t1372
+    JMP e1372
+t1372: LI r0, 1
+e1372: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, 50000000, t1373
+    JMP e1373
+t1373: LI r0, 1
+e1373: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, 50000000, t1374
+    JMP e1374
+t1374: LI r0, 1
+e1374: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, 50000000, t1375
+    JMP e1375
+t1375: LI r0, 1
+e1375: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, 50000000, t1376
+    JMP e1376
+t1376: LI r0, 1
+e1376: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, 50000000, t1377
+    JMP e1377
+t1377: LI r0, 1
+e1377: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, 50000000, t1378
+    JMP e1378
+t1378: LI r0, 1
+e1378: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, 50000000, t1379
+    JMP e1379
+t1379: LI r0, 1
+e1379: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, 50000000, t1380
+    JMP e1380
+t1380: LI r0, 1
+e1380: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, -50000000, t1381
+    JMP e1381
+t1381: LI r0, 1
+e1381: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, -50000000, t1382
+    JMP e1382
+t1382: LI r0, 1
+e1382: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, -50000000, t1383
+    JMP e1383
+t1383: LI r0, 1
+e1383: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, -50000000, t1384
+    JMP e1384
+t1384: LI r0, 1
+e1384: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, -50000000, t1385
+    JMP e1385
+t1385: LI r0, 1
+e1385: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, -50000000, t1386
+    JMP e1386
+t1386: LI r0, 1
+e1386: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, -50000000, t1387
+    JMP e1387
+t1387: LI r0, 1
+e1387: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, -50000000, t1388
+    JMP e1388
+t1388: LI r0, 1
+e1388: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, -50000000, t1389
+    JMP e1389
+t1389: LI r0, 1
+e1389: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, -50000000, t1390
+    JMP e1390
+t1390: LI r0, 1
+e1390: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, 2147483647, t1391
+    JMP e1391
+t1391: LI r0, 1
+e1391: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, 2147483647, t1392
+    JMP e1392
+t1392: LI r0, 1
+e1392: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, 2147483647, t1393
+    JMP e1393
+t1393: LI r0, 1
+e1393: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, 2147483647, t1394
+    JMP e1394
+t1394: LI r0, 1
+e1394: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, 2147483647, t1395
+    JMP e1395
+t1395: LI r0, 1
+e1395: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, 2147483647, t1396
+    JMP e1396
+t1396: LI r0, 1
+e1396: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, 2147483647, t1397
+    JMP e1397
+t1397: LI r0, 1
+e1397: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, 2147483647, t1398
+    JMP e1398
+t1398: LI r0, 1
+e1398: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, 2147483647, t1399
+    JMP e1399
+t1399: LI r0, 1
+e1399: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, 2147483647, t1400
+    JMP e1400
+t1400: LI r0, 1
+e1400: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, -2147483648, t1401
+    JMP e1401
+t1401: LI r0, 1
+e1401: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, -2147483648, t1402
+    JMP e1402
+t1402: LI r0, 1
+e1402: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, -2147483648, t1403
+    JMP e1403
+t1403: LI r0, 1
+e1403: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, -2147483648, t1404
+    JMP e1404
+t1404: LI r0, 1
+e1404: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, -2147483648, t1405
+    JMP e1405
+t1405: LI r0, 1
+e1405: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, -2147483648, t1406
+    JMP e1406
+t1406: LI r0, 1
+e1406: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, -2147483648, t1407
+    JMP e1407
+t1407: LI r0, 1
+e1407: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, -2147483648, t1408
+    JMP e1408
+t1408: LI r0, 1
+e1408: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, -2147483648, t1409
+    JMP e1409
+t1409: LI r0, 1
+e1409: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, -2147483648, t1410
+    JMP e1410
+t1410: LI r0, 1
+e1410: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, 32768, t1411
+    JMP e1411
+t1411: LI r0, 1
+e1411: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, 32768, t1412
+    JMP e1412
+t1412: LI r0, 1
+e1412: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, 32768, t1413
+    JMP e1413
+t1413: LI r0, 1
+e1413: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, 32768, t1414
+    JMP e1414
+t1414: LI r0, 1
+e1414: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, 32768, t1415
+    JMP e1415
+t1415: LI r0, 1
+e1415: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, 32768, t1416
+    JMP e1416
+t1416: LI r0, 1
+e1416: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, 32768, t1417
+    JMP e1417
+t1417: LI r0, 1
+e1417: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, 32768, t1418
+    JMP e1418
+t1418: LI r0, 1
+e1418: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, 32768, t1419
+    JMP e1419
+t1419: LI r0, 1
+e1419: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, 32768, t1420
+    JMP e1420
+t1420: LI r0, 1
+e1420: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, -32769, t1421
+    JMP e1421
+t1421: LI r0, 1
+e1421: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, -32769, t1422
+    JMP e1422
+t1422: LI r0, 1
+e1422: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, -32769, t1423
+    JMP e1423
+t1423: LI r0, 1
+e1423: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, -32769, t1424
+    JMP e1424
+t1424: LI r0, 1
+e1424: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, -32769, t1425
+    JMP e1425
+t1425: LI r0, 1
+e1425: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, -32769, t1426
+    JMP e1426
+t1426: LI r0, 1
+e1426: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, -32769, t1427
+    JMP e1427
+t1427: LI r0, 1
+e1427: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, -32769, t1428
+    JMP e1428
+t1428: LI r0, 1
+e1428: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, -32769, t1429
+    JMP e1429
+t1429: LI r0, 1
+e1429: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, -32769, t1430
+    JMP e1430
+t1430: LI r0, 1
+e1430: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLTK r5, 100, t1431
+    JMP e1431
+t1431: LI r0, 1
+e1431: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFLEK r5, 100, t1432
+    JMP e1432
+t1432: LI r0, 1
+e1432: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGTK r5, 100, t1433
+    JMP e1433
+t1433: LI r0, 1
+e1433: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFGEK r5, 100, t1434
+    JMP e1434
+t1434: LI r0, 1
+e1434: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLTK r5, 100, t1435
+    JMP e1435
+t1435: LI r0, 1
+e1435: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNLEK r5, 100, t1436
+    JMP e1436
+t1436: LI r0, 1
+e1436: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGTK r5, 100, t1437
+    JMP e1437
+t1437: LI r0, 1
+e1437: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNGEK r5, 100, t1438
+    JMP e1438
+t1438: LI r0, 1
+e1438: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFEQK r5, 100, t1439
+    JMP e1439
+t1439: LI r0, 1
+e1439: PRINT r0
+    LI r5, 4681608360884174848
+    LI r0, 0
+    BFNEK r5, 100, t1440
+    JMP e1440
+t1440: LI r0, 1
+e1440: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, 0, t1441
+    JMP e1441
+t1441: LI r0, 1
+e1441: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, 0, t1442
+    JMP e1442
+t1442: LI r0, 1
+e1442: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, 0, t1443
+    JMP e1443
+t1443: LI r0, 1
+e1443: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, 0, t1444
+    JMP e1444
+t1444: LI r0, 1
+e1444: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, 0, t1445
+    JMP e1445
+t1445: LI r0, 1
+e1445: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, 0, t1446
+    JMP e1446
+t1446: LI r0, 1
+e1446: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, 0, t1447
+    JMP e1447
+t1447: LI r0, 1
+e1447: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, 0, t1448
+    JMP e1448
+t1448: LI r0, 1
+e1448: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, 0, t1449
+    JMP e1449
+t1449: LI r0, 1
+e1449: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, 0, t1450
+    JMP e1450
+t1450: LI r0, 1
+e1450: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, 1, t1451
+    JMP e1451
+t1451: LI r0, 1
+e1451: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, 1, t1452
+    JMP e1452
+t1452: LI r0, 1
+e1452: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, 1, t1453
+    JMP e1453
+t1453: LI r0, 1
+e1453: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, 1, t1454
+    JMP e1454
+t1454: LI r0, 1
+e1454: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, 1, t1455
+    JMP e1455
+t1455: LI r0, 1
+e1455: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, 1, t1456
+    JMP e1456
+t1456: LI r0, 1
+e1456: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, 1, t1457
+    JMP e1457
+t1457: LI r0, 1
+e1457: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, 1, t1458
+    JMP e1458
+t1458: LI r0, 1
+e1458: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, 1, t1459
+    JMP e1459
+t1459: LI r0, 1
+e1459: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, 1, t1460
+    JMP e1460
+t1460: LI r0, 1
+e1460: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, -1, t1461
+    JMP e1461
+t1461: LI r0, 1
+e1461: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, -1, t1462
+    JMP e1462
+t1462: LI r0, 1
+e1462: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, -1, t1463
+    JMP e1463
+t1463: LI r0, 1
+e1463: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, -1, t1464
+    JMP e1464
+t1464: LI r0, 1
+e1464: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, -1, t1465
+    JMP e1465
+t1465: LI r0, 1
+e1465: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, -1, t1466
+    JMP e1466
+t1466: LI r0, 1
+e1466: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, -1, t1467
+    JMP e1467
+t1467: LI r0, 1
+e1467: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, -1, t1468
+    JMP e1468
+t1468: LI r0, 1
+e1468: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, -1, t1469
+    JMP e1469
+t1469: LI r0, 1
+e1469: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, -1, t1470
+    JMP e1470
+t1470: LI r0, 1
+e1470: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, 40000, t1471
+    JMP e1471
+t1471: LI r0, 1
+e1471: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, 40000, t1472
+    JMP e1472
+t1472: LI r0, 1
+e1472: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, 40000, t1473
+    JMP e1473
+t1473: LI r0, 1
+e1473: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, 40000, t1474
+    JMP e1474
+t1474: LI r0, 1
+e1474: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, 40000, t1475
+    JMP e1475
+t1475: LI r0, 1
+e1475: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, 40000, t1476
+    JMP e1476
+t1476: LI r0, 1
+e1476: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, 40000, t1477
+    JMP e1477
+t1477: LI r0, 1
+e1477: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, 40000, t1478
+    JMP e1478
+t1478: LI r0, 1
+e1478: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, 40000, t1479
+    JMP e1479
+t1479: LI r0, 1
+e1479: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, 40000, t1480
+    JMP e1480
+t1480: LI r0, 1
+e1480: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, -40000, t1481
+    JMP e1481
+t1481: LI r0, 1
+e1481: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, -40000, t1482
+    JMP e1482
+t1482: LI r0, 1
+e1482: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, -40000, t1483
+    JMP e1483
+t1483: LI r0, 1
+e1483: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, -40000, t1484
+    JMP e1484
+t1484: LI r0, 1
+e1484: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, -40000, t1485
+    JMP e1485
+t1485: LI r0, 1
+e1485: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, -40000, t1486
+    JMP e1486
+t1486: LI r0, 1
+e1486: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, -40000, t1487
+    JMP e1487
+t1487: LI r0, 1
+e1487: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, -40000, t1488
+    JMP e1488
+t1488: LI r0, 1
+e1488: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, -40000, t1489
+    JMP e1489
+t1489: LI r0, 1
+e1489: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, -40000, t1490
+    JMP e1490
+t1490: LI r0, 1
+e1490: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, 50000000, t1491
+    JMP e1491
+t1491: LI r0, 1
+e1491: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, 50000000, t1492
+    JMP e1492
+t1492: LI r0, 1
+e1492: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, 50000000, t1493
+    JMP e1493
+t1493: LI r0, 1
+e1493: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, 50000000, t1494
+    JMP e1494
+t1494: LI r0, 1
+e1494: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, 50000000, t1495
+    JMP e1495
+t1495: LI r0, 1
+e1495: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, 50000000, t1496
+    JMP e1496
+t1496: LI r0, 1
+e1496: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, 50000000, t1497
+    JMP e1497
+t1497: LI r0, 1
+e1497: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, 50000000, t1498
+    JMP e1498
+t1498: LI r0, 1
+e1498: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, 50000000, t1499
+    JMP e1499
+t1499: LI r0, 1
+e1499: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, 50000000, t1500
+    JMP e1500
+t1500: LI r0, 1
+e1500: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, -50000000, t1501
+    JMP e1501
+t1501: LI r0, 1
+e1501: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, -50000000, t1502
+    JMP e1502
+t1502: LI r0, 1
+e1502: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, -50000000, t1503
+    JMP e1503
+t1503: LI r0, 1
+e1503: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, -50000000, t1504
+    JMP e1504
+t1504: LI r0, 1
+e1504: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, -50000000, t1505
+    JMP e1505
+t1505: LI r0, 1
+e1505: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, -50000000, t1506
+    JMP e1506
+t1506: LI r0, 1
+e1506: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, -50000000, t1507
+    JMP e1507
+t1507: LI r0, 1
+e1507: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, -50000000, t1508
+    JMP e1508
+t1508: LI r0, 1
+e1508: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, -50000000, t1509
+    JMP e1509
+t1509: LI r0, 1
+e1509: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, -50000000, t1510
+    JMP e1510
+t1510: LI r0, 1
+e1510: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, 2147483647, t1511
+    JMP e1511
+t1511: LI r0, 1
+e1511: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, 2147483647, t1512
+    JMP e1512
+t1512: LI r0, 1
+e1512: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, 2147483647, t1513
+    JMP e1513
+t1513: LI r0, 1
+e1513: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, 2147483647, t1514
+    JMP e1514
+t1514: LI r0, 1
+e1514: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, 2147483647, t1515
+    JMP e1515
+t1515: LI r0, 1
+e1515: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, 2147483647, t1516
+    JMP e1516
+t1516: LI r0, 1
+e1516: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, 2147483647, t1517
+    JMP e1517
+t1517: LI r0, 1
+e1517: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, 2147483647, t1518
+    JMP e1518
+t1518: LI r0, 1
+e1518: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, 2147483647, t1519
+    JMP e1519
+t1519: LI r0, 1
+e1519: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, 2147483647, t1520
+    JMP e1520
+t1520: LI r0, 1
+e1520: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, -2147483648, t1521
+    JMP e1521
+t1521: LI r0, 1
+e1521: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, -2147483648, t1522
+    JMP e1522
+t1522: LI r0, 1
+e1522: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, -2147483648, t1523
+    JMP e1523
+t1523: LI r0, 1
+e1523: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, -2147483648, t1524
+    JMP e1524
+t1524: LI r0, 1
+e1524: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, -2147483648, t1525
+    JMP e1525
+t1525: LI r0, 1
+e1525: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, -2147483648, t1526
+    JMP e1526
+t1526: LI r0, 1
+e1526: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, -2147483648, t1527
+    JMP e1527
+t1527: LI r0, 1
+e1527: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, -2147483648, t1528
+    JMP e1528
+t1528: LI r0, 1
+e1528: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, -2147483648, t1529
+    JMP e1529
+t1529: LI r0, 1
+e1529: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, -2147483648, t1530
+    JMP e1530
+t1530: LI r0, 1
+e1530: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, 32768, t1531
+    JMP e1531
+t1531: LI r0, 1
+e1531: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, 32768, t1532
+    JMP e1532
+t1532: LI r0, 1
+e1532: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, 32768, t1533
+    JMP e1533
+t1533: LI r0, 1
+e1533: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, 32768, t1534
+    JMP e1534
+t1534: LI r0, 1
+e1534: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, 32768, t1535
+    JMP e1535
+t1535: LI r0, 1
+e1535: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, 32768, t1536
+    JMP e1536
+t1536: LI r0, 1
+e1536: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, 32768, t1537
+    JMP e1537
+t1537: LI r0, 1
+e1537: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, 32768, t1538
+    JMP e1538
+t1538: LI r0, 1
+e1538: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, 32768, t1539
+    JMP e1539
+t1539: LI r0, 1
+e1539: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, 32768, t1540
+    JMP e1540
+t1540: LI r0, 1
+e1540: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, -32769, t1541
+    JMP e1541
+t1541: LI r0, 1
+e1541: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, -32769, t1542
+    JMP e1542
+t1542: LI r0, 1
+e1542: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, -32769, t1543
+    JMP e1543
+t1543: LI r0, 1
+e1543: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, -32769, t1544
+    JMP e1544
+t1544: LI r0, 1
+e1544: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, -32769, t1545
+    JMP e1545
+t1545: LI r0, 1
+e1545: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, -32769, t1546
+    JMP e1546
+t1546: LI r0, 1
+e1546: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, -32769, t1547
+    JMP e1547
+t1547: LI r0, 1
+e1547: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, -32769, t1548
+    JMP e1548
+t1548: LI r0, 1
+e1548: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, -32769, t1549
+    JMP e1549
+t1549: LI r0, 1
+e1549: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, -32769, t1550
+    JMP e1550
+t1550: LI r0, 1
+e1550: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLTK r5, 100, t1551
+    JMP e1551
+t1551: LI r0, 1
+e1551: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFLEK r5, 100, t1552
+    JMP e1552
+t1552: LI r0, 1
+e1552: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGTK r5, 100, t1553
+    JMP e1553
+t1553: LI r0, 1
+e1553: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFGEK r5, 100, t1554
+    JMP e1554
+t1554: LI r0, 1
+e1554: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLTK r5, 100, t1555
+    JMP e1555
+t1555: LI r0, 1
+e1555: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNLEK r5, 100, t1556
+    JMP e1556
+t1556: LI r0, 1
+e1556: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGTK r5, 100, t1557
+    JMP e1557
+t1557: LI r0, 1
+e1557: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNGEK r5, 100, t1558
+    JMP e1558
+t1558: LI r0, 1
+e1558: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFEQK r5, 100, t1559
+    JMP e1559
+t1559: LI r0, 1
+e1559: PRINT r0
+    LI r5, -4541763675970600960
+    LI r0, 0
+    BFNEK r5, 100, t1560
+    JMP e1560
+t1560: LI r0, 1
+e1560: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, 0, t1561
+    JMP e1561
+t1561: LI r0, 1
+e1561: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, 0, t1562
+    JMP e1562
+t1562: LI r0, 1
+e1562: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, 0, t1563
+    JMP e1563
+t1563: LI r0, 1
+e1563: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, 0, t1564
+    JMP e1564
+t1564: LI r0, 1
+e1564: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, 0, t1565
+    JMP e1565
+t1565: LI r0, 1
+e1565: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, 0, t1566
+    JMP e1566
+t1566: LI r0, 1
+e1566: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, 0, t1567
+    JMP e1567
+t1567: LI r0, 1
+e1567: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, 0, t1568
+    JMP e1568
+t1568: LI r0, 1
+e1568: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, 0, t1569
+    JMP e1569
+t1569: LI r0, 1
+e1569: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, 0, t1570
+    JMP e1570
+t1570: LI r0, 1
+e1570: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, 1, t1571
+    JMP e1571
+t1571: LI r0, 1
+e1571: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, 1, t1572
+    JMP e1572
+t1572: LI r0, 1
+e1572: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, 1, t1573
+    JMP e1573
+t1573: LI r0, 1
+e1573: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, 1, t1574
+    JMP e1574
+t1574: LI r0, 1
+e1574: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, 1, t1575
+    JMP e1575
+t1575: LI r0, 1
+e1575: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, 1, t1576
+    JMP e1576
+t1576: LI r0, 1
+e1576: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, 1, t1577
+    JMP e1577
+t1577: LI r0, 1
+e1577: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, 1, t1578
+    JMP e1578
+t1578: LI r0, 1
+e1578: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, 1, t1579
+    JMP e1579
+t1579: LI r0, 1
+e1579: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, 1, t1580
+    JMP e1580
+t1580: LI r0, 1
+e1580: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, -1, t1581
+    JMP e1581
+t1581: LI r0, 1
+e1581: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, -1, t1582
+    JMP e1582
+t1582: LI r0, 1
+e1582: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, -1, t1583
+    JMP e1583
+t1583: LI r0, 1
+e1583: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, -1, t1584
+    JMP e1584
+t1584: LI r0, 1
+e1584: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, -1, t1585
+    JMP e1585
+t1585: LI r0, 1
+e1585: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, -1, t1586
+    JMP e1586
+t1586: LI r0, 1
+e1586: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, -1, t1587
+    JMP e1587
+t1587: LI r0, 1
+e1587: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, -1, t1588
+    JMP e1588
+t1588: LI r0, 1
+e1588: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, -1, t1589
+    JMP e1589
+t1589: LI r0, 1
+e1589: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, -1, t1590
+    JMP e1590
+t1590: LI r0, 1
+e1590: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, 40000, t1591
+    JMP e1591
+t1591: LI r0, 1
+e1591: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, 40000, t1592
+    JMP e1592
+t1592: LI r0, 1
+e1592: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, 40000, t1593
+    JMP e1593
+t1593: LI r0, 1
+e1593: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, 40000, t1594
+    JMP e1594
+t1594: LI r0, 1
+e1594: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, 40000, t1595
+    JMP e1595
+t1595: LI r0, 1
+e1595: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, 40000, t1596
+    JMP e1596
+t1596: LI r0, 1
+e1596: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, 40000, t1597
+    JMP e1597
+t1597: LI r0, 1
+e1597: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, 40000, t1598
+    JMP e1598
+t1598: LI r0, 1
+e1598: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, 40000, t1599
+    JMP e1599
+t1599: LI r0, 1
+e1599: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, 40000, t1600
+    JMP e1600
+t1600: LI r0, 1
+e1600: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, -40000, t1601
+    JMP e1601
+t1601: LI r0, 1
+e1601: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, -40000, t1602
+    JMP e1602
+t1602: LI r0, 1
+e1602: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, -40000, t1603
+    JMP e1603
+t1603: LI r0, 1
+e1603: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, -40000, t1604
+    JMP e1604
+t1604: LI r0, 1
+e1604: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, -40000, t1605
+    JMP e1605
+t1605: LI r0, 1
+e1605: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, -40000, t1606
+    JMP e1606
+t1606: LI r0, 1
+e1606: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, -40000, t1607
+    JMP e1607
+t1607: LI r0, 1
+e1607: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, -40000, t1608
+    JMP e1608
+t1608: LI r0, 1
+e1608: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, -40000, t1609
+    JMP e1609
+t1609: LI r0, 1
+e1609: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, -40000, t1610
+    JMP e1610
+t1610: LI r0, 1
+e1610: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, 50000000, t1611
+    JMP e1611
+t1611: LI r0, 1
+e1611: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, 50000000, t1612
+    JMP e1612
+t1612: LI r0, 1
+e1612: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, 50000000, t1613
+    JMP e1613
+t1613: LI r0, 1
+e1613: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, 50000000, t1614
+    JMP e1614
+t1614: LI r0, 1
+e1614: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, 50000000, t1615
+    JMP e1615
+t1615: LI r0, 1
+e1615: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, 50000000, t1616
+    JMP e1616
+t1616: LI r0, 1
+e1616: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, 50000000, t1617
+    JMP e1617
+t1617: LI r0, 1
+e1617: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, 50000000, t1618
+    JMP e1618
+t1618: LI r0, 1
+e1618: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, 50000000, t1619
+    JMP e1619
+t1619: LI r0, 1
+e1619: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, 50000000, t1620
+    JMP e1620
+t1620: LI r0, 1
+e1620: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, -50000000, t1621
+    JMP e1621
+t1621: LI r0, 1
+e1621: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, -50000000, t1622
+    JMP e1622
+t1622: LI r0, 1
+e1622: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, -50000000, t1623
+    JMP e1623
+t1623: LI r0, 1
+e1623: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, -50000000, t1624
+    JMP e1624
+t1624: LI r0, 1
+e1624: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, -50000000, t1625
+    JMP e1625
+t1625: LI r0, 1
+e1625: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, -50000000, t1626
+    JMP e1626
+t1626: LI r0, 1
+e1626: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, -50000000, t1627
+    JMP e1627
+t1627: LI r0, 1
+e1627: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, -50000000, t1628
+    JMP e1628
+t1628: LI r0, 1
+e1628: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, -50000000, t1629
+    JMP e1629
+t1629: LI r0, 1
+e1629: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, -50000000, t1630
+    JMP e1630
+t1630: LI r0, 1
+e1630: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, 2147483647, t1631
+    JMP e1631
+t1631: LI r0, 1
+e1631: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, 2147483647, t1632
+    JMP e1632
+t1632: LI r0, 1
+e1632: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, 2147483647, t1633
+    JMP e1633
+t1633: LI r0, 1
+e1633: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, 2147483647, t1634
+    JMP e1634
+t1634: LI r0, 1
+e1634: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, 2147483647, t1635
+    JMP e1635
+t1635: LI r0, 1
+e1635: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, 2147483647, t1636
+    JMP e1636
+t1636: LI r0, 1
+e1636: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, 2147483647, t1637
+    JMP e1637
+t1637: LI r0, 1
+e1637: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, 2147483647, t1638
+    JMP e1638
+t1638: LI r0, 1
+e1638: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, 2147483647, t1639
+    JMP e1639
+t1639: LI r0, 1
+e1639: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, 2147483647, t1640
+    JMP e1640
+t1640: LI r0, 1
+e1640: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, -2147483648, t1641
+    JMP e1641
+t1641: LI r0, 1
+e1641: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, -2147483648, t1642
+    JMP e1642
+t1642: LI r0, 1
+e1642: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, -2147483648, t1643
+    JMP e1643
+t1643: LI r0, 1
+e1643: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, -2147483648, t1644
+    JMP e1644
+t1644: LI r0, 1
+e1644: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, -2147483648, t1645
+    JMP e1645
+t1645: LI r0, 1
+e1645: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, -2147483648, t1646
+    JMP e1646
+t1646: LI r0, 1
+e1646: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, -2147483648, t1647
+    JMP e1647
+t1647: LI r0, 1
+e1647: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, -2147483648, t1648
+    JMP e1648
+t1648: LI r0, 1
+e1648: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, -2147483648, t1649
+    JMP e1649
+t1649: LI r0, 1
+e1649: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, -2147483648, t1650
+    JMP e1650
+t1650: LI r0, 1
+e1650: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, 32768, t1651
+    JMP e1651
+t1651: LI r0, 1
+e1651: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, 32768, t1652
+    JMP e1652
+t1652: LI r0, 1
+e1652: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, 32768, t1653
+    JMP e1653
+t1653: LI r0, 1
+e1653: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, 32768, t1654
+    JMP e1654
+t1654: LI r0, 1
+e1654: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, 32768, t1655
+    JMP e1655
+t1655: LI r0, 1
+e1655: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, 32768, t1656
+    JMP e1656
+t1656: LI r0, 1
+e1656: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, 32768, t1657
+    JMP e1657
+t1657: LI r0, 1
+e1657: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, 32768, t1658
+    JMP e1658
+t1658: LI r0, 1
+e1658: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, 32768, t1659
+    JMP e1659
+t1659: LI r0, 1
+e1659: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, 32768, t1660
+    JMP e1660
+t1660: LI r0, 1
+e1660: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, -32769, t1661
+    JMP e1661
+t1661: LI r0, 1
+e1661: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, -32769, t1662
+    JMP e1662
+t1662: LI r0, 1
+e1662: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, -32769, t1663
+    JMP e1663
+t1663: LI r0, 1
+e1663: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, -32769, t1664
+    JMP e1664
+t1664: LI r0, 1
+e1664: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, -32769, t1665
+    JMP e1665
+t1665: LI r0, 1
+e1665: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, -32769, t1666
+    JMP e1666
+t1666: LI r0, 1
+e1666: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, -32769, t1667
+    JMP e1667
+t1667: LI r0, 1
+e1667: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, -32769, t1668
+    JMP e1668
+t1668: LI r0, 1
+e1668: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, -32769, t1669
+    JMP e1669
+t1669: LI r0, 1
+e1669: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, -32769, t1670
+    JMP e1670
+t1670: LI r0, 1
+e1670: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLTK r5, 100, t1671
+    JMP e1671
+t1671: LI r0, 1
+e1671: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFLEK r5, 100, t1672
+    JMP e1672
+t1672: LI r0, 1
+e1672: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGTK r5, 100, t1673
+    JMP e1673
+t1673: LI r0, 1
+e1673: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFGEK r5, 100, t1674
+    JMP e1674
+t1674: LI r0, 1
+e1674: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLTK r5, 100, t1675
+    JMP e1675
+t1675: LI r0, 1
+e1675: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNLEK r5, 100, t1676
+    JMP e1676
+t1676: LI r0, 1
+e1676: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGTK r5, 100, t1677
+    JMP e1677
+t1677: LI r0, 1
+e1677: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNGEK r5, 100, t1678
+    JMP e1678
+t1678: LI r0, 1
+e1678: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFEQK r5, 100, t1679
+    JMP e1679
+t1679: LI r0, 1
+e1679: PRINT r0
+    LI r5, 4675730371722084352
+    LI r0, 0
+    BFNEK r5, 100, t1680
+    JMP e1680
+t1680: LI r0, 1
+e1680: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, 0, t1681
+    JMP e1681
+t1681: LI r0, 1
+e1681: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, 0, t1682
+    JMP e1682
+t1682: LI r0, 1
+e1682: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, 0, t1683
+    JMP e1683
+t1683: LI r0, 1
+e1683: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, 0, t1684
+    JMP e1684
+t1684: LI r0, 1
+e1684: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, 0, t1685
+    JMP e1685
+t1685: LI r0, 1
+e1685: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, 0, t1686
+    JMP e1686
+t1686: LI r0, 1
+e1686: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, 0, t1687
+    JMP e1687
+t1687: LI r0, 1
+e1687: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, 0, t1688
+    JMP e1688
+t1688: LI r0, 1
+e1688: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, 0, t1689
+    JMP e1689
+t1689: LI r0, 1
+e1689: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, 0, t1690
+    JMP e1690
+t1690: LI r0, 1
+e1690: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, 1, t1691
+    JMP e1691
+t1691: LI r0, 1
+e1691: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, 1, t1692
+    JMP e1692
+t1692: LI r0, 1
+e1692: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, 1, t1693
+    JMP e1693
+t1693: LI r0, 1
+e1693: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, 1, t1694
+    JMP e1694
+t1694: LI r0, 1
+e1694: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, 1, t1695
+    JMP e1695
+t1695: LI r0, 1
+e1695: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, 1, t1696
+    JMP e1696
+t1696: LI r0, 1
+e1696: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, 1, t1697
+    JMP e1697
+t1697: LI r0, 1
+e1697: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, 1, t1698
+    JMP e1698
+t1698: LI r0, 1
+e1698: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, 1, t1699
+    JMP e1699
+t1699: LI r0, 1
+e1699: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, 1, t1700
+    JMP e1700
+t1700: LI r0, 1
+e1700: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, -1, t1701
+    JMP e1701
+t1701: LI r0, 1
+e1701: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, -1, t1702
+    JMP e1702
+t1702: LI r0, 1
+e1702: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, -1, t1703
+    JMP e1703
+t1703: LI r0, 1
+e1703: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, -1, t1704
+    JMP e1704
+t1704: LI r0, 1
+e1704: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, -1, t1705
+    JMP e1705
+t1705: LI r0, 1
+e1705: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, -1, t1706
+    JMP e1706
+t1706: LI r0, 1
+e1706: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, -1, t1707
+    JMP e1707
+t1707: LI r0, 1
+e1707: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, -1, t1708
+    JMP e1708
+t1708: LI r0, 1
+e1708: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, -1, t1709
+    JMP e1709
+t1709: LI r0, 1
+e1709: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, -1, t1710
+    JMP e1710
+t1710: LI r0, 1
+e1710: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, 40000, t1711
+    JMP e1711
+t1711: LI r0, 1
+e1711: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, 40000, t1712
+    JMP e1712
+t1712: LI r0, 1
+e1712: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, 40000, t1713
+    JMP e1713
+t1713: LI r0, 1
+e1713: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, 40000, t1714
+    JMP e1714
+t1714: LI r0, 1
+e1714: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, 40000, t1715
+    JMP e1715
+t1715: LI r0, 1
+e1715: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, 40000, t1716
+    JMP e1716
+t1716: LI r0, 1
+e1716: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, 40000, t1717
+    JMP e1717
+t1717: LI r0, 1
+e1717: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, 40000, t1718
+    JMP e1718
+t1718: LI r0, 1
+e1718: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, 40000, t1719
+    JMP e1719
+t1719: LI r0, 1
+e1719: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, 40000, t1720
+    JMP e1720
+t1720: LI r0, 1
+e1720: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, -40000, t1721
+    JMP e1721
+t1721: LI r0, 1
+e1721: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, -40000, t1722
+    JMP e1722
+t1722: LI r0, 1
+e1722: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, -40000, t1723
+    JMP e1723
+t1723: LI r0, 1
+e1723: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, -40000, t1724
+    JMP e1724
+t1724: LI r0, 1
+e1724: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, -40000, t1725
+    JMP e1725
+t1725: LI r0, 1
+e1725: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, -40000, t1726
+    JMP e1726
+t1726: LI r0, 1
+e1726: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, -40000, t1727
+    JMP e1727
+t1727: LI r0, 1
+e1727: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, -40000, t1728
+    JMP e1728
+t1728: LI r0, 1
+e1728: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, -40000, t1729
+    JMP e1729
+t1729: LI r0, 1
+e1729: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, -40000, t1730
+    JMP e1730
+t1730: LI r0, 1
+e1730: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, 50000000, t1731
+    JMP e1731
+t1731: LI r0, 1
+e1731: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, 50000000, t1732
+    JMP e1732
+t1732: LI r0, 1
+e1732: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, 50000000, t1733
+    JMP e1733
+t1733: LI r0, 1
+e1733: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, 50000000, t1734
+    JMP e1734
+t1734: LI r0, 1
+e1734: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, 50000000, t1735
+    JMP e1735
+t1735: LI r0, 1
+e1735: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, 50000000, t1736
+    JMP e1736
+t1736: LI r0, 1
+e1736: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, 50000000, t1737
+    JMP e1737
+t1737: LI r0, 1
+e1737: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, 50000000, t1738
+    JMP e1738
+t1738: LI r0, 1
+e1738: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, 50000000, t1739
+    JMP e1739
+t1739: LI r0, 1
+e1739: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, 50000000, t1740
+    JMP e1740
+t1740: LI r0, 1
+e1740: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, -50000000, t1741
+    JMP e1741
+t1741: LI r0, 1
+e1741: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, -50000000, t1742
+    JMP e1742
+t1742: LI r0, 1
+e1742: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, -50000000, t1743
+    JMP e1743
+t1743: LI r0, 1
+e1743: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, -50000000, t1744
+    JMP e1744
+t1744: LI r0, 1
+e1744: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, -50000000, t1745
+    JMP e1745
+t1745: LI r0, 1
+e1745: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, -50000000, t1746
+    JMP e1746
+t1746: LI r0, 1
+e1746: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, -50000000, t1747
+    JMP e1747
+t1747: LI r0, 1
+e1747: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, -50000000, t1748
+    JMP e1748
+t1748: LI r0, 1
+e1748: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, -50000000, t1749
+    JMP e1749
+t1749: LI r0, 1
+e1749: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, -50000000, t1750
+    JMP e1750
+t1750: LI r0, 1
+e1750: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, 2147483647, t1751
+    JMP e1751
+t1751: LI r0, 1
+e1751: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, 2147483647, t1752
+    JMP e1752
+t1752: LI r0, 1
+e1752: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, 2147483647, t1753
+    JMP e1753
+t1753: LI r0, 1
+e1753: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, 2147483647, t1754
+    JMP e1754
+t1754: LI r0, 1
+e1754: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, 2147483647, t1755
+    JMP e1755
+t1755: LI r0, 1
+e1755: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, 2147483647, t1756
+    JMP e1756
+t1756: LI r0, 1
+e1756: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, 2147483647, t1757
+    JMP e1757
+t1757: LI r0, 1
+e1757: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, 2147483647, t1758
+    JMP e1758
+t1758: LI r0, 1
+e1758: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, 2147483647, t1759
+    JMP e1759
+t1759: LI r0, 1
+e1759: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, 2147483647, t1760
+    JMP e1760
+t1760: LI r0, 1
+e1760: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, -2147483648, t1761
+    JMP e1761
+t1761: LI r0, 1
+e1761: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, -2147483648, t1762
+    JMP e1762
+t1762: LI r0, 1
+e1762: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, -2147483648, t1763
+    JMP e1763
+t1763: LI r0, 1
+e1763: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, -2147483648, t1764
+    JMP e1764
+t1764: LI r0, 1
+e1764: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, -2147483648, t1765
+    JMP e1765
+t1765: LI r0, 1
+e1765: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, -2147483648, t1766
+    JMP e1766
+t1766: LI r0, 1
+e1766: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, -2147483648, t1767
+    JMP e1767
+t1767: LI r0, 1
+e1767: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, -2147483648, t1768
+    JMP e1768
+t1768: LI r0, 1
+e1768: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, -2147483648, t1769
+    JMP e1769
+t1769: LI r0, 1
+e1769: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, -2147483648, t1770
+    JMP e1770
+t1770: LI r0, 1
+e1770: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, 32768, t1771
+    JMP e1771
+t1771: LI r0, 1
+e1771: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, 32768, t1772
+    JMP e1772
+t1772: LI r0, 1
+e1772: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, 32768, t1773
+    JMP e1773
+t1773: LI r0, 1
+e1773: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, 32768, t1774
+    JMP e1774
+t1774: LI r0, 1
+e1774: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, 32768, t1775
+    JMP e1775
+t1775: LI r0, 1
+e1775: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, 32768, t1776
+    JMP e1776
+t1776: LI r0, 1
+e1776: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, 32768, t1777
+    JMP e1777
+t1777: LI r0, 1
+e1777: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, 32768, t1778
+    JMP e1778
+t1778: LI r0, 1
+e1778: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, 32768, t1779
+    JMP e1779
+t1779: LI r0, 1
+e1779: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, 32768, t1780
+    JMP e1780
+t1780: LI r0, 1
+e1780: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, -32769, t1781
+    JMP e1781
+t1781: LI r0, 1
+e1781: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, -32769, t1782
+    JMP e1782
+t1782: LI r0, 1
+e1782: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, -32769, t1783
+    JMP e1783
+t1783: LI r0, 1
+e1783: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, -32769, t1784
+    JMP e1784
+t1784: LI r0, 1
+e1784: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, -32769, t1785
+    JMP e1785
+t1785: LI r0, 1
+e1785: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, -32769, t1786
+    JMP e1786
+t1786: LI r0, 1
+e1786: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, -32769, t1787
+    JMP e1787
+t1787: LI r0, 1
+e1787: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, -32769, t1788
+    JMP e1788
+t1788: LI r0, 1
+e1788: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, -32769, t1789
+    JMP e1789
+t1789: LI r0, 1
+e1789: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, -32769, t1790
+    JMP e1790
+t1790: LI r0, 1
+e1790: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLTK r5, 100, t1791
+    JMP e1791
+t1791: LI r0, 1
+e1791: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFLEK r5, 100, t1792
+    JMP e1792
+t1792: LI r0, 1
+e1792: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGTK r5, 100, t1793
+    JMP e1793
+t1793: LI r0, 1
+e1793: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFGEK r5, 100, t1794
+    JMP e1794
+t1794: LI r0, 1
+e1794: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLTK r5, 100, t1795
+    JMP e1795
+t1795: LI r0, 1
+e1795: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNLEK r5, 100, t1796
+    JMP e1796
+t1796: LI r0, 1
+e1796: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGTK r5, 100, t1797
+    JMP e1797
+t1797: LI r0, 1
+e1797: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNGEK r5, 100, t1798
+    JMP e1798
+t1798: LI r0, 1
+e1798: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFEQK r5, 100, t1799
+    JMP e1799
+t1799: LI r0, 1
+e1799: PRINT r0
+    LI r5, -4547641665132691456
+    LI r0, 0
+    BFNEK r5, 100, t1800
+    JMP e1800
+t1800: LI r0, 1
+e1800: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, 0, t1801
+    JMP e1801
+t1801: LI r0, 1
+e1801: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, 0, t1802
+    JMP e1802
+t1802: LI r0, 1
+e1802: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, 0, t1803
+    JMP e1803
+t1803: LI r0, 1
+e1803: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, 0, t1804
+    JMP e1804
+t1804: LI r0, 1
+e1804: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, 0, t1805
+    JMP e1805
+t1805: LI r0, 1
+e1805: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, 0, t1806
+    JMP e1806
+t1806: LI r0, 1
+e1806: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, 0, t1807
+    JMP e1807
+t1807: LI r0, 1
+e1807: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, 0, t1808
+    JMP e1808
+t1808: LI r0, 1
+e1808: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, 0, t1809
+    JMP e1809
+t1809: LI r0, 1
+e1809: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, 0, t1810
+    JMP e1810
+t1810: LI r0, 1
+e1810: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, 1, t1811
+    JMP e1811
+t1811: LI r0, 1
+e1811: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, 1, t1812
+    JMP e1812
+t1812: LI r0, 1
+e1812: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, 1, t1813
+    JMP e1813
+t1813: LI r0, 1
+e1813: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, 1, t1814
+    JMP e1814
+t1814: LI r0, 1
+e1814: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, 1, t1815
+    JMP e1815
+t1815: LI r0, 1
+e1815: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, 1, t1816
+    JMP e1816
+t1816: LI r0, 1
+e1816: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, 1, t1817
+    JMP e1817
+t1817: LI r0, 1
+e1817: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, 1, t1818
+    JMP e1818
+t1818: LI r0, 1
+e1818: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, 1, t1819
+    JMP e1819
+t1819: LI r0, 1
+e1819: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, 1, t1820
+    JMP e1820
+t1820: LI r0, 1
+e1820: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, -1, t1821
+    JMP e1821
+t1821: LI r0, 1
+e1821: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, -1, t1822
+    JMP e1822
+t1822: LI r0, 1
+e1822: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, -1, t1823
+    JMP e1823
+t1823: LI r0, 1
+e1823: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, -1, t1824
+    JMP e1824
+t1824: LI r0, 1
+e1824: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, -1, t1825
+    JMP e1825
+t1825: LI r0, 1
+e1825: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, -1, t1826
+    JMP e1826
+t1826: LI r0, 1
+e1826: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, -1, t1827
+    JMP e1827
+t1827: LI r0, 1
+e1827: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, -1, t1828
+    JMP e1828
+t1828: LI r0, 1
+e1828: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, -1, t1829
+    JMP e1829
+t1829: LI r0, 1
+e1829: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, -1, t1830
+    JMP e1830
+t1830: LI r0, 1
+e1830: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, 40000, t1831
+    JMP e1831
+t1831: LI r0, 1
+e1831: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, 40000, t1832
+    JMP e1832
+t1832: LI r0, 1
+e1832: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, 40000, t1833
+    JMP e1833
+t1833: LI r0, 1
+e1833: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, 40000, t1834
+    JMP e1834
+t1834: LI r0, 1
+e1834: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, 40000, t1835
+    JMP e1835
+t1835: LI r0, 1
+e1835: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, 40000, t1836
+    JMP e1836
+t1836: LI r0, 1
+e1836: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, 40000, t1837
+    JMP e1837
+t1837: LI r0, 1
+e1837: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, 40000, t1838
+    JMP e1838
+t1838: LI r0, 1
+e1838: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, 40000, t1839
+    JMP e1839
+t1839: LI r0, 1
+e1839: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, 40000, t1840
+    JMP e1840
+t1840: LI r0, 1
+e1840: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, -40000, t1841
+    JMP e1841
+t1841: LI r0, 1
+e1841: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, -40000, t1842
+    JMP e1842
+t1842: LI r0, 1
+e1842: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, -40000, t1843
+    JMP e1843
+t1843: LI r0, 1
+e1843: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, -40000, t1844
+    JMP e1844
+t1844: LI r0, 1
+e1844: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, -40000, t1845
+    JMP e1845
+t1845: LI r0, 1
+e1845: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, -40000, t1846
+    JMP e1846
+t1846: LI r0, 1
+e1846: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, -40000, t1847
+    JMP e1847
+t1847: LI r0, 1
+e1847: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, -40000, t1848
+    JMP e1848
+t1848: LI r0, 1
+e1848: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, -40000, t1849
+    JMP e1849
+t1849: LI r0, 1
+e1849: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, -40000, t1850
+    JMP e1850
+t1850: LI r0, 1
+e1850: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, 50000000, t1851
+    JMP e1851
+t1851: LI r0, 1
+e1851: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, 50000000, t1852
+    JMP e1852
+t1852: LI r0, 1
+e1852: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, 50000000, t1853
+    JMP e1853
+t1853: LI r0, 1
+e1853: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, 50000000, t1854
+    JMP e1854
+t1854: LI r0, 1
+e1854: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, 50000000, t1855
+    JMP e1855
+t1855: LI r0, 1
+e1855: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, 50000000, t1856
+    JMP e1856
+t1856: LI r0, 1
+e1856: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, 50000000, t1857
+    JMP e1857
+t1857: LI r0, 1
+e1857: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, 50000000, t1858
+    JMP e1858
+t1858: LI r0, 1
+e1858: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, 50000000, t1859
+    JMP e1859
+t1859: LI r0, 1
+e1859: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, 50000000, t1860
+    JMP e1860
+t1860: LI r0, 1
+e1860: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, -50000000, t1861
+    JMP e1861
+t1861: LI r0, 1
+e1861: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, -50000000, t1862
+    JMP e1862
+t1862: LI r0, 1
+e1862: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, -50000000, t1863
+    JMP e1863
+t1863: LI r0, 1
+e1863: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, -50000000, t1864
+    JMP e1864
+t1864: LI r0, 1
+e1864: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, -50000000, t1865
+    JMP e1865
+t1865: LI r0, 1
+e1865: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, -50000000, t1866
+    JMP e1866
+t1866: LI r0, 1
+e1866: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, -50000000, t1867
+    JMP e1867
+t1867: LI r0, 1
+e1867: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, -50000000, t1868
+    JMP e1868
+t1868: LI r0, 1
+e1868: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, -50000000, t1869
+    JMP e1869
+t1869: LI r0, 1
+e1869: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, -50000000, t1870
+    JMP e1870
+t1870: LI r0, 1
+e1870: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, 2147483647, t1871
+    JMP e1871
+t1871: LI r0, 1
+e1871: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, 2147483647, t1872
+    JMP e1872
+t1872: LI r0, 1
+e1872: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, 2147483647, t1873
+    JMP e1873
+t1873: LI r0, 1
+e1873: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, 2147483647, t1874
+    JMP e1874
+t1874: LI r0, 1
+e1874: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, 2147483647, t1875
+    JMP e1875
+t1875: LI r0, 1
+e1875: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, 2147483647, t1876
+    JMP e1876
+t1876: LI r0, 1
+e1876: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, 2147483647, t1877
+    JMP e1877
+t1877: LI r0, 1
+e1877: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, 2147483647, t1878
+    JMP e1878
+t1878: LI r0, 1
+e1878: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, 2147483647, t1879
+    JMP e1879
+t1879: LI r0, 1
+e1879: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, 2147483647, t1880
+    JMP e1880
+t1880: LI r0, 1
+e1880: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, -2147483648, t1881
+    JMP e1881
+t1881: LI r0, 1
+e1881: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, -2147483648, t1882
+    JMP e1882
+t1882: LI r0, 1
+e1882: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, -2147483648, t1883
+    JMP e1883
+t1883: LI r0, 1
+e1883: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, -2147483648, t1884
+    JMP e1884
+t1884: LI r0, 1
+e1884: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, -2147483648, t1885
+    JMP e1885
+t1885: LI r0, 1
+e1885: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, -2147483648, t1886
+    JMP e1886
+t1886: LI r0, 1
+e1886: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, -2147483648, t1887
+    JMP e1887
+t1887: LI r0, 1
+e1887: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, -2147483648, t1888
+    JMP e1888
+t1888: LI r0, 1
+e1888: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, -2147483648, t1889
+    JMP e1889
+t1889: LI r0, 1
+e1889: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, -2147483648, t1890
+    JMP e1890
+t1890: LI r0, 1
+e1890: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, 32768, t1891
+    JMP e1891
+t1891: LI r0, 1
+e1891: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, 32768, t1892
+    JMP e1892
+t1892: LI r0, 1
+e1892: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, 32768, t1893
+    JMP e1893
+t1893: LI r0, 1
+e1893: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, 32768, t1894
+    JMP e1894
+t1894: LI r0, 1
+e1894: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, 32768, t1895
+    JMP e1895
+t1895: LI r0, 1
+e1895: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, 32768, t1896
+    JMP e1896
+t1896: LI r0, 1
+e1896: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, 32768, t1897
+    JMP e1897
+t1897: LI r0, 1
+e1897: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, 32768, t1898
+    JMP e1898
+t1898: LI r0, 1
+e1898: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, 32768, t1899
+    JMP e1899
+t1899: LI r0, 1
+e1899: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, 32768, t1900
+    JMP e1900
+t1900: LI r0, 1
+e1900: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, -32769, t1901
+    JMP e1901
+t1901: LI r0, 1
+e1901: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, -32769, t1902
+    JMP e1902
+t1902: LI r0, 1
+e1902: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, -32769, t1903
+    JMP e1903
+t1903: LI r0, 1
+e1903: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, -32769, t1904
+    JMP e1904
+t1904: LI r0, 1
+e1904: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, -32769, t1905
+    JMP e1905
+t1905: LI r0, 1
+e1905: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, -32769, t1906
+    JMP e1906
+t1906: LI r0, 1
+e1906: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, -32769, t1907
+    JMP e1907
+t1907: LI r0, 1
+e1907: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, -32769, t1908
+    JMP e1908
+t1908: LI r0, 1
+e1908: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, -32769, t1909
+    JMP e1909
+t1909: LI r0, 1
+e1909: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, -32769, t1910
+    JMP e1910
+t1910: LI r0, 1
+e1910: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLTK r5, 100, t1911
+    JMP e1911
+t1911: LI r0, 1
+e1911: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFLEK r5, 100, t1912
+    JMP e1912
+t1912: LI r0, 1
+e1912: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGTK r5, 100, t1913
+    JMP e1913
+t1913: LI r0, 1
+e1913: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFGEK r5, 100, t1914
+    JMP e1914
+t1914: LI r0, 1
+e1914: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLTK r5, 100, t1915
+    JMP e1915
+t1915: LI r0, 1
+e1915: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNLEK r5, 100, t1916
+    JMP e1916
+t1916: LI r0, 1
+e1916: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGTK r5, 100, t1917
+    JMP e1917
+t1917: LI r0, 1
+e1917: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNGEK r5, 100, t1918
+    JMP e1918
+t1918: LI r0, 1
+e1918: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFEQK r5, 100, t1919
+    JMP e1919
+t1919: LI r0, 1
+e1919: PRINT r0
+    LI r5, 4679240012837945344
+    LI r0, 0
+    BFNEK r5, 100, t1920
+    JMP e1920
+t1920: LI r0, 1
+e1920: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, 0, t1921
+    JMP e1921
+t1921: LI r0, 1
+e1921: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, 0, t1922
+    JMP e1922
+t1922: LI r0, 1
+e1922: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, 0, t1923
+    JMP e1923
+t1923: LI r0, 1
+e1923: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, 0, t1924
+    JMP e1924
+t1924: LI r0, 1
+e1924: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, 0, t1925
+    JMP e1925
+t1925: LI r0, 1
+e1925: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, 0, t1926
+    JMP e1926
+t1926: LI r0, 1
+e1926: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, 0, t1927
+    JMP e1927
+t1927: LI r0, 1
+e1927: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, 0, t1928
+    JMP e1928
+t1928: LI r0, 1
+e1928: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, 0, t1929
+    JMP e1929
+t1929: LI r0, 1
+e1929: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, 0, t1930
+    JMP e1930
+t1930: LI r0, 1
+e1930: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, 1, t1931
+    JMP e1931
+t1931: LI r0, 1
+e1931: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, 1, t1932
+    JMP e1932
+t1932: LI r0, 1
+e1932: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, 1, t1933
+    JMP e1933
+t1933: LI r0, 1
+e1933: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, 1, t1934
+    JMP e1934
+t1934: LI r0, 1
+e1934: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, 1, t1935
+    JMP e1935
+t1935: LI r0, 1
+e1935: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, 1, t1936
+    JMP e1936
+t1936: LI r0, 1
+e1936: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, 1, t1937
+    JMP e1937
+t1937: LI r0, 1
+e1937: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, 1, t1938
+    JMP e1938
+t1938: LI r0, 1
+e1938: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, 1, t1939
+    JMP e1939
+t1939: LI r0, 1
+e1939: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, 1, t1940
+    JMP e1940
+t1940: LI r0, 1
+e1940: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, -1, t1941
+    JMP e1941
+t1941: LI r0, 1
+e1941: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, -1, t1942
+    JMP e1942
+t1942: LI r0, 1
+e1942: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, -1, t1943
+    JMP e1943
+t1943: LI r0, 1
+e1943: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, -1, t1944
+    JMP e1944
+t1944: LI r0, 1
+e1944: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, -1, t1945
+    JMP e1945
+t1945: LI r0, 1
+e1945: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, -1, t1946
+    JMP e1946
+t1946: LI r0, 1
+e1946: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, -1, t1947
+    JMP e1947
+t1947: LI r0, 1
+e1947: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, -1, t1948
+    JMP e1948
+t1948: LI r0, 1
+e1948: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, -1, t1949
+    JMP e1949
+t1949: LI r0, 1
+e1949: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, -1, t1950
+    JMP e1950
+t1950: LI r0, 1
+e1950: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, 40000, t1951
+    JMP e1951
+t1951: LI r0, 1
+e1951: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, 40000, t1952
+    JMP e1952
+t1952: LI r0, 1
+e1952: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, 40000, t1953
+    JMP e1953
+t1953: LI r0, 1
+e1953: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, 40000, t1954
+    JMP e1954
+t1954: LI r0, 1
+e1954: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, 40000, t1955
+    JMP e1955
+t1955: LI r0, 1
+e1955: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, 40000, t1956
+    JMP e1956
+t1956: LI r0, 1
+e1956: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, 40000, t1957
+    JMP e1957
+t1957: LI r0, 1
+e1957: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, 40000, t1958
+    JMP e1958
+t1958: LI r0, 1
+e1958: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, 40000, t1959
+    JMP e1959
+t1959: LI r0, 1
+e1959: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, 40000, t1960
+    JMP e1960
+t1960: LI r0, 1
+e1960: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, -40000, t1961
+    JMP e1961
+t1961: LI r0, 1
+e1961: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, -40000, t1962
+    JMP e1962
+t1962: LI r0, 1
+e1962: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, -40000, t1963
+    JMP e1963
+t1963: LI r0, 1
+e1963: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, -40000, t1964
+    JMP e1964
+t1964: LI r0, 1
+e1964: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, -40000, t1965
+    JMP e1965
+t1965: LI r0, 1
+e1965: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, -40000, t1966
+    JMP e1966
+t1966: LI r0, 1
+e1966: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, -40000, t1967
+    JMP e1967
+t1967: LI r0, 1
+e1967: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, -40000, t1968
+    JMP e1968
+t1968: LI r0, 1
+e1968: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, -40000, t1969
+    JMP e1969
+t1969: LI r0, 1
+e1969: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, -40000, t1970
+    JMP e1970
+t1970: LI r0, 1
+e1970: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, 50000000, t1971
+    JMP e1971
+t1971: LI r0, 1
+e1971: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, 50000000, t1972
+    JMP e1972
+t1972: LI r0, 1
+e1972: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, 50000000, t1973
+    JMP e1973
+t1973: LI r0, 1
+e1973: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, 50000000, t1974
+    JMP e1974
+t1974: LI r0, 1
+e1974: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, 50000000, t1975
+    JMP e1975
+t1975: LI r0, 1
+e1975: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, 50000000, t1976
+    JMP e1976
+t1976: LI r0, 1
+e1976: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, 50000000, t1977
+    JMP e1977
+t1977: LI r0, 1
+e1977: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, 50000000, t1978
+    JMP e1978
+t1978: LI r0, 1
+e1978: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, 50000000, t1979
+    JMP e1979
+t1979: LI r0, 1
+e1979: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, 50000000, t1980
+    JMP e1980
+t1980: LI r0, 1
+e1980: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, -50000000, t1981
+    JMP e1981
+t1981: LI r0, 1
+e1981: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, -50000000, t1982
+    JMP e1982
+t1982: LI r0, 1
+e1982: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, -50000000, t1983
+    JMP e1983
+t1983: LI r0, 1
+e1983: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, -50000000, t1984
+    JMP e1984
+t1984: LI r0, 1
+e1984: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, -50000000, t1985
+    JMP e1985
+t1985: LI r0, 1
+e1985: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, -50000000, t1986
+    JMP e1986
+t1986: LI r0, 1
+e1986: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, -50000000, t1987
+    JMP e1987
+t1987: LI r0, 1
+e1987: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, -50000000, t1988
+    JMP e1988
+t1988: LI r0, 1
+e1988: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, -50000000, t1989
+    JMP e1989
+t1989: LI r0, 1
+e1989: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, -50000000, t1990
+    JMP e1990
+t1990: LI r0, 1
+e1990: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, 2147483647, t1991
+    JMP e1991
+t1991: LI r0, 1
+e1991: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, 2147483647, t1992
+    JMP e1992
+t1992: LI r0, 1
+e1992: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, 2147483647, t1993
+    JMP e1993
+t1993: LI r0, 1
+e1993: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, 2147483647, t1994
+    JMP e1994
+t1994: LI r0, 1
+e1994: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, 2147483647, t1995
+    JMP e1995
+t1995: LI r0, 1
+e1995: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, 2147483647, t1996
+    JMP e1996
+t1996: LI r0, 1
+e1996: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, 2147483647, t1997
+    JMP e1997
+t1997: LI r0, 1
+e1997: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, 2147483647, t1998
+    JMP e1998
+t1998: LI r0, 1
+e1998: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, 2147483647, t1999
+    JMP e1999
+t1999: LI r0, 1
+e1999: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, 2147483647, t2000
+    JMP e2000
+t2000: LI r0, 1
+e2000: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, -2147483648, t2001
+    JMP e2001
+t2001: LI r0, 1
+e2001: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, -2147483648, t2002
+    JMP e2002
+t2002: LI r0, 1
+e2002: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, -2147483648, t2003
+    JMP e2003
+t2003: LI r0, 1
+e2003: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, -2147483648, t2004
+    JMP e2004
+t2004: LI r0, 1
+e2004: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, -2147483648, t2005
+    JMP e2005
+t2005: LI r0, 1
+e2005: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, -2147483648, t2006
+    JMP e2006
+t2006: LI r0, 1
+e2006: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, -2147483648, t2007
+    JMP e2007
+t2007: LI r0, 1
+e2007: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, -2147483648, t2008
+    JMP e2008
+t2008: LI r0, 1
+e2008: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, -2147483648, t2009
+    JMP e2009
+t2009: LI r0, 1
+e2009: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, -2147483648, t2010
+    JMP e2010
+t2010: LI r0, 1
+e2010: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, 32768, t2011
+    JMP e2011
+t2011: LI r0, 1
+e2011: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, 32768, t2012
+    JMP e2012
+t2012: LI r0, 1
+e2012: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, 32768, t2013
+    JMP e2013
+t2013: LI r0, 1
+e2013: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, 32768, t2014
+    JMP e2014
+t2014: LI r0, 1
+e2014: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, 32768, t2015
+    JMP e2015
+t2015: LI r0, 1
+e2015: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, 32768, t2016
+    JMP e2016
+t2016: LI r0, 1
+e2016: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, 32768, t2017
+    JMP e2017
+t2017: LI r0, 1
+e2017: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, 32768, t2018
+    JMP e2018
+t2018: LI r0, 1
+e2018: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, 32768, t2019
+    JMP e2019
+t2019: LI r0, 1
+e2019: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, 32768, t2020
+    JMP e2020
+t2020: LI r0, 1
+e2020: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, -32769, t2021
+    JMP e2021
+t2021: LI r0, 1
+e2021: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, -32769, t2022
+    JMP e2022
+t2022: LI r0, 1
+e2022: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, -32769, t2023
+    JMP e2023
+t2023: LI r0, 1
+e2023: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, -32769, t2024
+    JMP e2024
+t2024: LI r0, 1
+e2024: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, -32769, t2025
+    JMP e2025
+t2025: LI r0, 1
+e2025: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, -32769, t2026
+    JMP e2026
+t2026: LI r0, 1
+e2026: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, -32769, t2027
+    JMP e2027
+t2027: LI r0, 1
+e2027: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, -32769, t2028
+    JMP e2028
+t2028: LI r0, 1
+e2028: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, -32769, t2029
+    JMP e2029
+t2029: LI r0, 1
+e2029: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, -32769, t2030
+    JMP e2030
+t2030: LI r0, 1
+e2030: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLTK r5, 100, t2031
+    JMP e2031
+t2031: LI r0, 1
+e2031: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFLEK r5, 100, t2032
+    JMP e2032
+t2032: LI r0, 1
+e2032: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGTK r5, 100, t2033
+    JMP e2033
+t2033: LI r0, 1
+e2033: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFGEK r5, 100, t2034
+    JMP e2034
+t2034: LI r0, 1
+e2034: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLTK r5, 100, t2035
+    JMP e2035
+t2035: LI r0, 1
+e2035: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNLEK r5, 100, t2036
+    JMP e2036
+t2036: LI r0, 1
+e2036: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGTK r5, 100, t2037
+    JMP e2037
+t2037: LI r0, 1
+e2037: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNGEK r5, 100, t2038
+    JMP e2038
+t2038: LI r0, 1
+e2038: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFEQK r5, 100, t2039
+    JMP e2039
+t2039: LI r0, 1
+e2039: PRINT r0
+    LI r5, 9221120237041090560
+    LI r0, 0
+    BFNEK r5, 100, t2040
+    JMP e2040
+t2040: LI r0, 1
+e2040: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, 0, t2041
+    JMP e2041
+t2041: LI r0, 1
+e2041: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, 0, t2042
+    JMP e2042
+t2042: LI r0, 1
+e2042: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, 0, t2043
+    JMP e2043
+t2043: LI r0, 1
+e2043: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, 0, t2044
+    JMP e2044
+t2044: LI r0, 1
+e2044: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, 0, t2045
+    JMP e2045
+t2045: LI r0, 1
+e2045: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, 0, t2046
+    JMP e2046
+t2046: LI r0, 1
+e2046: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, 0, t2047
+    JMP e2047
+t2047: LI r0, 1
+e2047: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, 0, t2048
+    JMP e2048
+t2048: LI r0, 1
+e2048: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, 0, t2049
+    JMP e2049
+t2049: LI r0, 1
+e2049: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, 0, t2050
+    JMP e2050
+t2050: LI r0, 1
+e2050: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, 1, t2051
+    JMP e2051
+t2051: LI r0, 1
+e2051: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, 1, t2052
+    JMP e2052
+t2052: LI r0, 1
+e2052: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, 1, t2053
+    JMP e2053
+t2053: LI r0, 1
+e2053: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, 1, t2054
+    JMP e2054
+t2054: LI r0, 1
+e2054: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, 1, t2055
+    JMP e2055
+t2055: LI r0, 1
+e2055: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, 1, t2056
+    JMP e2056
+t2056: LI r0, 1
+e2056: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, 1, t2057
+    JMP e2057
+t2057: LI r0, 1
+e2057: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, 1, t2058
+    JMP e2058
+t2058: LI r0, 1
+e2058: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, 1, t2059
+    JMP e2059
+t2059: LI r0, 1
+e2059: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, 1, t2060
+    JMP e2060
+t2060: LI r0, 1
+e2060: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, -1, t2061
+    JMP e2061
+t2061: LI r0, 1
+e2061: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, -1, t2062
+    JMP e2062
+t2062: LI r0, 1
+e2062: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, -1, t2063
+    JMP e2063
+t2063: LI r0, 1
+e2063: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, -1, t2064
+    JMP e2064
+t2064: LI r0, 1
+e2064: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, -1, t2065
+    JMP e2065
+t2065: LI r0, 1
+e2065: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, -1, t2066
+    JMP e2066
+t2066: LI r0, 1
+e2066: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, -1, t2067
+    JMP e2067
+t2067: LI r0, 1
+e2067: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, -1, t2068
+    JMP e2068
+t2068: LI r0, 1
+e2068: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, -1, t2069
+    JMP e2069
+t2069: LI r0, 1
+e2069: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, -1, t2070
+    JMP e2070
+t2070: LI r0, 1
+e2070: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, 40000, t2071
+    JMP e2071
+t2071: LI r0, 1
+e2071: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, 40000, t2072
+    JMP e2072
+t2072: LI r0, 1
+e2072: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, 40000, t2073
+    JMP e2073
+t2073: LI r0, 1
+e2073: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, 40000, t2074
+    JMP e2074
+t2074: LI r0, 1
+e2074: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, 40000, t2075
+    JMP e2075
+t2075: LI r0, 1
+e2075: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, 40000, t2076
+    JMP e2076
+t2076: LI r0, 1
+e2076: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, 40000, t2077
+    JMP e2077
+t2077: LI r0, 1
+e2077: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, 40000, t2078
+    JMP e2078
+t2078: LI r0, 1
+e2078: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, 40000, t2079
+    JMP e2079
+t2079: LI r0, 1
+e2079: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, 40000, t2080
+    JMP e2080
+t2080: LI r0, 1
+e2080: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, -40000, t2081
+    JMP e2081
+t2081: LI r0, 1
+e2081: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, -40000, t2082
+    JMP e2082
+t2082: LI r0, 1
+e2082: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, -40000, t2083
+    JMP e2083
+t2083: LI r0, 1
+e2083: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, -40000, t2084
+    JMP e2084
+t2084: LI r0, 1
+e2084: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, -40000, t2085
+    JMP e2085
+t2085: LI r0, 1
+e2085: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, -40000, t2086
+    JMP e2086
+t2086: LI r0, 1
+e2086: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, -40000, t2087
+    JMP e2087
+t2087: LI r0, 1
+e2087: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, -40000, t2088
+    JMP e2088
+t2088: LI r0, 1
+e2088: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, -40000, t2089
+    JMP e2089
+t2089: LI r0, 1
+e2089: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, -40000, t2090
+    JMP e2090
+t2090: LI r0, 1
+e2090: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, 50000000, t2091
+    JMP e2091
+t2091: LI r0, 1
+e2091: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, 50000000, t2092
+    JMP e2092
+t2092: LI r0, 1
+e2092: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, 50000000, t2093
+    JMP e2093
+t2093: LI r0, 1
+e2093: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, 50000000, t2094
+    JMP e2094
+t2094: LI r0, 1
+e2094: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, 50000000, t2095
+    JMP e2095
+t2095: LI r0, 1
+e2095: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, 50000000, t2096
+    JMP e2096
+t2096: LI r0, 1
+e2096: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, 50000000, t2097
+    JMP e2097
+t2097: LI r0, 1
+e2097: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, 50000000, t2098
+    JMP e2098
+t2098: LI r0, 1
+e2098: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, 50000000, t2099
+    JMP e2099
+t2099: LI r0, 1
+e2099: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, 50000000, t2100
+    JMP e2100
+t2100: LI r0, 1
+e2100: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, -50000000, t2101
+    JMP e2101
+t2101: LI r0, 1
+e2101: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, -50000000, t2102
+    JMP e2102
+t2102: LI r0, 1
+e2102: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, -50000000, t2103
+    JMP e2103
+t2103: LI r0, 1
+e2103: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, -50000000, t2104
+    JMP e2104
+t2104: LI r0, 1
+e2104: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, -50000000, t2105
+    JMP e2105
+t2105: LI r0, 1
+e2105: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, -50000000, t2106
+    JMP e2106
+t2106: LI r0, 1
+e2106: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, -50000000, t2107
+    JMP e2107
+t2107: LI r0, 1
+e2107: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, -50000000, t2108
+    JMP e2108
+t2108: LI r0, 1
+e2108: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, -50000000, t2109
+    JMP e2109
+t2109: LI r0, 1
+e2109: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, -50000000, t2110
+    JMP e2110
+t2110: LI r0, 1
+e2110: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, 2147483647, t2111
+    JMP e2111
+t2111: LI r0, 1
+e2111: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, 2147483647, t2112
+    JMP e2112
+t2112: LI r0, 1
+e2112: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, 2147483647, t2113
+    JMP e2113
+t2113: LI r0, 1
+e2113: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, 2147483647, t2114
+    JMP e2114
+t2114: LI r0, 1
+e2114: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, 2147483647, t2115
+    JMP e2115
+t2115: LI r0, 1
+e2115: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, 2147483647, t2116
+    JMP e2116
+t2116: LI r0, 1
+e2116: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, 2147483647, t2117
+    JMP e2117
+t2117: LI r0, 1
+e2117: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, 2147483647, t2118
+    JMP e2118
+t2118: LI r0, 1
+e2118: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, 2147483647, t2119
+    JMP e2119
+t2119: LI r0, 1
+e2119: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, 2147483647, t2120
+    JMP e2120
+t2120: LI r0, 1
+e2120: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, -2147483648, t2121
+    JMP e2121
+t2121: LI r0, 1
+e2121: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, -2147483648, t2122
+    JMP e2122
+t2122: LI r0, 1
+e2122: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, -2147483648, t2123
+    JMP e2123
+t2123: LI r0, 1
+e2123: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, -2147483648, t2124
+    JMP e2124
+t2124: LI r0, 1
+e2124: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, -2147483648, t2125
+    JMP e2125
+t2125: LI r0, 1
+e2125: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, -2147483648, t2126
+    JMP e2126
+t2126: LI r0, 1
+e2126: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, -2147483648, t2127
+    JMP e2127
+t2127: LI r0, 1
+e2127: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, -2147483648, t2128
+    JMP e2128
+t2128: LI r0, 1
+e2128: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, -2147483648, t2129
+    JMP e2129
+t2129: LI r0, 1
+e2129: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, -2147483648, t2130
+    JMP e2130
+t2130: LI r0, 1
+e2130: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, 32768, t2131
+    JMP e2131
+t2131: LI r0, 1
+e2131: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, 32768, t2132
+    JMP e2132
+t2132: LI r0, 1
+e2132: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, 32768, t2133
+    JMP e2133
+t2133: LI r0, 1
+e2133: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, 32768, t2134
+    JMP e2134
+t2134: LI r0, 1
+e2134: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, 32768, t2135
+    JMP e2135
+t2135: LI r0, 1
+e2135: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, 32768, t2136
+    JMP e2136
+t2136: LI r0, 1
+e2136: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, 32768, t2137
+    JMP e2137
+t2137: LI r0, 1
+e2137: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, 32768, t2138
+    JMP e2138
+t2138: LI r0, 1
+e2138: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, 32768, t2139
+    JMP e2139
+t2139: LI r0, 1
+e2139: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, 32768, t2140
+    JMP e2140
+t2140: LI r0, 1
+e2140: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, -32769, t2141
+    JMP e2141
+t2141: LI r0, 1
+e2141: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, -32769, t2142
+    JMP e2142
+t2142: LI r0, 1
+e2142: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, -32769, t2143
+    JMP e2143
+t2143: LI r0, 1
+e2143: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, -32769, t2144
+    JMP e2144
+t2144: LI r0, 1
+e2144: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, -32769, t2145
+    JMP e2145
+t2145: LI r0, 1
+e2145: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, -32769, t2146
+    JMP e2146
+t2146: LI r0, 1
+e2146: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, -32769, t2147
+    JMP e2147
+t2147: LI r0, 1
+e2147: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, -32769, t2148
+    JMP e2148
+t2148: LI r0, 1
+e2148: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, -32769, t2149
+    JMP e2149
+t2149: LI r0, 1
+e2149: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, -32769, t2150
+    JMP e2150
+t2150: LI r0, 1
+e2150: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLTK r5, 100, t2151
+    JMP e2151
+t2151: LI r0, 1
+e2151: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFLEK r5, 100, t2152
+    JMP e2152
+t2152: LI r0, 1
+e2152: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGTK r5, 100, t2153
+    JMP e2153
+t2153: LI r0, 1
+e2153: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFGEK r5, 100, t2154
+    JMP e2154
+t2154: LI r0, 1
+e2154: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLTK r5, 100, t2155
+    JMP e2155
+t2155: LI r0, 1
+e2155: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNLEK r5, 100, t2156
+    JMP e2156
+t2156: LI r0, 1
+e2156: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGTK r5, 100, t2157
+    JMP e2157
+t2157: LI r0, 1
+e2157: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNGEK r5, 100, t2158
+    JMP e2158
+t2158: LI r0, 1
+e2158: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFEQK r5, 100, t2159
+    JMP e2159
+t2159: LI r0, 1
+e2159: PRINT r0
+    LI r5, 9218868437227405312
+    LI r0, 0
+    BFNEK r5, 100, t2160
+    JMP e2160
+t2160: LI r0, 1
+e2160: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, 0, t2161
+    JMP e2161
+t2161: LI r0, 1
+e2161: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, 0, t2162
+    JMP e2162
+t2162: LI r0, 1
+e2162: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, 0, t2163
+    JMP e2163
+t2163: LI r0, 1
+e2163: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, 0, t2164
+    JMP e2164
+t2164: LI r0, 1
+e2164: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, 0, t2165
+    JMP e2165
+t2165: LI r0, 1
+e2165: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, 0, t2166
+    JMP e2166
+t2166: LI r0, 1
+e2166: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, 0, t2167
+    JMP e2167
+t2167: LI r0, 1
+e2167: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, 0, t2168
+    JMP e2168
+t2168: LI r0, 1
+e2168: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, 0, t2169
+    JMP e2169
+t2169: LI r0, 1
+e2169: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, 0, t2170
+    JMP e2170
+t2170: LI r0, 1
+e2170: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, 1, t2171
+    JMP e2171
+t2171: LI r0, 1
+e2171: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, 1, t2172
+    JMP e2172
+t2172: LI r0, 1
+e2172: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, 1, t2173
+    JMP e2173
+t2173: LI r0, 1
+e2173: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, 1, t2174
+    JMP e2174
+t2174: LI r0, 1
+e2174: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, 1, t2175
+    JMP e2175
+t2175: LI r0, 1
+e2175: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, 1, t2176
+    JMP e2176
+t2176: LI r0, 1
+e2176: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, 1, t2177
+    JMP e2177
+t2177: LI r0, 1
+e2177: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, 1, t2178
+    JMP e2178
+t2178: LI r0, 1
+e2178: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, 1, t2179
+    JMP e2179
+t2179: LI r0, 1
+e2179: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, 1, t2180
+    JMP e2180
+t2180: LI r0, 1
+e2180: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, -1, t2181
+    JMP e2181
+t2181: LI r0, 1
+e2181: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, -1, t2182
+    JMP e2182
+t2182: LI r0, 1
+e2182: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, -1, t2183
+    JMP e2183
+t2183: LI r0, 1
+e2183: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, -1, t2184
+    JMP e2184
+t2184: LI r0, 1
+e2184: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, -1, t2185
+    JMP e2185
+t2185: LI r0, 1
+e2185: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, -1, t2186
+    JMP e2186
+t2186: LI r0, 1
+e2186: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, -1, t2187
+    JMP e2187
+t2187: LI r0, 1
+e2187: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, -1, t2188
+    JMP e2188
+t2188: LI r0, 1
+e2188: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, -1, t2189
+    JMP e2189
+t2189: LI r0, 1
+e2189: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, -1, t2190
+    JMP e2190
+t2190: LI r0, 1
+e2190: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, 40000, t2191
+    JMP e2191
+t2191: LI r0, 1
+e2191: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, 40000, t2192
+    JMP e2192
+t2192: LI r0, 1
+e2192: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, 40000, t2193
+    JMP e2193
+t2193: LI r0, 1
+e2193: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, 40000, t2194
+    JMP e2194
+t2194: LI r0, 1
+e2194: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, 40000, t2195
+    JMP e2195
+t2195: LI r0, 1
+e2195: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, 40000, t2196
+    JMP e2196
+t2196: LI r0, 1
+e2196: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, 40000, t2197
+    JMP e2197
+t2197: LI r0, 1
+e2197: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, 40000, t2198
+    JMP e2198
+t2198: LI r0, 1
+e2198: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, 40000, t2199
+    JMP e2199
+t2199: LI r0, 1
+e2199: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, 40000, t2200
+    JMP e2200
+t2200: LI r0, 1
+e2200: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, -40000, t2201
+    JMP e2201
+t2201: LI r0, 1
+e2201: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, -40000, t2202
+    JMP e2202
+t2202: LI r0, 1
+e2202: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, -40000, t2203
+    JMP e2203
+t2203: LI r0, 1
+e2203: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, -40000, t2204
+    JMP e2204
+t2204: LI r0, 1
+e2204: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, -40000, t2205
+    JMP e2205
+t2205: LI r0, 1
+e2205: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, -40000, t2206
+    JMP e2206
+t2206: LI r0, 1
+e2206: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, -40000, t2207
+    JMP e2207
+t2207: LI r0, 1
+e2207: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, -40000, t2208
+    JMP e2208
+t2208: LI r0, 1
+e2208: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, -40000, t2209
+    JMP e2209
+t2209: LI r0, 1
+e2209: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, -40000, t2210
+    JMP e2210
+t2210: LI r0, 1
+e2210: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, 50000000, t2211
+    JMP e2211
+t2211: LI r0, 1
+e2211: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, 50000000, t2212
+    JMP e2212
+t2212: LI r0, 1
+e2212: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, 50000000, t2213
+    JMP e2213
+t2213: LI r0, 1
+e2213: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, 50000000, t2214
+    JMP e2214
+t2214: LI r0, 1
+e2214: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, 50000000, t2215
+    JMP e2215
+t2215: LI r0, 1
+e2215: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, 50000000, t2216
+    JMP e2216
+t2216: LI r0, 1
+e2216: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, 50000000, t2217
+    JMP e2217
+t2217: LI r0, 1
+e2217: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, 50000000, t2218
+    JMP e2218
+t2218: LI r0, 1
+e2218: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, 50000000, t2219
+    JMP e2219
+t2219: LI r0, 1
+e2219: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, 50000000, t2220
+    JMP e2220
+t2220: LI r0, 1
+e2220: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, -50000000, t2221
+    JMP e2221
+t2221: LI r0, 1
+e2221: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, -50000000, t2222
+    JMP e2222
+t2222: LI r0, 1
+e2222: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, -50000000, t2223
+    JMP e2223
+t2223: LI r0, 1
+e2223: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, -50000000, t2224
+    JMP e2224
+t2224: LI r0, 1
+e2224: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, -50000000, t2225
+    JMP e2225
+t2225: LI r0, 1
+e2225: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, -50000000, t2226
+    JMP e2226
+t2226: LI r0, 1
+e2226: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, -50000000, t2227
+    JMP e2227
+t2227: LI r0, 1
+e2227: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, -50000000, t2228
+    JMP e2228
+t2228: LI r0, 1
+e2228: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, -50000000, t2229
+    JMP e2229
+t2229: LI r0, 1
+e2229: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, -50000000, t2230
+    JMP e2230
+t2230: LI r0, 1
+e2230: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, 2147483647, t2231
+    JMP e2231
+t2231: LI r0, 1
+e2231: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, 2147483647, t2232
+    JMP e2232
+t2232: LI r0, 1
+e2232: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, 2147483647, t2233
+    JMP e2233
+t2233: LI r0, 1
+e2233: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, 2147483647, t2234
+    JMP e2234
+t2234: LI r0, 1
+e2234: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, 2147483647, t2235
+    JMP e2235
+t2235: LI r0, 1
+e2235: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, 2147483647, t2236
+    JMP e2236
+t2236: LI r0, 1
+e2236: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, 2147483647, t2237
+    JMP e2237
+t2237: LI r0, 1
+e2237: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, 2147483647, t2238
+    JMP e2238
+t2238: LI r0, 1
+e2238: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, 2147483647, t2239
+    JMP e2239
+t2239: LI r0, 1
+e2239: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, 2147483647, t2240
+    JMP e2240
+t2240: LI r0, 1
+e2240: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, -2147483648, t2241
+    JMP e2241
+t2241: LI r0, 1
+e2241: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, -2147483648, t2242
+    JMP e2242
+t2242: LI r0, 1
+e2242: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, -2147483648, t2243
+    JMP e2243
+t2243: LI r0, 1
+e2243: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, -2147483648, t2244
+    JMP e2244
+t2244: LI r0, 1
+e2244: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, -2147483648, t2245
+    JMP e2245
+t2245: LI r0, 1
+e2245: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, -2147483648, t2246
+    JMP e2246
+t2246: LI r0, 1
+e2246: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, -2147483648, t2247
+    JMP e2247
+t2247: LI r0, 1
+e2247: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, -2147483648, t2248
+    JMP e2248
+t2248: LI r0, 1
+e2248: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, -2147483648, t2249
+    JMP e2249
+t2249: LI r0, 1
+e2249: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, -2147483648, t2250
+    JMP e2250
+t2250: LI r0, 1
+e2250: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, 32768, t2251
+    JMP e2251
+t2251: LI r0, 1
+e2251: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, 32768, t2252
+    JMP e2252
+t2252: LI r0, 1
+e2252: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, 32768, t2253
+    JMP e2253
+t2253: LI r0, 1
+e2253: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, 32768, t2254
+    JMP e2254
+t2254: LI r0, 1
+e2254: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, 32768, t2255
+    JMP e2255
+t2255: LI r0, 1
+e2255: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, 32768, t2256
+    JMP e2256
+t2256: LI r0, 1
+e2256: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, 32768, t2257
+    JMP e2257
+t2257: LI r0, 1
+e2257: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, 32768, t2258
+    JMP e2258
+t2258: LI r0, 1
+e2258: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, 32768, t2259
+    JMP e2259
+t2259: LI r0, 1
+e2259: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, 32768, t2260
+    JMP e2260
+t2260: LI r0, 1
+e2260: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, -32769, t2261
+    JMP e2261
+t2261: LI r0, 1
+e2261: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, -32769, t2262
+    JMP e2262
+t2262: LI r0, 1
+e2262: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, -32769, t2263
+    JMP e2263
+t2263: LI r0, 1
+e2263: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, -32769, t2264
+    JMP e2264
+t2264: LI r0, 1
+e2264: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, -32769, t2265
+    JMP e2265
+t2265: LI r0, 1
+e2265: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, -32769, t2266
+    JMP e2266
+t2266: LI r0, 1
+e2266: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, -32769, t2267
+    JMP e2267
+t2267: LI r0, 1
+e2267: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, -32769, t2268
+    JMP e2268
+t2268: LI r0, 1
+e2268: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, -32769, t2269
+    JMP e2269
+t2269: LI r0, 1
+e2269: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, -32769, t2270
+    JMP e2270
+t2270: LI r0, 1
+e2270: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLTK r5, 100, t2271
+    JMP e2271
+t2271: LI r0, 1
+e2271: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFLEK r5, 100, t2272
+    JMP e2272
+t2272: LI r0, 1
+e2272: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGTK r5, 100, t2273
+    JMP e2273
+t2273: LI r0, 1
+e2273: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFGEK r5, 100, t2274
+    JMP e2274
+t2274: LI r0, 1
+e2274: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLTK r5, 100, t2275
+    JMP e2275
+t2275: LI r0, 1
+e2275: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNLEK r5, 100, t2276
+    JMP e2276
+t2276: LI r0, 1
+e2276: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGTK r5, 100, t2277
+    JMP e2277
+t2277: LI r0, 1
+e2277: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNGEK r5, 100, t2278
+    JMP e2278
+t2278: LI r0, 1
+e2278: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFEQK r5, 100, t2279
+    JMP e2279
+t2279: LI r0, 1
+e2279: PRINT r0
+    LI r5, -4503599627370496
+    LI r0, 0
+    BFNEK r5, 100, t2280
+    JMP e2280
+t2280: LI r0, 1
+e2280: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, 0, t2281
+    JMP e2281
+t2281: LI r0, 1
+e2281: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, 0, t2282
+    JMP e2282
+t2282: LI r0, 1
+e2282: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, 0, t2283
+    JMP e2283
+t2283: LI r0, 1
+e2283: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, 0, t2284
+    JMP e2284
+t2284: LI r0, 1
+e2284: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, 0, t2285
+    JMP e2285
+t2285: LI r0, 1
+e2285: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, 0, t2286
+    JMP e2286
+t2286: LI r0, 1
+e2286: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, 0, t2287
+    JMP e2287
+t2287: LI r0, 1
+e2287: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, 0, t2288
+    JMP e2288
+t2288: LI r0, 1
+e2288: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, 0, t2289
+    JMP e2289
+t2289: LI r0, 1
+e2289: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, 0, t2290
+    JMP e2290
+t2290: LI r0, 1
+e2290: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, 1, t2291
+    JMP e2291
+t2291: LI r0, 1
+e2291: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, 1, t2292
+    JMP e2292
+t2292: LI r0, 1
+e2292: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, 1, t2293
+    JMP e2293
+t2293: LI r0, 1
+e2293: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, 1, t2294
+    JMP e2294
+t2294: LI r0, 1
+e2294: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, 1, t2295
+    JMP e2295
+t2295: LI r0, 1
+e2295: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, 1, t2296
+    JMP e2296
+t2296: LI r0, 1
+e2296: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, 1, t2297
+    JMP e2297
+t2297: LI r0, 1
+e2297: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, 1, t2298
+    JMP e2298
+t2298: LI r0, 1
+e2298: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, 1, t2299
+    JMP e2299
+t2299: LI r0, 1
+e2299: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, 1, t2300
+    JMP e2300
+t2300: LI r0, 1
+e2300: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, -1, t2301
+    JMP e2301
+t2301: LI r0, 1
+e2301: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, -1, t2302
+    JMP e2302
+t2302: LI r0, 1
+e2302: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, -1, t2303
+    JMP e2303
+t2303: LI r0, 1
+e2303: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, -1, t2304
+    JMP e2304
+t2304: LI r0, 1
+e2304: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, -1, t2305
+    JMP e2305
+t2305: LI r0, 1
+e2305: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, -1, t2306
+    JMP e2306
+t2306: LI r0, 1
+e2306: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, -1, t2307
+    JMP e2307
+t2307: LI r0, 1
+e2307: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, -1, t2308
+    JMP e2308
+t2308: LI r0, 1
+e2308: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, -1, t2309
+    JMP e2309
+t2309: LI r0, 1
+e2309: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, -1, t2310
+    JMP e2310
+t2310: LI r0, 1
+e2310: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, 40000, t2311
+    JMP e2311
+t2311: LI r0, 1
+e2311: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, 40000, t2312
+    JMP e2312
+t2312: LI r0, 1
+e2312: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, 40000, t2313
+    JMP e2313
+t2313: LI r0, 1
+e2313: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, 40000, t2314
+    JMP e2314
+t2314: LI r0, 1
+e2314: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, 40000, t2315
+    JMP e2315
+t2315: LI r0, 1
+e2315: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, 40000, t2316
+    JMP e2316
+t2316: LI r0, 1
+e2316: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, 40000, t2317
+    JMP e2317
+t2317: LI r0, 1
+e2317: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, 40000, t2318
+    JMP e2318
+t2318: LI r0, 1
+e2318: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, 40000, t2319
+    JMP e2319
+t2319: LI r0, 1
+e2319: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, 40000, t2320
+    JMP e2320
+t2320: LI r0, 1
+e2320: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, -40000, t2321
+    JMP e2321
+t2321: LI r0, 1
+e2321: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, -40000, t2322
+    JMP e2322
+t2322: LI r0, 1
+e2322: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, -40000, t2323
+    JMP e2323
+t2323: LI r0, 1
+e2323: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, -40000, t2324
+    JMP e2324
+t2324: LI r0, 1
+e2324: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, -40000, t2325
+    JMP e2325
+t2325: LI r0, 1
+e2325: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, -40000, t2326
+    JMP e2326
+t2326: LI r0, 1
+e2326: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, -40000, t2327
+    JMP e2327
+t2327: LI r0, 1
+e2327: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, -40000, t2328
+    JMP e2328
+t2328: LI r0, 1
+e2328: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, -40000, t2329
+    JMP e2329
+t2329: LI r0, 1
+e2329: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, -40000, t2330
+    JMP e2330
+t2330: LI r0, 1
+e2330: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, 50000000, t2331
+    JMP e2331
+t2331: LI r0, 1
+e2331: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, 50000000, t2332
+    JMP e2332
+t2332: LI r0, 1
+e2332: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, 50000000, t2333
+    JMP e2333
+t2333: LI r0, 1
+e2333: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, 50000000, t2334
+    JMP e2334
+t2334: LI r0, 1
+e2334: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, 50000000, t2335
+    JMP e2335
+t2335: LI r0, 1
+e2335: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, 50000000, t2336
+    JMP e2336
+t2336: LI r0, 1
+e2336: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, 50000000, t2337
+    JMP e2337
+t2337: LI r0, 1
+e2337: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, 50000000, t2338
+    JMP e2338
+t2338: LI r0, 1
+e2338: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, 50000000, t2339
+    JMP e2339
+t2339: LI r0, 1
+e2339: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, 50000000, t2340
+    JMP e2340
+t2340: LI r0, 1
+e2340: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, -50000000, t2341
+    JMP e2341
+t2341: LI r0, 1
+e2341: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, -50000000, t2342
+    JMP e2342
+t2342: LI r0, 1
+e2342: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, -50000000, t2343
+    JMP e2343
+t2343: LI r0, 1
+e2343: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, -50000000, t2344
+    JMP e2344
+t2344: LI r0, 1
+e2344: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, -50000000, t2345
+    JMP e2345
+t2345: LI r0, 1
+e2345: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, -50000000, t2346
+    JMP e2346
+t2346: LI r0, 1
+e2346: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, -50000000, t2347
+    JMP e2347
+t2347: LI r0, 1
+e2347: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, -50000000, t2348
+    JMP e2348
+t2348: LI r0, 1
+e2348: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, -50000000, t2349
+    JMP e2349
+t2349: LI r0, 1
+e2349: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, -50000000, t2350
+    JMP e2350
+t2350: LI r0, 1
+e2350: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, 2147483647, t2351
+    JMP e2351
+t2351: LI r0, 1
+e2351: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, 2147483647, t2352
+    JMP e2352
+t2352: LI r0, 1
+e2352: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, 2147483647, t2353
+    JMP e2353
+t2353: LI r0, 1
+e2353: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, 2147483647, t2354
+    JMP e2354
+t2354: LI r0, 1
+e2354: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, 2147483647, t2355
+    JMP e2355
+t2355: LI r0, 1
+e2355: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, 2147483647, t2356
+    JMP e2356
+t2356: LI r0, 1
+e2356: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, 2147483647, t2357
+    JMP e2357
+t2357: LI r0, 1
+e2357: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, 2147483647, t2358
+    JMP e2358
+t2358: LI r0, 1
+e2358: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, 2147483647, t2359
+    JMP e2359
+t2359: LI r0, 1
+e2359: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, 2147483647, t2360
+    JMP e2360
+t2360: LI r0, 1
+e2360: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, -2147483648, t2361
+    JMP e2361
+t2361: LI r0, 1
+e2361: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, -2147483648, t2362
+    JMP e2362
+t2362: LI r0, 1
+e2362: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, -2147483648, t2363
+    JMP e2363
+t2363: LI r0, 1
+e2363: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, -2147483648, t2364
+    JMP e2364
+t2364: LI r0, 1
+e2364: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, -2147483648, t2365
+    JMP e2365
+t2365: LI r0, 1
+e2365: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, -2147483648, t2366
+    JMP e2366
+t2366: LI r0, 1
+e2366: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, -2147483648, t2367
+    JMP e2367
+t2367: LI r0, 1
+e2367: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, -2147483648, t2368
+    JMP e2368
+t2368: LI r0, 1
+e2368: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, -2147483648, t2369
+    JMP e2369
+t2369: LI r0, 1
+e2369: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, -2147483648, t2370
+    JMP e2370
+t2370: LI r0, 1
+e2370: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, 32768, t2371
+    JMP e2371
+t2371: LI r0, 1
+e2371: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, 32768, t2372
+    JMP e2372
+t2372: LI r0, 1
+e2372: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, 32768, t2373
+    JMP e2373
+t2373: LI r0, 1
+e2373: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, 32768, t2374
+    JMP e2374
+t2374: LI r0, 1
+e2374: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, 32768, t2375
+    JMP e2375
+t2375: LI r0, 1
+e2375: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, 32768, t2376
+    JMP e2376
+t2376: LI r0, 1
+e2376: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, 32768, t2377
+    JMP e2377
+t2377: LI r0, 1
+e2377: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, 32768, t2378
+    JMP e2378
+t2378: LI r0, 1
+e2378: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, 32768, t2379
+    JMP e2379
+t2379: LI r0, 1
+e2379: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, 32768, t2380
+    JMP e2380
+t2380: LI r0, 1
+e2380: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, -32769, t2381
+    JMP e2381
+t2381: LI r0, 1
+e2381: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, -32769, t2382
+    JMP e2382
+t2382: LI r0, 1
+e2382: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, -32769, t2383
+    JMP e2383
+t2383: LI r0, 1
+e2383: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, -32769, t2384
+    JMP e2384
+t2384: LI r0, 1
+e2384: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, -32769, t2385
+    JMP e2385
+t2385: LI r0, 1
+e2385: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, -32769, t2386
+    JMP e2386
+t2386: LI r0, 1
+e2386: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, -32769, t2387
+    JMP e2387
+t2387: LI r0, 1
+e2387: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, -32769, t2388
+    JMP e2388
+t2388: LI r0, 1
+e2388: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, -32769, t2389
+    JMP e2389
+t2389: LI r0, 1
+e2389: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, -32769, t2390
+    JMP e2390
+t2390: LI r0, 1
+e2390: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLTK r5, 100, t2391
+    JMP e2391
+t2391: LI r0, 1
+e2391: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFLEK r5, 100, t2392
+    JMP e2392
+t2392: LI r0, 1
+e2392: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGTK r5, 100, t2393
+    JMP e2393
+t2393: LI r0, 1
+e2393: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFGEK r5, 100, t2394
+    JMP e2394
+t2394: LI r0, 1
+e2394: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLTK r5, 100, t2395
+    JMP e2395
+t2395: LI r0, 1
+e2395: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNLEK r5, 100, t2396
+    JMP e2396
+t2396: LI r0, 1
+e2396: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGTK r5, 100, t2397
+    JMP e2397
+t2397: LI r0, 1
+e2397: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNGEK r5, 100, t2398
+    JMP e2398
+t2398: LI r0, 1
+e2398: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFEQK r5, 100, t2399
+    JMP e2399
+t2399: LI r0, 1
+e2399: PRINT r0
+    LI r5, 9094988921128908188
+    LI r0, 0
+    BFNEK r5, 100, t2400
+    JMP e2400
+t2400: LI r0, 1
+e2400: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, 0, t2401
+    JMP e2401
+t2401: LI r0, 1
+e2401: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, 0, t2402
+    JMP e2402
+t2402: LI r0, 1
+e2402: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, 0, t2403
+    JMP e2403
+t2403: LI r0, 1
+e2403: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, 0, t2404
+    JMP e2404
+t2404: LI r0, 1
+e2404: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, 0, t2405
+    JMP e2405
+t2405: LI r0, 1
+e2405: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, 0, t2406
+    JMP e2406
+t2406: LI r0, 1
+e2406: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, 0, t2407
+    JMP e2407
+t2407: LI r0, 1
+e2407: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, 0, t2408
+    JMP e2408
+t2408: LI r0, 1
+e2408: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, 0, t2409
+    JMP e2409
+t2409: LI r0, 1
+e2409: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, 0, t2410
+    JMP e2410
+t2410: LI r0, 1
+e2410: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, 1, t2411
+    JMP e2411
+t2411: LI r0, 1
+e2411: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, 1, t2412
+    JMP e2412
+t2412: LI r0, 1
+e2412: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, 1, t2413
+    JMP e2413
+t2413: LI r0, 1
+e2413: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, 1, t2414
+    JMP e2414
+t2414: LI r0, 1
+e2414: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, 1, t2415
+    JMP e2415
+t2415: LI r0, 1
+e2415: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, 1, t2416
+    JMP e2416
+t2416: LI r0, 1
+e2416: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, 1, t2417
+    JMP e2417
+t2417: LI r0, 1
+e2417: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, 1, t2418
+    JMP e2418
+t2418: LI r0, 1
+e2418: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, 1, t2419
+    JMP e2419
+t2419: LI r0, 1
+e2419: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, 1, t2420
+    JMP e2420
+t2420: LI r0, 1
+e2420: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, -1, t2421
+    JMP e2421
+t2421: LI r0, 1
+e2421: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, -1, t2422
+    JMP e2422
+t2422: LI r0, 1
+e2422: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, -1, t2423
+    JMP e2423
+t2423: LI r0, 1
+e2423: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, -1, t2424
+    JMP e2424
+t2424: LI r0, 1
+e2424: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, -1, t2425
+    JMP e2425
+t2425: LI r0, 1
+e2425: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, -1, t2426
+    JMP e2426
+t2426: LI r0, 1
+e2426: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, -1, t2427
+    JMP e2427
+t2427: LI r0, 1
+e2427: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, -1, t2428
+    JMP e2428
+t2428: LI r0, 1
+e2428: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, -1, t2429
+    JMP e2429
+t2429: LI r0, 1
+e2429: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, -1, t2430
+    JMP e2430
+t2430: LI r0, 1
+e2430: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, 40000, t2431
+    JMP e2431
+t2431: LI r0, 1
+e2431: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, 40000, t2432
+    JMP e2432
+t2432: LI r0, 1
+e2432: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, 40000, t2433
+    JMP e2433
+t2433: LI r0, 1
+e2433: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, 40000, t2434
+    JMP e2434
+t2434: LI r0, 1
+e2434: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, 40000, t2435
+    JMP e2435
+t2435: LI r0, 1
+e2435: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, 40000, t2436
+    JMP e2436
+t2436: LI r0, 1
+e2436: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, 40000, t2437
+    JMP e2437
+t2437: LI r0, 1
+e2437: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, 40000, t2438
+    JMP e2438
+t2438: LI r0, 1
+e2438: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, 40000, t2439
+    JMP e2439
+t2439: LI r0, 1
+e2439: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, 40000, t2440
+    JMP e2440
+t2440: LI r0, 1
+e2440: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, -40000, t2441
+    JMP e2441
+t2441: LI r0, 1
+e2441: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, -40000, t2442
+    JMP e2442
+t2442: LI r0, 1
+e2442: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, -40000, t2443
+    JMP e2443
+t2443: LI r0, 1
+e2443: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, -40000, t2444
+    JMP e2444
+t2444: LI r0, 1
+e2444: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, -40000, t2445
+    JMP e2445
+t2445: LI r0, 1
+e2445: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, -40000, t2446
+    JMP e2446
+t2446: LI r0, 1
+e2446: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, -40000, t2447
+    JMP e2447
+t2447: LI r0, 1
+e2447: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, -40000, t2448
+    JMP e2448
+t2448: LI r0, 1
+e2448: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, -40000, t2449
+    JMP e2449
+t2449: LI r0, 1
+e2449: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, -40000, t2450
+    JMP e2450
+t2450: LI r0, 1
+e2450: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, 50000000, t2451
+    JMP e2451
+t2451: LI r0, 1
+e2451: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, 50000000, t2452
+    JMP e2452
+t2452: LI r0, 1
+e2452: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, 50000000, t2453
+    JMP e2453
+t2453: LI r0, 1
+e2453: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, 50000000, t2454
+    JMP e2454
+t2454: LI r0, 1
+e2454: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, 50000000, t2455
+    JMP e2455
+t2455: LI r0, 1
+e2455: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, 50000000, t2456
+    JMP e2456
+t2456: LI r0, 1
+e2456: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, 50000000, t2457
+    JMP e2457
+t2457: LI r0, 1
+e2457: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, 50000000, t2458
+    JMP e2458
+t2458: LI r0, 1
+e2458: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, 50000000, t2459
+    JMP e2459
+t2459: LI r0, 1
+e2459: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, 50000000, t2460
+    JMP e2460
+t2460: LI r0, 1
+e2460: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, -50000000, t2461
+    JMP e2461
+t2461: LI r0, 1
+e2461: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, -50000000, t2462
+    JMP e2462
+t2462: LI r0, 1
+e2462: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, -50000000, t2463
+    JMP e2463
+t2463: LI r0, 1
+e2463: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, -50000000, t2464
+    JMP e2464
+t2464: LI r0, 1
+e2464: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, -50000000, t2465
+    JMP e2465
+t2465: LI r0, 1
+e2465: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, -50000000, t2466
+    JMP e2466
+t2466: LI r0, 1
+e2466: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, -50000000, t2467
+    JMP e2467
+t2467: LI r0, 1
+e2467: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, -50000000, t2468
+    JMP e2468
+t2468: LI r0, 1
+e2468: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, -50000000, t2469
+    JMP e2469
+t2469: LI r0, 1
+e2469: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, -50000000, t2470
+    JMP e2470
+t2470: LI r0, 1
+e2470: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, 2147483647, t2471
+    JMP e2471
+t2471: LI r0, 1
+e2471: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, 2147483647, t2472
+    JMP e2472
+t2472: LI r0, 1
+e2472: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, 2147483647, t2473
+    JMP e2473
+t2473: LI r0, 1
+e2473: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, 2147483647, t2474
+    JMP e2474
+t2474: LI r0, 1
+e2474: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, 2147483647, t2475
+    JMP e2475
+t2475: LI r0, 1
+e2475: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, 2147483647, t2476
+    JMP e2476
+t2476: LI r0, 1
+e2476: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, 2147483647, t2477
+    JMP e2477
+t2477: LI r0, 1
+e2477: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, 2147483647, t2478
+    JMP e2478
+t2478: LI r0, 1
+e2478: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, 2147483647, t2479
+    JMP e2479
+t2479: LI r0, 1
+e2479: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, 2147483647, t2480
+    JMP e2480
+t2480: LI r0, 1
+e2480: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, -2147483648, t2481
+    JMP e2481
+t2481: LI r0, 1
+e2481: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, -2147483648, t2482
+    JMP e2482
+t2482: LI r0, 1
+e2482: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, -2147483648, t2483
+    JMP e2483
+t2483: LI r0, 1
+e2483: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, -2147483648, t2484
+    JMP e2484
+t2484: LI r0, 1
+e2484: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, -2147483648, t2485
+    JMP e2485
+t2485: LI r0, 1
+e2485: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, -2147483648, t2486
+    JMP e2486
+t2486: LI r0, 1
+e2486: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, -2147483648, t2487
+    JMP e2487
+t2487: LI r0, 1
+e2487: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, -2147483648, t2488
+    JMP e2488
+t2488: LI r0, 1
+e2488: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, -2147483648, t2489
+    JMP e2489
+t2489: LI r0, 1
+e2489: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, -2147483648, t2490
+    JMP e2490
+t2490: LI r0, 1
+e2490: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, 32768, t2491
+    JMP e2491
+t2491: LI r0, 1
+e2491: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, 32768, t2492
+    JMP e2492
+t2492: LI r0, 1
+e2492: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, 32768, t2493
+    JMP e2493
+t2493: LI r0, 1
+e2493: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, 32768, t2494
+    JMP e2494
+t2494: LI r0, 1
+e2494: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, 32768, t2495
+    JMP e2495
+t2495: LI r0, 1
+e2495: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, 32768, t2496
+    JMP e2496
+t2496: LI r0, 1
+e2496: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, 32768, t2497
+    JMP e2497
+t2497: LI r0, 1
+e2497: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, 32768, t2498
+    JMP e2498
+t2498: LI r0, 1
+e2498: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, 32768, t2499
+    JMP e2499
+t2499: LI r0, 1
+e2499: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, 32768, t2500
+    JMP e2500
+t2500: LI r0, 1
+e2500: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, -32769, t2501
+    JMP e2501
+t2501: LI r0, 1
+e2501: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, -32769, t2502
+    JMP e2502
+t2502: LI r0, 1
+e2502: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, -32769, t2503
+    JMP e2503
+t2503: LI r0, 1
+e2503: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, -32769, t2504
+    JMP e2504
+t2504: LI r0, 1
+e2504: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, -32769, t2505
+    JMP e2505
+t2505: LI r0, 1
+e2505: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, -32769, t2506
+    JMP e2506
+t2506: LI r0, 1
+e2506: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, -32769, t2507
+    JMP e2507
+t2507: LI r0, 1
+e2507: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, -32769, t2508
+    JMP e2508
+t2508: LI r0, 1
+e2508: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, -32769, t2509
+    JMP e2509
+t2509: LI r0, 1
+e2509: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, -32769, t2510
+    JMP e2510
+t2510: LI r0, 1
+e2510: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLTK r5, 100, t2511
+    JMP e2511
+t2511: LI r0, 1
+e2511: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFLEK r5, 100, t2512
+    JMP e2512
+t2512: LI r0, 1
+e2512: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGTK r5, 100, t2513
+    JMP e2513
+t2513: LI r0, 1
+e2513: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFGEK r5, 100, t2514
+    JMP e2514
+t2514: LI r0, 1
+e2514: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLTK r5, 100, t2515
+    JMP e2515
+t2515: LI r0, 1
+e2515: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNLEK r5, 100, t2516
+    JMP e2516
+t2516: LI r0, 1
+e2516: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGTK r5, 100, t2517
+    JMP e2517
+t2517: LI r0, 1
+e2517: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNGEK r5, 100, t2518
+    JMP e2518
+t2518: LI r0, 1
+e2518: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFEQK r5, 100, t2519
+    JMP e2519
+t2519: LI r0, 1
+e2519: PRINT r0
+    LI r5, 4602678819172646912
+    LI r0, 0
+    BFNEK r5, 100, t2520
+    JMP e2520
+t2520: LI r0, 1
+e2520: PRINT r0
+    HALT

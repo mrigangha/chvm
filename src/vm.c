@@ -697,6 +697,40 @@ dispatch:
     OP(BFNGEI)
         BRANCH(!(RA.f >= (double)VAL16));
 
+    /* Float compare with a 32-bit constant held in the next instruction (KDATA). Falling through skips it. */
+#define KBRANCH(cond)                       \
+    do {                                    \
+        double k = (double)pc[1].imm;       \
+        if (cond) {                         \
+            pc = TARGET;                    \
+            DISPATCH();                     \
+        }                                   \
+        pc += 2;                            \
+        DISPATCH();                         \
+    } while (0)
+    OP(BFLTK)
+        KBRANCH(RA.f < k);
+    OP(BFLEK)
+        KBRANCH(RA.f <= k);
+    OP(BFGTK)
+        KBRANCH(RA.f > k);
+    OP(BFGEK)
+        KBRANCH(RA.f >= k);
+    OP(BFNLTK)
+        KBRANCH(!(RA.f < k));
+    OP(BFNLEK)
+        KBRANCH(!(RA.f <= k));
+    OP(BFNGTK)
+        KBRANCH(!(RA.f > k));
+    OP(BFNGEK)
+        KBRANCH(!(RA.f >= k));
+    OP(BFEQK)
+        KBRANCH(RA.f == k);
+    OP(BFNEK)
+        KBRANCH(RA.f != k);
+    OP(KDATA)
+        FAIL(VM_E_TRAP);   /* data, never run: a branch skips it */
+
     /* Array header: [length][capacity][address of the 8-byte elements]. */
     OP(LDAX) {
         uint64_t h = RB.u;

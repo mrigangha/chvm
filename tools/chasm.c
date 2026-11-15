@@ -890,8 +890,35 @@ static void assemble_lifs(char **args, int nargs)
         emit(OP_MOVHI, a, 0, 0, 0);
 }
 
+/*
+ * BFLTK r, constant, target and its relatives: a float compare with a 32-bit whole number, in two
+ * instruction slots. The second slot is a KDATA that holds the constant. The assembler writes both.
+ */
+static void assemble_branch_k(const char *name, int op, char **args, int nargs)
+{
+    int64_t k;
+    if (nargs != 3) {
+        err("%s takes 3 operands, got %d", name, nargs);
+        return;
+    }
+    int r = reg(args[0]);
+    if (eval_const(args[1], &k) || k < INT32_MIN || k > INT32_MAX) {
+        err("%s needs a whole-number constant from -2147483648 to 2147483647, got '%s'", name, args[1]);
+        return;
+    }
+    int32_t imm = 0;
+    sym sy = imm_tok(args[2], &imm, 0);
+    emit(op, r, 0, 0, imm);
+    emit_fix(sy);
+    emit(OP_KDATA, 0, 0, 0, (int32_t)k);
+}
+
 static void assemble_insn(const char *name, int op, char **args, int nargs)
 {
+    if (op >= OP_BFLTK && op <= OP_BFNEK) {
+        assemble_branch_k(name, op, args, nargs);
+        return;
+    }
     static const uint8_t want[] = {
         [F_NONE] = 0, [F_R] = 1, [F_RR] = 2, [F_RRR] = 3, [F_RI] = 2, [F_RRI] = 3,
         [F_LD] = 2, [F_ST] = 2, [F_J] = 1, [F_RJ] = 2, [F_RRJ] = 3, [F_I] = 1, [F_RIJ] = 3, [F_RRRR] = 4,

@@ -39,6 +39,8 @@ interface Gen {
   hasFrame: boolean
   isStart: boolean
   liveFloor: number     // temporaries below this are known to hold nothing live, so calls need not save them
+  hoisted: Node[]       // a[i] expressions currently held in a register, and
+  hoistReg: number[]    // the register for each
   parked: number[]      // per saved register: 1 while a temporary value is parked in it
   usedMask: boolean[]   // per saved register: a variable lives there
   extraUsed: boolean[]  // per saved register: parked in at least once, so it must be saved in the prologue
@@ -80,6 +82,10 @@ function numLit(v: number): string {
 
 // A number that fits a 32-bit immediate and is a whole number (so FMOVI, FADDI and friends are exact)
 function isSmallInt(v: number): boolean {
+  return v === Math.floor(v) && v >= -2147483648 && v <= 2147483647 && !(v === 0 && 1 / v < 0)
+}
+
+function isSmall32(v: number): boolean {
   return v === Math.floor(v) && v >= -2147483648 && v <= 2147483647 && !(v === 0 && 1 / v < 0)
 }
 
@@ -129,6 +135,14 @@ function inPlace(g: Gen, n: Node): number {
   if (n.kind === "id" && n.slot >= 0) {
     const h = homeOf(g, n.slot)
     if (h.reg >= 0) return h.reg
+  }
+  if (n.kind === "index" && n.a.kind === "id" && n.b.kind === "id") {
+    let k = 0
+    while (k < g.hoisted.length) {
+      const h = g.hoisted[k]
+      if (h.a.slot === n.a.slot && h.b.slot === n.b.slot) return g.hoistReg[k]
+      k++
+    }
   }
   return -1
 }
@@ -275,6 +289,111 @@ function genAssignEffect(g: Gen, n: Node): void {
     return
   }
   genTo(g, n, FIRST_TEMP)
+}
+
+// ---- loop invariant loads ----
+//
+// In `for (k...) s += a[i][k] * b[k][j]` the value a[i] is the same on every trip. It can be loaded
+// once into a spare register before the loop, so the loop body reads the register instead of memory.
+// That is only valid when nothing in the loop could change a[i] or the variables that name it:
+//   - no store to any array element or object field, and no call (a callee could store anything),
+//   - the array variable and the index variable are never assigned in the loop,
+//   - both are plain local variables that live in registers.
+// The load is placed after the loop's first test, so a loop that runs zero times does not load at all
+// and cannot fault where the original would not.
+
+// Anything in the tree that could write memory other than a plain local variable.
+function writesMemory(n: Node): boolean {
+  if (n === NIL) return false
+  if (n.kind === "call" || n.kind === "array" || n.kind === "object") return true
+  if (n.kind === "assign" || n.kind === "update") {
+    const t = n.a
+    if (t.kind !== "id") return true
+    if (n.tag === "concat") return true
+  }
+  if (n.kind === "binary" && (n.tag === "concat" || n.tag === "str")) return true
+  if (writesMemory(n.a) || writesMemory(n.b) || writesMemory(n.c) || writesMemory(n.d)) return true
+  let i = 0
+  while (i < n.list.length) {
+    if (writesMemory(n.list[i])) return true
+    i++
+  }
+  return false
+}
+
+// Is the local variable in `slot` assigned or updated anywhere in the tree?
+function assignsSlot(n: Node, slot: number): boolean {
+  if (n === NIL) return false
+  if ((n.kind === "assign" || n.kind === "update") && n.a.kind === "id" && n.a.slot === slot) return true
+  if (n.kind === "var" && n.slot === slot) return true
+  if (assignsSlot(n.a, slot) || assignsSlot(n.b, slot) || assignsSlot(n.c, slot) || assignsSlot(n.d, slot)) return true
+  let i = 0
+  while (i < n.list.length) {
+    if (assignsSlot(n.list[i], slot)) return true
+    i++
+  }
+  return false
+}
+
+// Candidates: a[i] where a and i are register locals, found as the left side of another index.
+function collectInvariant(g: Gen, n: Node, body: Node, out: Node[]): void {
+  if (n === NIL) return
+  if (n.kind === "index" && n.a.kind === "index") {
+    const inner = n.a
+    if (inner.a.kind === "id" && inner.b.kind === "id" && inner.a.slot >= 0 && inner.b.slot >= 0 &&
+        homeOf(g, inner.a.slot).reg >= 0 && homeOf(g, inner.b.slot).reg >= 0 &&
+        inner.a.ty.kind === "array" && inner.ty.kind === "array" &&
+        !assignsSlot(body, inner.a.slot) && !assignsSlot(body, inner.b.slot)) {
+      let seen = false
+      let k = 0
+      while (k < out.length) {
+        if (out[k].a.slot === inner.a.slot && out[k].b.slot === inner.b.slot) seen = true
+        k++
+      }
+      if (!seen) out.push(inner)
+    }
+  }
+  collectInvariant(g, n.a, body, out)
+  collectInvariant(g, n.b, body, out)
+  collectInvariant(g, n.c, body, out)
+  collectInvariant(g, n.d, body, out)
+  let i = 0
+  while (i < n.list.length) {
+    collectInvariant(g, n.list[i], body, out)
+    i++
+  }
+}
+
+// Loads the invariant a[i] values for the loop `n` into spare saved registers. Returns how many.
+function hoistInvariants(g: Gen, n: Node): number {
+  if (writesMemory(n.d) || writesMemory(n.c) || writesMemory(n.b)) return 0
+  const found: Node[] = []
+  collectInvariant(g, n.d, n, found)
+  let made = 0
+  let k = 0
+  while (k < found.length) {
+    const reg = parkReg(g)
+    if (reg < 0) break
+    const inner = found[k]
+    // a[i] with the bounds check, exactly as the loop body would have done it
+    emit(g, "LDAX " + rn(reg) + ", " + rn(homeOf(g, inner.a.slot).reg) + ", " + rn(homeOf(g, inner.b.slot).reg))
+    g.hoisted.push(inner)
+    g.hoistReg.push(reg)
+    made++
+    k++
+  }
+  return made
+}
+
+function releaseHoisted(g: Gen, count: number): void {
+  let k = 0
+  while (k < count) {
+    const last = g.hoistReg.length - 1
+    releaseReg(g, g.hoistReg[last])
+    g.hoistReg = g.hoistReg.slice(0, last)
+    g.hoisted = g.hoisted.slice(0, last)
+    k++
+  }
 }
 
 // An operand as a register: the local's own register when it has one, else computed into `scratch`.
@@ -650,6 +769,19 @@ function genCompareBranch(g: Gen, n: Node, target: string, dst: number, whenFals
     else name = whenFalse ? "BFEQI" : "BFNEI"
     // "a != b" is true for NaN, so the false-jump of != is BFEQI, which is false for NaN. Correct.
     emit(g, name + " " + rn(ra) + ", " + v + ", " + target)
+    return true
+  }
+  // a whole-number constant too big for 16 bits but within 32: the branch carries it in its second slot
+  if (n.b.kind === "num" && isSmall32(n.b.num)) {
+    const ra = operand(g, n.a, dst)
+    let nm = ""
+    if (op === "<") nm = whenFalse ? "BFNLTK" : "BFLTK"
+    else if (op === "<=") nm = whenFalse ? "BFNLEK" : "BFLEK"
+    else if (op === ">") nm = whenFalse ? "BFNGTK" : "BFGTK"
+    else if (op === ">=") nm = whenFalse ? "BFNGEK" : "BFGEK"
+    else if (op === "===" || op === "==") nm = whenFalse ? "BFNEK" : "BFEQK"
+    else nm = whenFalse ? "BFEQK" : "BFNEK"
+    emit(g, nm + " " + rn(ra) + ", " + n.b.num + ", " + target)
     return true
   }
   const rs = genPair(g, n.a, n.b, dst)
@@ -1144,6 +1276,9 @@ function genStmt(g: Gen, n: Node): void {
     if (n.a !== NIL) genStmt(g, n.a)
     g.loops.push(cont + " " + end)
     if (n.b !== NIL) genJumpIfFalse(g, n.b, end, FIRST_TEMP)
+    // Hoist loads that cannot change while the loop runs, after the first test so that a loop that
+    // never runs never loads. Only for a loop with no stores and no calls anywhere in it.
+    const hoistedHere = hoistInvariants(g, n)
     place(g, top)
     genStmt(g, n.d)
     place(g, cont)
@@ -1151,6 +1286,7 @@ function genStmt(g: Gen, n: Node): void {
     if (n.b !== NIL) genJumpIfTrue(g, n.b, top, FIRST_TEMP)
     else emit(g, "JMP " + top)
     place(g, end)
+    releaseHoisted(g, hoistedHere)
     g.loops.pop()
   } else if (k === "return") {
     if (n.a !== NIL) {
@@ -1458,7 +1594,7 @@ export function generate(prog: Program, entryFile: string): string {
   const g: Gen = {
     out: [], label: 0, loops: [], fname: "", prog: prog, file: entryFile, line: 0,
     homes: [], usedRegs: [], depth: 0, hasFrame: false, isStart: false,
-    liveFloor: 1, parked: [0, 0, 0, 0, 0], usedMask: [false, false, false, false, false], extraUsed: [false, false, false, false, false], extraRegs: [],
+    hoisted: [], hoistReg: [], liveFloor: 1, parked: [0, 0, 0, 0, 0], usedMask: [false, false, false, false, false], extraUsed: [false, false, false, false, false], extraRegs: [],
   }
   g.out.push(".entry __start")
   g.out.push(".data")

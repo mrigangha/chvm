@@ -67,3 +67,16 @@ pointer: it saves the registers it uses with `PUSH` and `POP`.
 
 Conditions in `if`, `while` and `for` become one fused compare-and-branch. NaN is handled with
 dedicated "not less than" branches, because `!(a < b)` is not `a >= b` when either side is NaN.
+
+### Instruction-saving rules in the generator
+
+These only change how few instructions run, never what the program prints:
+
+- A result is computed straight into a variable's register when the right side has no call.
+- A constant on the left of `+` or `*` is moved to the right so the immediate form applies.
+- `while` and `for` loops are inverted: the test runs once before the loop and again at the bottom.
+- Variables in separate blocks, whose lifetimes do not overlap, share a saved register.
+- A function that starts with `if (test) return value`, using only parameters, answers before saving registers.
+- A comparison with a whole number that fits 32 bits is a single branch (`BFLTK`) with the number in the next slot.
+- A `const` number set from a literal is replaced by its value at every read, so it needs no register.
+- In a loop with no calls and no stores, `a[i]` read as `a[i][k]` is loaded once before the loop.

@@ -22,6 +22,8 @@ export interface Sym {
   inFunc: boolean   // a global that some function body uses, so it must stay in memory
   lo: number        // the variable is alive from tick lo (its declaration) to tick hi (the end of its block)
   hi: number
+  known: boolean    // a const number set from a literal: every read can use the value directly
+  value: number
 }
 
 export interface FuncInfo {
@@ -46,7 +48,7 @@ export interface Program {
   start: FuncInfo      // the top-level code
 }
 
-export const NOSYM: Sym = { name: "", ty: NOTYPE, isConst: false, slot: -9, label: "", uses: 0, inFunc: false, lo: 0, hi: 0 }
+export const NOSYM: Sym = { name: "", ty: NOTYPE, isConst: false, slot: -9, label: "", uses: 0, inFunc: false, lo: 0, hi: 0, known: false, value: 0 }
 
 interface Scope {
   names: string[]
@@ -134,7 +136,7 @@ function declareLocal(c: Ctx, n: Node, name: string, ty: Type, isConst: boolean)
     if (top.names[j] === name) err(n, "'" + name + "' is already declared in this block")
     j++
   }
-  const s: Sym = { name: name, ty: ty, isConst: isConst, slot: c.nslots, label: "", uses: 0, inFunc: false, lo: c.tick, hi: 0 }
+  const s: Sym = { name: name, ty: ty, isConst: isConst, slot: c.nslots, label: "", uses: 0, inFunc: false, lo: c.tick, hi: 0, known: false, value: 0 }
   c.tick++
   c.syms.push(s)
   c.nslots++
@@ -204,6 +206,7 @@ function checkExprInner(c: Ctx, n: Node, hint: Type): Type {
     return T_NUM
   }
   if (k === "update") {
+    if (n.a.kind === "id") checkAssignable(c, n.a)
     const t = checkExpr(c, n.a, NOTYPE)
     need(n.a, t, T_NUM, "the operand of '" + n.text + "'")
     checkAssignable(c, n.a)
@@ -244,6 +247,14 @@ function loopWeight(c: Ctx): number {
 
 function checkId(c: Ctx, n: Node): Type {
   const s = lookup(c, n.text)
+  if (s !== NOSYM && s.known) {
+    // a const number set from a literal: a read of it is the literal, so it needs no register
+    n.kind = "num"
+    n.num = s.value
+    n.text = "" + s.value
+    n.slot = 0
+    return T_NUM
+  }
   if (s !== NOSYM) {
     s.uses = s.uses + loopWeight(c)
     if (s.slot < 0 && c.inFunc) s.inFunc = true
@@ -384,6 +395,7 @@ function checkBinary(c: Ctx, n: Node): Type {
 }
 
 function checkAssign(c: Ctx, n: Node): Type {
+  if (n.a.kind === "id") checkAssignable(c, n.a)
   const lt = checkExpr(c, n.a, NOTYPE)
   checkAssignable(c, n.a)
   const rt = checkExpr(c, n.b, lt)
@@ -633,6 +645,10 @@ function checkVar(c: Ctx, n: Node): void {
   n.ty = ty
   const s = declareLocal(c, n, n.text, ty, n.num === 1)
   n.slot = s.slot
+  if (n.num === 1 && ty.kind === "number" && isLiteralNumber(n.a)) {
+    s.known = true
+    s.value = literalNumber(n.a)
+  }
 }
 
 // ---- program ----
@@ -803,6 +819,7 @@ export function check(files: Node[]): Program {
 // can only use such a global if the global has a written type or a literal value.
 function literalType(n: Node): Type {
   if (n.kind === "num") return T_NUM
+  if (n.kind === "unary" && n.text === "-" && n.a.kind === "num") return T_NUM
   if (n.kind === "str") return T_STR
   if (n.kind === "true" || n.kind === "false") return T_BOOL
   return NOTYPE
@@ -811,12 +828,27 @@ function literalType(n: Node): Type {
 // Registers the global. A global with no written type and no literal value is registered
 // with the type "none": a function body that uses it is an error, and the top-level
 // statement that declares it fills the type in.
+// The value of an initialiser that is a plain number: 5, 1e3, -7. Returns false in ok when it is anything else.
+function literalNumber(n: Node): number {
+  if (n.kind === "num") return n.num
+  if (n.kind === "unary" && n.text === "-" && n.a.kind === "num") return -n.a.num
+  return 0
+}
+
+function isLiteralNumber(n: Node): boolean {
+  return n.kind === "num" || (n.kind === "unary" && n.text === "-" && n.a.kind === "num")
+}
+
 function declareGlobal(c: Ctx, n: Node): void {
   let ty = NOTYPE
   if (n.ann.kind !== "none") ty = resolveType(c, n.ann, n)
   else ty = literalType(n.a)
   if (mapFind(c.globalIndex, n.text) >= 0) err(n, "'" + n.text + "' is already declared")
-  const g: Sym = { name: n.text, ty: ty, isConst: n.num === 1, slot: -1, label: "g_" + n.text, uses: 0, inFunc: false, lo: 0, hi: 0 }
+  const g: Sym = { name: n.text, ty: ty, isConst: n.num === 1, slot: -1, label: "g_" + n.text, uses: 0, inFunc: false, lo: 0, hi: 0, known: false, value: 0 }
+  if (n.num === 1 && ty.kind === "number" && isLiteralNumber(n.a)) {
+    g.known = true
+    g.value = literalNumber(n.a)
+  }
   c.prog.globals.push(g)
   mapSet(c.globalIndex, n.text, c.prog.globals.length - 1)
   n.ty = ty
@@ -842,6 +874,8 @@ function checkTopVar(c: Ctx, n: Node): void {
     const s = declareLocal(c, n, n.text, g.ty, g.isConst)
     n.slot = s.slot
     n.tag = ""
+    s.known = g.known
+    s.value = g.value
   }
 }
 

@@ -19,6 +19,10 @@
  *   F_RIJ   a, value = b | c << 8 (16 bits), imm is a code offset
  *   F_RRRR  a, b, c, and a fourth register number in imm
  *
+ * BFLTK r, target is followed by a KDATA instruction whose immediate is a 32-bit constant, which
+ * the branch reads and then skips, so a comparison with a number that does not fit 16 bits needs no
+ * register for it. The assembler writes the KDATA for you: BFLTK r, 50000000, target.
+ *
  * CALLX rd, fn, sig uses F_RRR: a = rd, b = fn, c = sig, and the argument array address is in r1.
  */
 enum chbc_fmt {
@@ -84,6 +88,9 @@ enum chbc_fmt {
     X(BFNGTI, F_RIJ) X(BFNGEI, F_RIJ)                                      \
     X(LDAX, F_RRR) X(STAX, F_RRR) X(SCHAR, F_RRR) X(LDI2F, F_LD)           \
     X(LDG, F_RI) X(STG, F_RI)                                              \
+    X(BFLTK, F_RJ) X(BFLEK, F_RJ) X(BFGTK, F_RJ) X(BFGEK, F_RJ)            \
+    X(BFNLTK, F_RJ) X(BFNLEK, F_RJ) X(BFNGTK, F_RJ) X(BFNGEK, F_RJ)        \
+    X(BFEQK, F_RJ) X(BFNEK, F_RJ) X(KDATA, F_I)                            \
     X(APUSH, F_RRR) X(APOP, F_RR) X(ALLOC, F_RR) X(ALLOCI, F_RI)           \
     X(AADDR, F_RRR) X(HEAPMARK, F_R) X(HEAPFREE, F_R)
 
