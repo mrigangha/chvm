@@ -52,6 +52,7 @@ offset  size  field
 | 4i | Native calls | `CALLX`, `SYS_DLOPEN/DLSYM/DLCLOSE`, libffi, `-F` flag, optional at build time | done |
 | 6 | Language `chts` | a TypeScript subset compiler written in itself (`ts/`), compiled by node first, then by itself | done |
 | 6b | Faster generated code | register locals, fused float branches, array/string instructions, peephole, no-frame leaf and call paths | done |
+| 6c | Baked executables | `chbake`: the program and the interpreter in one file, keeping only the instructions the program uses | done |
 | 5 | Optimiser | peephole, constant folding, dead code, superinstructions, as a `.chbc` to `.chbc` pass | todo |
 | 6 | Extras | float opcodes, disassembler, fuzzing the loader and verifier | todo |
 

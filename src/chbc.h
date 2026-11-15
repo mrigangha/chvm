@@ -90,6 +90,8 @@ static inline int chbc_fmt_is_branch(unsigned fmt)
 }
 
 chbc_err chbc_load(const char *path, chbc_image *img);
+/* Reads an image already in memory (for example one compiled into the program). The bytes are not copied or freed. */
+chbc_err chbc_load_mem(const uint8_t *buf, size_t len, chbc_image *img);
 void chbc_free(chbc_image *img);
 chbc_err chbc_verify(const chbc_image *img, uint32_t *bad_off);
 const char *chbc_err_str(chbc_err e);

@@ -21,6 +21,35 @@ static uint32_t rd32le(const uint8_t *p)
            (uint32_t)p[3] << 24;
 }
 
+/* Checks the header of an image in memory and fills img. Does not copy or take ownership of buf. */
+chbc_err chbc_load_mem(const uint8_t *buf, size_t len, chbc_image *img)
+{
+    memset(img, 0, sizeof *img);
+    if (len < CHBC_HEADER_SIZE || len > CHBC_MAX_FILE)
+        return CHBC_E_SIZE;
+    if (memcmp(buf, "CHBC", 4) != 0)
+        return CHBC_E_MAGIC;
+    if ((unsigned)(buf[4] | buf[5] << 8) != CHBC_VERSION)
+        return CHBC_E_VERSION;
+    uint32_t entry = rd32le(buf + 8);
+    uint32_t code_size = rd32le(buf + 12);
+    uint32_t data_size = rd32le(buf + 16);
+    uint32_t debug_size = rd32le(buf + 24);
+    uint64_t total = (uint64_t)CHBC_HEADER_SIZE + code_size + data_size + debug_size;
+    if (total != (uint64_t)len)
+        return CHBC_E_SIZE;
+    img->buf = NULL;   /* not ours, so chbc_free must not free it */
+    img->entry = entry;
+    img->code_size = code_size;
+    img->code = (const chbc_insn *)(buf + CHBC_HEADER_SIZE);
+    img->data_size = data_size;
+    img->bss_size = rd32le(buf + 20);
+    img->debug_size = debug_size;
+    img->debug = buf + CHBC_HEADER_SIZE + code_size + data_size;
+    img->data = buf + CHBC_HEADER_SIZE + code_size;
+    return CHBC_OK;
+}
+
 chbc_err chbc_load(const char *path, chbc_image *img)
 {
     memset(img, 0, sizeof *img);
@@ -52,34 +81,13 @@ chbc_err chbc_load(const char *path, chbc_image *img)
     }
     fclose(f);
 
-    chbc_err e = CHBC_OK;
-    if (memcmp(buf, "CHBC", 4) != 0) {
-        e = CHBC_E_MAGIC;
-    } else if ((unsigned)(buf[4] | buf[5] << 8) != CHBC_VERSION) {
-        e = CHBC_E_VERSION;
-    } else {
-        uint32_t entry = rd32le(buf + 8);
-        uint32_t code_size = rd32le(buf + 12);
-        uint32_t data_size = rd32le(buf + 16);
-        uint32_t debug_size = rd32le(buf + 24);
-        uint64_t total = (uint64_t)CHBC_HEADER_SIZE + code_size + data_size + debug_size;
-        if (total != (uint64_t)len) {
-            e = CHBC_E_SIZE;
-        } else {
-            img->buf = buf;
-            img->entry = entry;
-            img->code_size = code_size;
-            img->code = (const chbc_insn *)(buf + CHBC_HEADER_SIZE);
-            img->data_size = data_size;
-            img->bss_size = rd32le(buf + 20);
-            img->debug_size = debug_size;
-            img->debug = buf + CHBC_HEADER_SIZE + code_size + data_size;
-            img->data = buf + CHBC_HEADER_SIZE + code_size;
-            return CHBC_OK;
-        }
+    chbc_err e = chbc_load_mem(buf, (size_t)len, img);
+    if (e != CHBC_OK) {
+        free(buf);
+        return e;
     }
-    free(buf);
-    return e;
+    img->buf = buf;   /* now ours: chbc_free releases it */
+    return CHBC_OK;
 }
 
 void chbc_free(chbc_image *img)

@@ -40,6 +40,22 @@ typedef float    __attribute__((may_alias, aligned(1))) f32u;
 #define CHVM_CGOTO 1
 #endif
 
+/*
+ * Trimmed build (used by chbake). With CHVM_TRIM defined, the program says which opcodes it contains
+ * by defining CHVM_HAS_<NAME> as 1 or 0 for every opcode. The table then points an unused opcode at
+ * a common stub instead of its handler, so nothing refers to the handler and the compiler removes it.
+ * Without CHVM_TRIM every opcode keeps its handler.
+ */
+#define CHVM_CAT_(a, b) a##b
+#define CHVM_CAT(a, b) CHVM_CAT_(a, b)
+#define CHVM_LBL_1(name) &&L_##name
+#define CHVM_LBL_0(name) &&L_unused
+#ifdef CHVM_TRIM
+#define CHVM_LBL(name) CHVM_CAT(CHVM_LBL_, CHVM_CAT(CHVM_HAS_, name))(name)
+#else
+#define CHVM_LBL(name) CHVM_LBL_1(name)
+#endif
+
 #ifdef CHVM_CGOTO
 #define DISPATCH() goto *labels[pc->op]
 #define OP(name) L_##name:
@@ -285,7 +301,7 @@ vm_status vm_run(const chbc_image *img, const vm_config *cfg,
 
 #ifdef CHVM_CGOTO
     static const void *const labels[OP_COUNT] = {
-#define X(name, fmt) &&L_##name,
+#define X(name, fmt) CHVM_LBL(name),
         CHBC_OPCODES(X)
 #undef X
     };
@@ -877,6 +893,12 @@ dispatch:
     default:
         abort();
     }
+#endif
+
+#if defined(CHVM_CGOTO) && defined(CHVM_TRIM)
+    /* Reached only if an opcode that the program does not contain is run, which verification rules out. */
+L_unused: __attribute__((unused));
+    FAIL(VM_E_TRAP);
 #endif
 
 fail:

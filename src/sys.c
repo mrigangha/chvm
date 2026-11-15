@@ -200,6 +200,23 @@ static int fmt_js_number(double d, int inspect, char *out)
     if (isinf(d))
         return n + snprintf(out + n, 32 - n, "Infinity");
 
+    /*
+     * Whole numbers below 1e15 are by far the most common. Their shortest form is just their digits,
+     * and every such value is exact in a double, so there is nothing to search for.
+     */
+    if (d < 1e15 && d == (double)(uint64_t)d) {
+        char rev[20];
+        uint64_t v = (uint64_t)d;
+        int len = 0;
+        while (v) {
+            rev[len++] = (char)('0' + v % 10);
+            v /= 10;
+        }
+        while (len)
+            out[n++] = rev[--len];
+        return n;
+    }
+
     for (int p = 1; p <= 17; p++) {
         snprintf(tmp, sizeof tmp, "%.*e", p - 1, d);
         if (strtod(tmp, NULL) == d)

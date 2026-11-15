@@ -21,7 +21,7 @@ endif
 $(BUILD)/libchvmtest.so: tests/native/testlib.c | $(BUILD)
 	$(CC) -O2 -fPIC -shared -o $@ $<
 
-all: $(BUILD)/chvm $(BUILD)/chasm $(BUILD)/chdis $(TESTLIB)
+all: $(BUILD)/chvm $(BUILD)/chasm $(BUILD)/chdis $(BUILD)/chbake $(TESTLIB)
 
 $(BUILD)/chvm: $(BUILD)/main.o $(BUILD)/vm.o $(BUILD)/sys.o $(BUILD)/foreign.o $(COMMON)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ -lm $(FFILIBS)
@@ -33,6 +33,12 @@ $(BUILD)/%.o: src/%.c $(wildcard src/*.h) | $(BUILD)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(BUILD)/chasm.o: tools/chasm.c $(wildcard src/*.h) | $(BUILD)
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+$(BUILD)/chbake: $(BUILD)/chbake.o $(COMMON)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+
+$(BUILD)/chbake.o: tools/chbake.c $(wildcard src/*.h) | $(BUILD)
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(BUILD)/chdis: $(BUILD)/chdis.o $(COMMON)
@@ -51,6 +57,7 @@ static: clean
 
 test: all
 	sh tests/run.sh
+	sh tests/bake.sh
 
 clean:
 	rm -rf $(BUILD)

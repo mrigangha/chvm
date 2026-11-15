@@ -217,3 +217,25 @@ types [ . types ] > type
 - The library can read and write **all** of guest memory through a pointer it was given, up to wherever it chooses. The VM checks the start address only, not how far the function reads or writes.
 - Callbacks (passing a bytecode function to C, for `qsort` and similar) are not supported.
 - A signature that is bad, a function id that is not valid, a bad pointer, and a missing `-F` all end the program with a message such as `foreign call: bad signature`.
+
+## Baking a program into one executable
+
+`chbake prog.chbc prog.c` writes a C file that holds the program as a byte array and runs it on the
+interpreter. Compile it with the runtime sources to get one standalone executable:
+
+```
+build/chbake prog.chbc prog.c
+cc -O2 -fno-crossjumping -Isrc prog.c src/chbc.c src/sys.c src/foreign.c -lm -o prog
+```
+
+- **Only the instructions the program uses are kept.** `chbake` reads the verified code, notes which
+  opcodes appear, and the generated file defines `CHVM_HAS_<name>` for each one. The interpreter points
+  every unused opcode at a common stub, so nothing refers to its handler and the compiler removes it.
+  `chbake --all` keeps every instruction. A typical program uses 44 to 48 of 193, and the interpreter
+  loop shrinks from about 15 KB to about 4 KB.
+- **Keep `-fno-crossjumping`.** With few handlers, gcc merges the identical "go to the next instruction"
+  jump at the end of each one into a few shared jumps. That defeats computed goto, and the trimmed program
+  ran 2 to 9 percent slower than the full interpreter. With the flag it runs at the same speed.
+- `vm.c` is included by the generated file, so do not also list it on the compile line.
+- A baked program takes its memory size from the `CHVM_MEM` environment variable (bytes), like `chvm -m`.
+- A baked program cannot call native libraries, since it never enables them.

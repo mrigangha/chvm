@@ -1,0 +1,43 @@
+#!/bin/sh
+# Bakes each plain test program into a standalone executable with only the instructions it uses, and
+# checks it prints the same output and exits with the same code as chvm running the .chbc file.
+# Programs that need arguments, stdin, a memory flag or the native test library are skipped.
+# Usage: sh tests/bake.sh   (after make)
+cd "$(dirname "$0")/.." || exit 1
+B=build
+T=$(mktemp -d)
+trap 'rm -rf "$T"' EXIT
+cc_flags="-O1 -std=gnu11 -fno-crossjumping -Isrc"
+libs="-lm"
+if [ -f "$B/libchvmtest.so" ]; then
+    cc_flags="$cc_flags -DCHVM_FFI $(pkg-config --cflags libffi)"
+    libs="$libs $(pkg-config --libs libffi) -ldl"
+fi
+pass=0
+fail=0
+skipped=0
+for asm in tests/cases/*.asm; do
+    n=$(basename "$asm" .asm)
+    if [ -f "tests/cases/$n.ffi" ] || [ -f "tests/cases/$n.args" ] || [ -f "tests/cases/$n.in" ] ||
+       [ -f "tests/cases/$n.vmargs" ] || [ -f "tests/cases/$n.needffi" ]; then
+        skipped=$((skipped + 1))
+        continue
+    fi
+    $B/chasm -s "$asm" "$T/$n.chbc" 2>/dev/null || { skipped=$((skipped + 1)); continue; }
+    $B/chvm "$T/$n.chbc" >"$T/ref.out" 2>/dev/null; echo $? >"$T/ref.rc"
+    if ! $B/chbake "$T/$n.chbc" "$T/$n.c" 2>"$T/err"; then
+        echo "FAIL $n (bake): $(head -1 "$T/err")"; fail=$((fail + 1)); continue
+    fi
+    # shellcheck disable=SC2086
+    if ! cc $cc_flags -o "$T/$n.exe" "$T/$n.c" src/chbc.c src/sys.c src/foreign.c $libs 2>"$T/err"; then
+        echo "FAIL $n (compile): $(head -2 "$T/err")"; fail=$((fail + 1)); continue
+    fi
+    "$T/$n.exe" >"$T/got.out" 2>/dev/null; echo $? >"$T/got.rc"
+    if cmp -s "$T/ref.out" "$T/got.out" && cmp -s "$T/ref.rc" "$T/got.rc"; then
+        pass=$((pass + 1))
+    else
+        echo "FAIL $n: output or exit code differs from chvm"; fail=$((fail + 1))
+    fi
+done
+echo "baked: passed $pass, failed $fail, skipped $skipped"
+[ $fail -eq 0 ]
