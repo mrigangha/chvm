@@ -1,5 +1,5 @@
-// The same interface as host.ts, built on system calls, so the compiler can run on chvm.
-// Use it in place of host.ts when compiling the compiler (see build_self.sh).
+// The chvm version of os.ts, built on system calls. chts uses it automatically when a program
+// imports std/os.ts.
 
 function cstr(s: string): number {
   // a NUL-terminated copy of s in memory, as the number address

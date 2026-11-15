@@ -472,7 +472,9 @@ function checkCall(c: Ctx, n: Node): Type {
 }
 
 function isPrelude(file: string): boolean {
-  return file === "prelude.ts" || file === "src/host_chvm.ts" || file === "host_chvm.ts"
+  if (file === "prelude.ts") return true
+  const n = file.length
+  return n > 8 && file.slice(n - 8, n) === "_chvm.ts" && (file.slice(0, 4) === "std/" || file.indexOf("/std/") >= 0)
 }
 
 // slice(a) means slice(a, length). The object expression is checked again for its length, so it

@@ -1,4 +1,4 @@
-import { arenaMark, arenaFree } from "../../lib/arena.ts"
+import { arenaMark, arenaFree } from "../../std/arena.ts"
 
 interface Item { id: number; label: string; tags: string[] }
 

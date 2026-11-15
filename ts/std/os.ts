@@ -1,5 +1,5 @@
-// Host glue for running the compiler under node. A self-hosted build swaps this file
-// for host_chvm.ts, which does the same through system calls.
+// Standard library: files, arguments, exit and other programs, for node. A program compiled with chts
+// gets os_chvm.ts in its place, which does the same through system calls.
 import * as fs from "node:fs"
 import * as cp from "node:child_process"
 import * as os from "node:os"

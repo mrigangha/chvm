@@ -16,6 +16,7 @@ written in it, can be compiled by itself.
 - Strings: `+` joins a string with a string, number or boolean. `s.length`, `s.charCodeAt(i)`, `s.slice(a, b)`, `s.indexOf(t)`, `String.fromCharCode(n)`.
 - Arrays: `a.length`, `a[i]`, `a[i] = v`, `a.push(v)`, `a.pop()`, `a.join(sep)` (on `string[]`), `a.slice(a, b)`.
 - `Math.floor ceil trunc abs sqrt min max`, `Number(s)`, `console.log(...)`, `console.error(...)`.
+- Standard library: `import { readFile, writeFile, argAt, exit, runProgram } from "./std/os.ts"`. Each module in `std/` has a node file (`os.ts`) and a chvm file (`os_chvm.ts`); chts compiles the second one, so the same source runs under both. `std/arena.ts` gives `arenaMark` and `arenaFree` to node.
 - `import { a, b } from "./file.ts"` and `export` on declarations. All files share one global namespace, so names must be unique across files. Interfaces are types only, so they must come in through `import type { Node } from "./ast.ts"`: Node's type stripping removes them, and a plain import of one fails at run time.
 - Comments, and semicolons are optional (a newline ends a statement as in JavaScript).
 

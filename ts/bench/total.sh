@@ -24,8 +24,8 @@ printf '%-9s | %7s %7s %7s %8s | %7s %7s %8s | %8s\n' program chts chasm run 'ch
 for n in loop fib collatz sieve matmul objects strings; do
     f=bench/$n.ts
     mem=""; [ "$n" = sieve ] && mem="-m 600000000"
-    tc=$(best "$BIN/chvm" out/chts.chbc -S -H src/host_chvm.ts -o "$T/$n.asm" "$f")
-    "$BIN/chvm" out/chts.chbc -S -H src/host_chvm.ts -o "$T/$n.asm" "$f" 2>/dev/null
+    tc=$(best "$BIN/chvm" out/chts.chbc -S -o "$T/$n.asm" "$f")
+    "$BIN/chvm" out/chts.chbc -S -o "$T/$n.asm" "$f" 2>/dev/null
     ta=$(best "$BIN/chasm" "$T/$n.asm" "$T/$n.chbc")
     "$BIN/chasm" "$T/$n.asm" "$T/$n.chbc"
     tr=$(best "$BIN/chvm" $mem "$T/$n.chbc")

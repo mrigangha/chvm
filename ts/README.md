@@ -29,7 +29,7 @@ sh ts/tests/run_self.sh  # run the program tests with the self-hosted compiler
 identical. That makes `ts/out/chts.chbc` a compiler that runs on chvm alone:
 
 ```
-build/chvm ts/out/chts.chbc -S -H ts/src/host_chvm.ts -o prog.asm prog.ts
+build/chvm ts/out/chts.chbc -S -o prog.asm prog.ts
 build/chasm prog.asm prog.chbc
 ```
 
@@ -38,7 +38,7 @@ With `-X`, chvm lets the compiler start `chasm` itself, so one command gives a `
 
 ```
 cd ts
-../build/chvm -X out/chts.chbc -H src/host_chvm.ts -o prog.chbc prog.ts
+../build/chvm -X out/chts.chbc -o prog.chbc prog.ts
 ```
 
 Without `-X` it prints `cannot run ../build/chasm: run chvm with -X to allow it`. `-S` still
@@ -58,5 +58,5 @@ sh ts/tests/all.sh      # lexer, parser, checker, and 22 end-to-end programs che
 | `src/checker.ts`, `types.ts` | names, types, and every rule in `LANG.md` |
 | `src/codegen.ts` | tree to chasm assembly |
 | `src/prelude.ts`, `runtime.s` | the runtime: strings, arrays, allocation, printing |
-| `src/host.ts`, `host_chvm.ts` | file and process access, for node and for chvm |
+| `std/os.ts`, `std/os_chvm.ts` | standard library: files, arguments, exit, other programs, for node and for chvm. `std/arena.ts` is the node stand-in for `arenaMark`/`arenaFree` |
 | `src/chts.ts` | the command line |

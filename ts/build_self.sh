@@ -13,13 +13,12 @@ BIN="$ROOT/build"
 export CHVM_BIN="$BIN"
 OUT=out
 mkdir -p $OUT
-H="-H src/host_chvm.ts"
 set -e
-node src/chts.ts -S $H -o $OUT/stage1.asm src/chts.ts
+node src/chts.ts -S -o $OUT/stage1.asm src/chts.ts
 "$BIN/chasm" $OUT/stage1.asm $OUT/stage1.chbc
-"$BIN/chvm" $OUT/stage1.chbc -S $H -o $OUT/stage2.asm src/chts.ts
+"$BIN/chvm" $OUT/stage1.chbc -S -o $OUT/stage2.asm src/chts.ts
 "$BIN/chasm" $OUT/stage2.asm $OUT/stage2.chbc
-"$BIN/chvm" $OUT/stage2.chbc -S $H -o $OUT/stage3.asm src/chts.ts
+"$BIN/chvm" $OUT/stage2.chbc -S -o $OUT/stage3.asm src/chts.ts
 if cmp -s $OUT/stage1.asm $OUT/stage2.asm && cmp -s $OUT/stage2.asm $OUT/stage3.asm; then
     "$BIN/chasm" $OUT/stage3.asm $OUT/chts.chbc
     echo "bootstrap ok: stages 1, 2 and 3 are identical ($(wc -l < $OUT/stage3.asm) lines of assembly)"

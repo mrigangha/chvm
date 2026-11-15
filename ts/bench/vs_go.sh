@@ -39,6 +39,6 @@ for n in loop fib collatz sieve matmul objects strings; do
     best3() { b=999999999; for _ in 1 2 3; do s=$(date +%s%N); "$@" >/dev/null 2>&1; e=$(date +%s%N); t=$(( (e - s) / 10000 )); [ "$t" -lt "$b" ] && b=$t; done; echo "$b"; }
     tg=$(best3 gcc -O2 -o "$T/x" "bench/c/$n.c" -lm)
     tgo=$(best3 sh -c "touch bench/go/$n.go; GOCACHE=$T/gocache go build -o $T/x bench/go/$n.go")
-    tc=$(best3 sh -c "$BIN/chvm out/chts.chbc -S -H src/host_chvm.ts -o $T/y.asm bench/$n.ts && $BIN/chasm $T/y.asm $T/y.chbc")
+    tc=$(best3 sh -c "$BIN/chvm out/chts.chbc -S -o $T/y.asm bench/$n.ts && $BIN/chasm $T/y.asm $T/y.chbc")
     printf '%-9s | %9s %11s %11s\n' $n "$(ms $tg)" "$(ms $tgo)" "$(ms $tc)"
 done
