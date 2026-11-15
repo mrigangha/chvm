@@ -272,7 +272,7 @@ chbc_err chbc_verify(const chbc_image *img, uint32_t *bad_off)
         }
 
         /* A BF*K branch reads the constant in the slot after it, so that slot must exist and be a KDATA. */
-        if (in->op >= OP_BFLTK && in->op <= OP_BFNEK) {
+        if (chbc_op_has_kdata(in->op)) {
             if (i + 1 >= n || img->code[i + 1].op != OP_KDATA)
                 return CHBC_E_TARGET;
         }

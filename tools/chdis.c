@@ -216,7 +216,7 @@ usage:
         } else {
             printf("    ");
         }
-        const int is_k = img.code[k].op >= OP_BFLTK && img.code[k].op <= OP_BFNEK;
+        const int is_k = chbc_op_has_kdata(img.code[k].op);
         if (is_k)
             print_branch_k(&img.code[k], &img.code[k + 1]);
         else

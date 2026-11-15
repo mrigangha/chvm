@@ -596,20 +596,22 @@ function checkStmt(c: Ctx, n: Node): void {
     checkBlockScoped(c, n.b)
     if (n.c !== NIL) checkBlockScoped(c, n.c)
   } else if (k === "while") {
+    // the condition runs on every trip, so it counts at the loop's depth
+    c.loopDepth++
     const t = checkExpr(c, n.a, NOTYPE)
     need(n.a, t, T_BOOL, "the condition")
-    c.loopDepth++
     checkBlockScoped(c, n.b)
     c.loopDepth--
   } else if (k === "for") {
     pushScope(c)
     if (n.a !== NIL) checkStmt(c, n.a)
+    // the test and the step run on every trip, so they count at the loop's depth
+    c.loopDepth++
     if (n.b !== NIL) {
       const t = checkExpr(c, n.b, NOTYPE)
       need(n.b, t, T_BOOL, "the condition")
     }
     if (n.c !== NIL) checkExpr(c, n.c, NOTYPE)
-    c.loopDepth++
     checkBlockScoped(c, n.d)
     c.loopDepth--
     popScope(c)

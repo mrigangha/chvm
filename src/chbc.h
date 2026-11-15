@@ -85,6 +85,12 @@ static inline unsigned chbc_fmt_regmask(unsigned fmt)
     }
 }
 
+/* The branches that read a 32-bit constant from the KDATA slot after them. */
+static inline int chbc_op_has_kdata(unsigned op)
+{
+    return (op >= OP_BFLTK && op <= OP_BFNEK) || (op >= OP_INCBLTK && op <= OP_DECBGEK);
+}
+
 static inline int chbc_fmt_is_branch(unsigned fmt)
 {
     return fmt == F_J || fmt == F_RJ || fmt == F_RRJ || fmt == F_RIJ;

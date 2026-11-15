@@ -429,6 +429,43 @@ function releaseHoisted(g: Gen, count: number): void {
   }
 }
 
+// ---- counting loops ----
+//
+// `for (...; i < bound; i++)` ends every trip with "add one, compare, branch back". INCBLT does all
+// three. It applies when:
+//   - the step is i++ or i-- (as a statement, so the old value is not used) on a local in a register,
+//   - the condition compares that same variable with a bound using < <= (counting up) or > >= (counting down),
+//   - the bound is a number that is either a small whole constant (16 bits) or a variable in a register
+//     that the loop body never assigns, so it has the same value at the end of the trip as at the test.
+// Anything else keeps the plain FADDI and compare-and-branch pair.
+
+// The name of the fused instruction for this loop, or "" when it does not apply.
+function fusedLoopOp(g: Gen, cond: Node, step: Node, body: Node): string {
+  if (cond === NIL || step === NIL) return ""
+  if (step.kind !== "update") return ""
+  const v = step.a
+  if (v.kind !== "id" || v.slot < 0 || homeOf(g, v.slot).reg < 0) return ""
+  if (cond.kind !== "binary" || cond.a.kind !== "id" || cond.a.slot !== v.slot) return ""
+  if (cond.a.ty.kind !== "number") return ""
+  const op = cond.text
+  const up = step.text === "++"
+  if (up && op !== "<" && op !== "<=") return ""
+  if (!up && op !== ">" && op !== ">=") return ""
+  const b = cond.b
+  // kind of bound: 0 a register, 1 a 16-bit constant, 2 a 32-bit constant
+  let kind = 0
+  if (b.kind === "num" && isSmall16(b.num)) kind = 1
+  else if (b.kind === "num" && isSmall32(b.num)) kind = 2
+  else if (b.kind === "id" && b.slot >= 0 && homeOf(g, b.slot).reg >= 0 && b.slot !== v.slot && !assignsSlot(body, b.slot)) kind = 0
+  else return ""
+  if (up) {
+    if (op === "<") return kind === 0 ? "INCBLT" : kind === 1 ? "INCBLTI" : "INCBLTK"
+    return kind === 0 ? "INCBLE" : kind === 1 ? "INCBLEI" : "INCBLEK"
+  }
+  if (op === ">") return kind === 0 ? "DECBGT" : kind === 1 ? "DECBGTI" : "DECBGTK"
+  return kind === 0 ? "DECBGE" : kind === 1 ? "DECBGEI" : "DECBGEK"
+}
+
 // An operand as a register: the local's own register when it has one, else computed into `scratch`.
 function operand(g: Gen, n: Node, scratch: number): number {
   const p = inPlace(g, n)
@@ -1315,9 +1352,17 @@ function genStmt(g: Gen, n: Node): void {
     place(g, top)
     genStmt(g, n.d)
     place(g, cont)
-    if (n.c !== NIL) genEffect(g, n.c)
-    if (n.b !== NIL) genJumpIfTrue(g, n.b, top, FIRST_TEMP)
-    else emit(g, "JMP " + top)
+    const fused = fusedLoopOp(g, n.b, n.c, n.d)
+    if (fused !== "") {
+      // one instruction adds, compares and branches
+      const reg = homeOf(g, n.c.a.slot).reg
+      if (n.b.b.kind === "num") emit(g, fused + " " + rn(reg) + ", " + n.b.b.num + ", " + top)
+      else emit(g, fused + " " + rn(reg) + ", " + rn(homeOf(g, n.b.b.slot).reg) + ", " + top)
+    } else {
+      if (n.c !== NIL) genEffect(g, n.c)
+      if (n.b !== NIL) genJumpIfTrue(g, n.b, top, FIRST_TEMP)
+      else emit(g, "JMP " + top)
+    }
     place(g, end)
     releaseHoisted(g, hoistedHere)
     g.loops.pop()
@@ -1378,6 +1423,8 @@ function assignHomes(g: Gen, f: FuncInfo, nparams: number): void {
   let k = 0
   while (k < order.length) {
     const s = syms[order[k]]
+    // With 21 saved registers there is room for every variable that is used at all more than once,
+    // and a variable the loop reads is worth a register even if it is read only once per trip.
     if (s.uses >= 2) {
       let r = 0
       let placed = false

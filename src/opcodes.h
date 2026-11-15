@@ -23,6 +23,10 @@
  * the branch reads and then skips, so a comparison with a number that does not fit 16 bits needs no
  * register for it. The assembler writes the KDATA for you: BFLTK r, 50000000, target.
  *
+ * INCBLT r, bound, target: r = r + 1 (as a double), then branch to target if r < bound. This is the
+ * end of a counting loop in one instruction. INCBLE branches on <=. DECBGT and DECBGE subtract 1 and
+ * branch on > and >=. The I forms take a 16-bit constant bound instead of a register.
+ *
  * CALLX rd, fn, sig uses F_RRR: a = rd, b = fn, c = sig, and the argument array address is in r1.
  */
 enum chbc_fmt {
@@ -88,6 +92,9 @@ enum chbc_fmt {
     X(BFNGTI, F_RIJ) X(BFNGEI, F_RIJ)                                      \
     X(LDAX, F_RRR) X(STAX, F_RRR) X(SCHAR, F_RRR) X(LDI2F, F_LD)           \
     X(LDG, F_RI) X(STG, F_RI)                                              \
+    X(INCBLT, F_RRJ) X(INCBLE, F_RRJ) X(DECBGT, F_RRJ) X(DECBGE, F_RRJ)    \
+    X(INCBLTI, F_RIJ) X(INCBLEI, F_RIJ) X(DECBGTI, F_RIJ) X(DECBGEI, F_RIJ)\
+    X(INCBLTK, F_RJ) X(INCBLEK, F_RJ) X(DECBGTK, F_RJ) X(DECBGEK, F_RJ)    \
     X(BFLTK, F_RJ) X(BFLEK, F_RJ) X(BFGTK, F_RJ) X(BFGEK, F_RJ)            \
     X(BFNLTK, F_RJ) X(BFNLEK, F_RJ) X(BFNGTK, F_RJ) X(BFNGEK, F_RJ)        \
     X(BFEQK, F_RJ) X(BFNEK, F_RJ) X(KDATA, F_I)                            \

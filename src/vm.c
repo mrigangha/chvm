@@ -716,6 +716,45 @@ dispatch:
         KBRANCH(RA.f > k);
     OP(BFGEK)
         KBRANCH(RA.f >= k);
+    /* Counting loops: add or subtract one, then branch on the new value. */
+    OP(INCBLT)
+        RA.f += 1;
+        BRANCH(RA.f < RB.f);
+    OP(INCBLE)
+        RA.f += 1;
+        BRANCH(RA.f <= RB.f);
+    OP(DECBGT)
+        RA.f -= 1;
+        BRANCH(RA.f > RB.f);
+    OP(DECBGE)
+        RA.f -= 1;
+        BRANCH(RA.f >= RB.f);
+    OP(INCBLTI)
+        RA.f += 1;
+        BRANCH(RA.f < (double)VAL16);
+    OP(INCBLEI)
+        RA.f += 1;
+        BRANCH(RA.f <= (double)VAL16);
+    OP(DECBGTI)
+        RA.f -= 1;
+        BRANCH(RA.f > (double)VAL16);
+    OP(DECBGEI)
+        RA.f -= 1;
+        BRANCH(RA.f >= (double)VAL16);
+
+    OP(INCBLTK)
+        RA.f += 1;
+        KBRANCH(RA.f < k);
+    OP(INCBLEK)
+        RA.f += 1;
+        KBRANCH(RA.f <= k);
+    OP(DECBGTK)
+        RA.f -= 1;
+        KBRANCH(RA.f > k);
+    OP(DECBGEK)
+        RA.f -= 1;
+        KBRANCH(RA.f >= k);
+
     OP(BFNLTK)
         KBRANCH(!(RA.f < k));
     OP(BFNLEK)

@@ -915,7 +915,7 @@ static void assemble_branch_k(const char *name, int op, char **args, int nargs)
 
 static void assemble_insn(const char *name, int op, char **args, int nargs)
 {
-    if (op >= OP_BFLTK && op <= OP_BFNEK) {
+    if (chbc_op_has_kdata(op)) {
         assemble_branch_k(name, op, args, nargs);
         return;
     }
