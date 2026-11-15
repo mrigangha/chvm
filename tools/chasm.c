@@ -327,16 +327,24 @@ static int parse_float(const char *s, double *out)
 /* Returns the register number, or -1 if the token is not a register. */
 static int reg_tok(const char *t)
 {
-    if (!strcasecmp(t, "fp"))
-        return CHBC_REG_FP;
-    if (!strcasecmp(t, "sp"))
-        return CHBC_REG_SP;
-    if ((t[0] == 'r' || t[0] == 'R') && isdigit((unsigned char)t[1])) {
-        char *end;
-        long v = strtol(t + 1, &end, 10);
-        if (!*end && v >= 0 && v < CHBC_NREGS && (t[1] != '0' || !t[2]))
-            return (int)v;
+    char c0 = (char)(t[0] | 0x20);   /* lower-case a letter, harmless for anything else here */
+    if (c0 == 'r') {
+        /* r0 .. r15, with no leading zero: "r5", "r15" */
+        unsigned d1 = (unsigned char)t[1] - '0';
+        if (d1 > 9)
+            return -1;
+        if (!t[2])
+            return (int)d1;
+        unsigned d2 = (unsigned char)t[2] - '0';
+        if (d1 == 0 || d2 > 9 || t[3])
+            return -1;
+        unsigned v = d1 * 10 + d2;
+        return v < CHBC_NREGS ? (int)v : -1;
     }
+    if (c0 == 'f' && (t[1] | 0x20) == 'p' && !t[2])
+        return CHBC_REG_FP;
+    if (c0 == 's' && (t[1] | 0x20) == 'p' && !t[2])
+        return CHBC_REG_SP;
     return -1;
 }
 
@@ -538,11 +546,47 @@ static int parse_float32(const char *s, float *out)
 
 static int ieq(const char *a, const char *b) { return !strcasecmp(a, b); }
 
+/*
+ * Mnemonic lookup. Names are case-insensitive, so the table is keyed on the upper-case spelling.
+ * Open addressing, built once on first use. It was a linear scan of every opcode with strcasecmp,
+ * which took about 70 percent of the assembler's time.
+ */
+#define OPTAB_SIZE 1024   /* a power of two, more than twice the number of opcodes */
+
+_Static_assert(OPTAB_SIZE >= 2 * OP_COUNT, "grow OPTAB_SIZE: the mnemonic table must stay less than half full");
+
+static int optab[OPTAB_SIZE];   /* opcode + 1, or 0 for an empty slot */
+static int optab_ready;
+
+static uint32_t op_hash(const char *s)
+{
+    uint32_t h = 2166136261u;
+    for (; *s; s++)
+        h = (h ^ (uint8_t)toupper((unsigned char)*s)) * 16777619u;
+    return h;
+}
+
+static void optab_build(void)
+{
+    for (int i = 0; i < OP_COUNT; i++) {
+        uint32_t k = op_hash(chbc_op_name[i]) & (OPTAB_SIZE - 1);
+        while (optab[k])
+            k = (k + 1) & (OPTAB_SIZE - 1);
+        optab[k] = i + 1;
+    }
+    optab_ready = 1;
+}
+
 static int find_op(const char *name)
 {
-    for (int i = 0; i < OP_COUNT; i++)
-        if (ieq(chbc_op_name[i], name))
-            return i;
+    if (!optab_ready)
+        optab_build();
+    uint32_t k = op_hash(name) & (OPTAB_SIZE - 1);
+    while (optab[k]) {
+        if (ieq(chbc_op_name[optab[k] - 1], name))
+            return optab[k] - 1;
+        k = (k + 1) & (OPTAB_SIZE - 1);
+    }
     return -1;
 }
 
@@ -997,6 +1041,16 @@ static void assemble_stmt(char *name, char **args, int nargs, int *section, int 
         return;
     }
 
+    /*
+     * Real opcodes are by far the most common line, so look the name up first. A name that is also
+     * a pseudo-instruction never collides with an opcode, so this changes no behaviour.
+     */
+    int real = find_op(name);
+    if (real >= 0) {
+        assemble_insn(name, real, args, nargs);
+        return;
+    }
+
     if (ieq(name, "LI")) {
         assemble_li(args, nargs);
         return;
@@ -1053,12 +1107,7 @@ static void assemble_stmt(char *name, char **args, int nargs, int *section, int 
         return;
     }
 
-    int op = find_op(name);
-    if (op < 0) {
-        err("unknown instruction '%s'", name);
-        return;
-    }
-    assemble_insn(name, op, args, nargs);
+    err("unknown instruction '%s'", name);
 }
 
 static int64_t label_value(const label *l)
