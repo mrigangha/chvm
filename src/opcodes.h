@@ -99,7 +99,8 @@ enum chbc_fmt {
     X(BFNLTK, F_RJ) X(BFNLEK, F_RJ) X(BFNGTK, F_RJ) X(BFNGEK, F_RJ)        \
     X(BFEQK, F_RJ) X(BFNEK, F_RJ) X(KDATA, F_I)                            \
     X(APUSH, F_RRR) X(APOP, F_RR) X(ALLOC, F_RR) X(ALLOCI, F_RI)           \
-    X(AADDR, F_RRR) X(HEAPMARK, F_R) X(HEAPFREE, F_R)
+    X(AADDR, F_RRR) X(HEAPMARK, F_R) X(HEAPFREE, F_R)                      \
+    X(TRY, F_J) X(ENDTRY, F_NONE) X(THROW, F_R)
 
 enum chbc_op {
 #define X(name, fmt) OP_##name,

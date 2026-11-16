@@ -11,8 +11,24 @@ export function arrayOf(t: Type): Type {
   return mkType("array", "", t)
 }
 
+// A function type: elem is the return type and ftypes are the parameter types.
+export function funcOf(params: Type[], ret: Type): Type {
+  const t = mkType("func", "", ret)
+  t.ftypes = params
+  return t
+}
+
 export function typeStr(t: Type): string {
-  if (t.kind === "array") return typeStr(t.elem) + "[]"
+  if (t.kind === "array") return t.elem.kind === "func" ? "(" + typeStr(t.elem) + ")[]" : typeStr(t.elem) + "[]"
+  if (t.kind === "func") {
+    const ps: string[] = []
+    let i = 0
+    while (i < t.ftypes.length) {
+      ps.push(typeStr(t.ftypes[i]))
+      i++
+    }
+    return "(" + ps.join(", ") + ") => " + typeStr(t.elem)
+  }
   if (t.kind === "none") return "?"
   return t.name
 }
@@ -22,6 +38,14 @@ export function typeEq(a: Type, b: Type): boolean {
   if (a.kind !== b.kind) return false
   if (a.kind === "array") return typeEq(a.elem, b.elem)
   if (a.kind === "iface") return a.name === b.name
+  if (a.kind === "func") {
+    if (a.ftypes.length !== b.ftypes.length || !typeEq(a.elem, b.elem)) return false
+    let i = 0
+    while (i < a.ftypes.length) {
+      if (!typeEq(a.ftypes[i], b.ftypes[i])) return false
+      i++
+    }
+  }
   return true
 }
 
@@ -70,10 +94,35 @@ export const INTRINSICS: Intrinsic[] = [
   intr("__argc", [], T_NUM),
   intr("__argv", [T_NUM, T_NUM, T_NUM], T_NUM),
   intr("__spawn", [T_NUM, T_NUM], T_NUM),
+  intr("__getenv", [T_NUM, T_NUM, T_NUM], T_NUM),
+  intr("__listen", [T_NUM, T_NUM, T_NUM], T_NUM),
+  intr("__accept", [T_NUM, T_NUM, T_NUM], T_NUM),
+  intr("__poll", [T_NUM, T_NUM, T_NUM], T_NUM),
+  intr("__shutdown", [T_NUM, T_NUM], T_NUM),
+  intr("__sockport", [T_NUM], T_NUM),
+  intr("__time", [T_NUM], T_NUM),
+  intr("__seek", [T_NUM, T_NUM, T_NUM], T_NUM),
+  intr("__pspawn", [T_ANY, T_NUM, T_NUM, T_NUM, T_NUM], T_NUM),
+  intr("__self", [], T_NUM),
+  intr("__send", [T_NUM, T_NUM, T_NUM, T_NUM], T_NUM),
+  intr("__msgwait", [T_NUM, T_NUM], T_NUM),
+  intr("__msgtake", [T_NUM, T_NUM], T_NUM),
+  intr("__msgfrom", [], T_NUM),
+  intr("__msgtag", [], T_NUM),
+  intr("__plink", [T_NUM], T_NUM),
+  intr("__punlink", [T_NUM], T_NUM),
+  intr("__monitor", [T_NUM], T_NUM),
+  intr("__trapexit", [T_NUM], T_NUM),
+  intr("__pkill", [T_NUM], T_NUM),
+  intr("__sleep", [T_NUM], T_NUM),
+  intr("__yield", [], T_NUM),
+  intr("__pcount", [], T_NUM),
+  intr("__pinfo", [T_NUM, T_NUM], T_NUM),
   intr("__exit", [T_NUM], T_VOID),
   intr("__fmtnum", [T_NUM, T_NUM, T_NUM], T_NUM),
   intr("__parsenum", [T_NUM, T_NUM], T_NUM),
   intr("__trap", [], T_VOID),
+  intr("__throw", [T_ANY], T_VOID),
 ]
 
 // Index of the intrinsic with this name, or -1.

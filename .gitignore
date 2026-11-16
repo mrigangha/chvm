@@ -1,2 +1,5 @@
 build/
 ts/out/
+__pycache__/
+*.pyc
+*.chbc

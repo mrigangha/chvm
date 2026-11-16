@@ -2,11 +2,29 @@
 
 #include "foreign.h"
 #include "sys.h"
+#include "syscalls.h"
+#include <sys/mman.h>
 
 #include <inttypes.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+/*
+ * try, catch and throw. TRY pushes a record (catch target, sp, fp) on a stack the VM keeps, ENDTRY pops one.
+ * THROW pops the top record, restores sp and fp, puts the thrown value in r0 and 0 in r1, and jumps to the
+ * catch target. A fault that is catchable does the same with r0 = 0 and r1 = the fault code. The VM does not
+ * restore any other register: the compiler saves what it needs. Without a record, THROW ends the program with
+ * VM_E_UNCAUGHT and the text of the thrown string. A trimmed program that has no TRY needs none of this.
+ */
+#if !defined(CHVM_TRIM) || CHVM_HAS_TRY
+#define CHVM_TRY_ON 1
+#endif
+#define VM_MAX_TRIES (1u << 18)
+
+#if !defined(CHVM_NO_PROC) && (!defined(CHVM_TRIM) || CHVM_HAS_PROC)
+#define CHVM_PROC_ON 1
+#endif
 
 #define LIKELY(x)   __builtin_expect(!!(x), 1)
 #define UNLIKELY(x) __builtin_expect(!!(x), 0)
@@ -87,9 +105,19 @@ typedef float    __attribute__((may_alias, aligned(1))) f32u;
 #define SP (r[CHBC_REG_SP])
 #define TARGET (code + ((uint32_t)pc->imm >> 3))
 
+#ifdef CHVM_PROC_ON
+#define SLICE_CHECK() \
+    do {                              \
+        if (UNLIKELY(--slice <= 0))   \
+            goto preempt;             \
+    } while (0)
+#else
+#define SLICE_CHECK() do { } while (0)
+#endif
 #define JUMP()           \
     do {                 \
         pc = TARGET;     \
+        SLICE_CHECK();   \
         DISPATCH();      \
     } while (0)
 #define BRANCH(cond)     \
@@ -201,10 +229,1070 @@ static inline uint64_t index_of(double d)
     return (uint64_t)(int64_t)d;
 }
 
+static char fault_detail[200];
+
+const char *vm_fault_detail(void)
+{
+    return fault_detail;
+}
+
+/* Copies the guest string at addr ([length][bytes]) into fault_detail, with control bytes turned into ?. */
+static void set_detail(const uint8_t *mem, uint64_t mem_size, uint64_t addr)
+{
+    uint64_t len = RD(u64u, mem + addr);
+    uint64_t room = mem_size - addr - 8;
+    if (len > room)
+        len = room;
+    if (len > sizeof fault_detail - 1)
+        len = sizeof fault_detail - 1;
+    for (uint64_t i = 0; i < len; i++) {
+        uint8_t c = mem[addr + 8 + i];
+        fault_detail[i] = (c < 32 || c == 127) ? '?' : (char)c;
+    }
+    fault_detail[len] = 0;
+}
+
+#ifdef CHVM_TRY_ON
+/* A fault the program can survive: the VM checked the access before it failed, so nothing was changed. */
+static int vm_catchable(vm_status s)
+{
+    switch (s) {
+    case VM_E_STACK_UNDERFLOW: case VM_E_STACK_OVERFLOW: case VM_E_DIV_ZERO: case VM_E_BAD_MEM:
+    case VM_E_BAD_JUMP: case VM_E_INDEX: case VM_E_OOM: case VM_E_HEAP:
+        return 1;
+    default:
+        return 0;
+    }
+}
+
+typedef struct {
+    uint32_t target;    /* index of the catch instruction */
+    uint64_t sp, fp;
+} try_rec;
+#endif
+
+/* Zeroes memory the heap grows into. A child's memory is a private anonymous mapping, so for a big range the pages
+ * in the middle are given back to the system (they read as zero and cost nothing until touched), and only the
+ * ragged ends are written. Other memory is simply cleared. */
+static void zero_grow(uint8_t *p, uint64_t n, int lazy)
+{
+#ifdef CHVM_PROC_ON
+    if (lazy && n >= 65536) {
+        uintptr_t a = (uintptr_t)p, b = a + (uintptr_t)n;
+        uintptr_t pa = (a + 4095) & ~(uintptr_t)4095, pb = b & ~(uintptr_t)4095;
+        if (pb > pa && madvise((void *)pa, pb - pa, MADV_DONTNEED) == 0) {
+            memset(p, 0, (size_t)(pa - a));
+            memset((void *)pb, 0, (size_t)(b - pb));
+            return;
+        }
+    }
+#endif
+    (void)lazy;
+    memset(p, 0, (size_t)n);
+}
+
 static inline int mem_ok(uint64_t addr, uint64_t n, uint64_t mem_size)
 {
     return addr >= CHBC_NULL_PAGE && addr <= mem_size && n <= mem_size - addr;
 }
+
+/*
+ * Processes: lightweight actors that share nothing. Each one has its own memory block, registers, try
+ * stack and mailbox, so a fault in one ends only that one, and its memory is freed at once. They are
+ * scheduled in turn on one OS thread. A process is preempted after PROC_SLICE taken branches and calls,
+ * like a reduction count, so one that loops cannot starve the rest. Messages are copied bytes.
+ * The first process is the program itself: when it ends, the machine ends, and every other process with it.
+ */
+#ifdef CHVM_PROC_ON
+#include <errno.h>
+#include <fcntl.h>
+#include <limits.h>
+#include <poll.h>
+#include <sys/mman.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <time.h>
+#include <unistd.h>
+
+#define PROC_SLICE 10000
+#define PROC_SOLO_SLICE 0x7fffffff
+#define PROC_PID_BITS 20
+#define PROC_PID_MASK ((1u << PROC_PID_BITS) - 1)
+#define PROC_MAX_LIMIT (PROC_PID_MASK - 1)
+#define PROC_DEFAULT_MAX 4096
+#define PROC_MSG_MAX (1u << 20)
+#define PROC_MAILBOX_MSGS 1000u
+#define PROC_MAILBOX_BYTES (4u << 20)
+#define PROC_TOTAL_MEM (2ull << 30)
+#define PROC_DEFAULT_ROOM (128u << 10)
+#define PROC_RET_SENTINEL 0xFFFFFFFFFFFFFFF8ull
+#define PROC_NO_DEADLINE UINT64_MAX
+
+enum { PS_FREE, PS_RUN, PS_WMSG, PS_SLEEP, PS_WFD };
+
+typedef struct msg {
+    struct msg *next;
+    uint64_t from;
+    int64_t tag;
+    uint32_t len;
+    uint8_t data[];
+} msg_t;
+
+typedef struct {
+    uint32_t gen;
+    uint8_t state, queued, trap, dl_set;
+    int64_t wait_tag;
+    uint64_t deadline;
+    uint8_t *mem;
+    uint64_t mem_size, brk, heap_ptr, heap_base, stack_reserve, heap_step;
+    vm_value r[CHBC_NREGS];
+    uint32_t pc;
+#ifdef CHVM_TRY_ON
+    try_rec *tries;
+    size_t ntries, captries;
+#endif
+    msg_t *mh, *mt, *cur_msg;
+    uint32_t mcount;
+    uint64_t mbytes;
+    uint64_t *links, *mons;
+    uint32_t nlinks, caplinks, nmons, capmons;
+    int wfd;                       /* the descriptor a waiting process is waiting on, and for what (poll bits) */
+    short wev;
+    uint32_t wf_pos;               /* its place in the list of waiting descriptors */
+    uint64_t *fds;                 /* sockets this process owns: closed when it ends */
+    uint32_t nfds, capfds;
+} proc_t;
+
+typedef struct {
+    proc_t *p;
+    uint32_t cap, used, max_procs, alive;
+    uint32_t *freeq, nfree;
+    uint64_t *rq;
+    uint32_t rq_cap, rq_head, rq_n;
+    uint64_t next_deadline;
+    uint32_t *wf, nwf;             /* processes waiting on a descriptor, packed */
+    struct pollfd *pf;
+    uint64_t next_fd_poll;
+    uint64_t child_mem;
+    uint32_t cur;
+    int cur_died, main_dead;
+    char main_text[200];
+} sched_t;
+
+static uint64_t now_ns(void)
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)ts.tv_sec * 1000000000ull + (uint64_t)ts.tv_nsec;
+}
+
+static uint64_t pid_of(const sched_t *s, uint32_t idx)
+{
+    return ((uint64_t)s->p[idx].gen << PROC_PID_BITS) | (idx + 1);
+}
+
+/* The slot of a live process, or -1. A pid whose slot was reused has a different generation. */
+static int proc_find(const sched_t *s, uint64_t pid)
+{
+    uint64_t low = pid & PROC_PID_MASK;
+    if (low == 0 || low - 1 >= s->used)
+        return -1;
+    const proc_t *p = &s->p[low - 1];
+    if (p->state == PS_FREE || p->gen != (pid >> PROC_PID_BITS))
+        return -1;
+    return (int)(low - 1);
+}
+
+static int sched_init(sched_t *s, int max_procs)
+{
+    memset(s, 0, sizeof *s);
+    s->max_procs = max_procs > 0 && (uint32_t)max_procs <= PROC_MAX_LIMIT ? (uint32_t)max_procs : PROC_DEFAULT_MAX;
+    s->cap = s->max_procs + 1;
+    s->p = calloc(s->cap, sizeof *s->p);
+    s->rq_cap = 1;
+    while (s->rq_cap < s->max_procs + 2)
+        s->rq_cap <<= 1;
+    s->rq = malloc(s->rq_cap * sizeof *s->rq);
+    s->freeq = malloc(((size_t)s->max_procs + 1) * sizeof *s->freeq);
+    s->wf = malloc(((size_t)s->max_procs + 1) * sizeof *s->wf);
+    s->pf = malloc(((size_t)s->max_procs + 1) * sizeof *s->pf);
+    if (!s->p || !s->rq || !s->freeq || !s->wf || !s->pf)
+        return -1;
+    s->used = 1;
+    s->alive = 1;
+    s->p[0].state = PS_RUN;
+    s->next_deadline = PROC_NO_DEADLINE;
+    return 0;
+}
+
+static void rq_push(sched_t *s, uint32_t idx)
+{
+    proc_t *p = &s->p[idx];
+    if (p->queued)
+        return;
+    p->queued = 1;
+    s->rq[(s->rq_head + s->rq_n) & (s->rq_cap - 1)] = pid_of(s, idx);
+    s->rq_n++;
+}
+
+/* The next process to run, or -1. Entries of processes that died or went to sleep since are skipped. */
+static int rq_pop(sched_t *s)
+{
+    while (s->rq_n > 0) {
+        uint64_t pid = s->rq[s->rq_head];
+        s->rq_head = (s->rq_head + 1) & (s->rq_cap - 1);
+        s->rq_n--;
+        int i = proc_find(s, pid);
+        if (i < 0)
+            continue;
+        s->p[i].queued = 0;
+        if (s->p[i].state == PS_RUN)
+            return i;
+    }
+    return -1;
+}
+
+static void make_runnable(sched_t *s, uint32_t idx)
+{
+    s->p[idx].state = PS_RUN;
+    rq_push(s, idx);
+}
+
+static void wf_add(sched_t *s, uint32_t idx, int fd, short ev)
+{
+    proc_t *p = &s->p[idx];
+    p->state = PS_WFD;
+    p->wfd = fd;
+    p->wev = ev;
+    p->wf_pos = s->nwf;
+    s->wf[s->nwf++] = idx;
+}
+
+static void wf_del(sched_t *s, uint32_t idx)
+{
+    uint32_t pos = s->p[idx].wf_pos;
+    uint32_t last = s->wf[--s->nwf];
+    s->wf[pos] = last;
+    s->p[last].wf_pos = pos;
+}
+
+/* Polls every descriptor a process waits on, and makes the ones that are ready runnable. They run the
+ * system call again, which now finds data, room or a connection. Goes through the list from the end, so
+ * taking an entry out (the last one moves into its place) never skips one. */
+static void fd_poll(sched_t *s, int timeout_ms)
+{
+    uint32_t n = s->nwf;
+    for (uint32_t i = 0; i < n; i++) {
+        const proc_t *p = &s->p[s->wf[i]];
+        s->pf[i].fd = p->wfd;
+        s->pf[i].events = p->wev;
+        s->pf[i].revents = 0;
+    }
+    int pr;
+    do
+        pr = poll(s->pf, n, timeout_ms);
+    while (pr < 0 && errno == EINTR);
+    if (pr <= 0)
+        return;
+    for (uint32_t i = n; i-- > 0;) {
+        if (s->pf[i].revents) {
+            uint32_t idx = s->wf[i];
+            wf_del(s, idx);
+            make_runnable(s, idx);
+        }
+    }
+}
+
+static void set_deadline(sched_t *s, proc_t *p, uint64_t at)
+{
+    p->dl_set = 1;
+    p->deadline = at;
+    if (at < s->next_deadline)
+        s->next_deadline = at;
+}
+
+/* Wakes every sleeper whose time has come, and finds the next time anyone needs waking. */
+static void timers_check(sched_t *s, uint64_t now)
+{
+    if (s->next_deadline == PROC_NO_DEADLINE || now < s->next_deadline)
+        return;
+    uint64_t next = PROC_NO_DEADLINE;
+    for (uint32_t i = 0; i < s->used; i++) {
+        proc_t *p = &s->p[i];
+        if ((p->state == PS_WMSG || p->state == PS_SLEEP || p->state == PS_WFD) && p->dl_set) {
+            if (p->deadline <= now) {
+                if (p->state == PS_SLEEP)
+                    p->dl_set = 0;
+                if (p->state == PS_WFD)
+                    wf_del(s, i);
+                make_runnable(s, i);
+            } else if (p->deadline < next)
+                next = p->deadline;
+        }
+    }
+    s->next_deadline = next;
+}
+
+static int mbox_put(proc_t *q, uint64_t from, int64_t tag, const void *data, uint32_t len, int system)
+{
+    if (!system && (q->mcount >= PROC_MAILBOX_MSGS || (uint64_t)q->mbytes + len > PROC_MAILBOX_BYTES))
+        return -ENOBUFS;
+    msg_t *m = malloc(sizeof *m + len);
+    if (!m)
+        return -ENOMEM;
+    m->next = NULL;
+    m->from = from;
+    m->tag = tag;
+    m->len = len;
+    if (len)
+        memcpy(m->data, data, len);
+    if (q->mt)
+        q->mt->next = m;
+    else
+        q->mh = m;
+    q->mt = m;
+    q->mcount++;
+    q->mbytes += len;
+    return 0;
+}
+
+static void mbox_remove(proc_t *q, msg_t *m)
+{
+    msg_t *prev = NULL;
+    for (msg_t *x = q->mh; x; prev = x, x = x->next) {
+        if (x != m)
+            continue;
+        if (prev)
+            prev->next = x->next;
+        else
+            q->mh = x->next;
+        if (q->mt == x)
+            q->mt = prev;
+        q->mcount--;
+        q->mbytes -= x->len;
+        if (q->cur_msg == x)
+            q->cur_msg = NULL;
+        free(x);
+        return;
+    }
+}
+
+static msg_t *mbox_find(const proc_t *q, int64_t tag)
+{
+    for (msg_t *x = q->mh; x; x = x->next)
+        if (tag == -1 || x->tag == tag)
+            return x;
+    return NULL;
+}
+
+static void wake_for(sched_t *s, uint32_t idx, int64_t tag)
+{
+    proc_t *q = &s->p[idx];
+    if (q->state == PS_WMSG && (q->wait_tag == -1 || q->wait_tag == tag))
+        make_runnable(s, idx);
+}
+
+static int list_add(uint64_t **arr, uint32_t *n, uint32_t *cap, uint64_t pid)
+{
+    for (uint32_t i = 0; i < *n; i++)
+        if ((*arr)[i] == pid)
+            return 0;
+    if (*n == *cap) {
+        uint32_t nc = *cap ? *cap * 2 : 4;
+        uint64_t *na = realloc(*arr, nc * sizeof **arr);
+        if (!na)
+            return -ENOMEM;
+        *arr = na;
+        *cap = nc;
+    }
+    (*arr)[(*n)++] = pid;
+    return 0;
+}
+
+static void list_del(uint64_t *arr, uint32_t *n, uint64_t pid)
+{
+    for (uint32_t i = 0; i < *n; i++)
+        if (arr[i] == pid) {
+            arr[i] = arr[--*n];
+            return;
+        }
+}
+
+typedef struct {
+    uint32_t idx;
+    int kind;
+    int64_t code;
+    char detail[120];
+} death_t;
+
+static uint8_t fd_nonblock[1024];   /* descriptors already set not to block, so the call is made once */
+
+static void proc_free_resources(proc_t *p)
+{
+    if (p->mem)
+        munmap(p->mem, p->mem_size);
+    p->mem = NULL;
+#ifdef CHVM_TRY_ON
+    free(p->tries);
+    p->tries = NULL;
+#endif
+    for (msg_t *m = p->mh, *nx; m; m = nx) {
+        nx = m->next;
+        free(m);
+    }
+    p->mh = p->mt = p->cur_msg = NULL;
+    p->mcount = 0;
+    p->mbytes = 0;
+    for (uint32_t i = 0; i < p->nfds; i++) {
+        if (p->fds[i] < 1024)
+            fd_nonblock[p->fds[i]] = 0;
+        close((int)p->fds[i]);
+    }
+    free(p->fds);
+    p->fds = NULL;
+    p->nfds = p->capfds = 0;
+}
+
+/*
+ * Ends a process, and the ones it takes with it. kind: 0 a normal exit, 1 an exit with a code, 2 a machine
+ * fault, 3 an uncaught throw, 4 killed. A process linked to it dies too unless the end was normal or it traps
+ * exits, in which case it gets a message (tag -2). A process that monitors it gets a message (tag -3) whatever
+ * the reason. The first process is not freed here: the machine ends when it does.
+ */
+static void proc_die(sched_t *s, uint32_t first, int kind, int64_t code, const char *detail)
+{
+    size_t cq = 16, nq = 0;
+    death_t *q = malloc(cq * sizeof *q);
+    if (!q)
+        return;
+    q[nq].idx = first;
+    q[nq].kind = kind;
+    q[nq].code = code;
+    snprintf(q[nq].detail, sizeof q[nq].detail, "%s", detail);
+    nq++;
+    while (nq > 0) {
+        death_t d = q[--nq];
+        proc_t *p = &s->p[d.idx];
+        if (p->state == PS_FREE)
+            continue;
+        uint64_t pid = pid_of(s, d.idx);
+        char text[200];
+        snprintf(text, sizeof text, "%d %lld %llu %s", d.kind, (long long)d.code, (unsigned long long)pid, d.detail);
+        if (d.idx == 0) {
+            s->main_dead = 1;
+            snprintf(s->main_text, sizeof s->main_text, "%s", d.detail);
+            continue;
+        }
+        if (p->state == PS_WFD)
+            wf_del(s, d.idx);
+        uint64_t *links = p->links, *mons = p->mons;
+        uint32_t nl = p->nlinks, nm = p->nmons;
+        p->links = p->mons = NULL;
+        p->nlinks = p->caplinks = p->nmons = p->capmons = 0;
+        proc_free_resources(p);
+        s->child_mem -= p->mem_size;
+        p->state = PS_FREE;
+        p->queued = 0;
+        p->dl_set = 0;
+        p->trap = 0;
+        p->gen++;
+        s->alive--;
+        s->freeq[s->nfree++] = d.idx;
+        if (d.idx == s->cur)
+            s->cur_died = 1;
+        for (uint32_t i = 0; i < nl; i++) {
+            int qi = proc_find(s, links[i]);
+            if (qi < 0)
+                continue;
+            proc_t *o = &s->p[qi];
+            list_del(o->links, &o->nlinks, pid);
+            if (o->trap) {
+                if (mbox_put(o, pid, -2, text, (uint32_t)strlen(text), 1) == 0)
+                    wake_for(s, (uint32_t)qi, -2);
+            } else if (d.kind != 0) {
+                if (nq == cq) {
+                    death_t *nqa = realloc(q, cq * 2 * sizeof *q);
+                    if (!nqa)
+                        continue;
+                    q = nqa;
+                    cq *= 2;
+                }
+                q[nq].idx = (uint32_t)qi;
+                q[nq].kind = 4;
+                q[nq].code = (int64_t)pid;
+                snprintf(q[nq].detail, sizeof q[nq].detail, "linked process %llu ended", (unsigned long long)pid);
+                nq++;
+            }
+        }
+        for (uint32_t i = 0; i < nm; i++) {
+            int qi = proc_find(s, mons[i]);
+            if (qi < 0)
+                continue;
+            if (mbox_put(&s->p[qi], pid, -3, text, (uint32_t)strlen(text), 1) == 0)
+                wake_for(s, (uint32_t)qi, -3);
+        }
+        free(links);
+        free(mons);
+    }
+    free(q);
+}
+
+static void sched_free(sched_t *s)
+{
+    for (uint32_t i = 1; i < s->used; i++) {
+        proc_t *p = &s->p[i];
+        if (p->state != PS_FREE)
+            proc_free_resources(p);
+        free(p->links);
+        free(p->mons);
+    }
+    free(s->p[0].links);
+    free(s->p[0].mons);
+    free(s->p[0].fds);
+    free(s->wf);
+    free(s->pf);
+    for (msg_t *m = s->p[0].mh, *nx; m; m = nx) {
+        nx = m->next;
+        free(m);
+    }
+    free(s->p);
+    free(s->rq);
+    free(s->freeq);
+}
+
+
+/*
+ * Input and output that other processes must not wait for. With more than one process alive, READ, WRITE, ACCEPT
+ * and POLL on a descriptor above 2 try the call without waiting. If it would block, the process goes to sleep on that
+ * descriptor, with a deadline when the call has one, and the same instruction runs again when the descriptor
+ * is ready. So a client that sends nothing holds up its own process, not the server.
+ * Returns PA_RUN_SYS to run the call as it is (the descriptor is a file, or this is the only process).
+ */
+static int set_nonblock(int fd)
+{
+    if (fd >= 0 && fd < 1024 && fd_nonblock[fd])
+        return 0;
+    int fl = fcntl(fd, F_GETFL);
+    if (fl < 0)
+        return -errno;
+    if (!(fl & O_NONBLOCK) && fcntl(fd, F_SETFL, fl | O_NONBLOCK) < 0)
+        return -errno;
+    if (fd >= 0 && fd < 1024)
+        fd_nonblock[fd] = 1;
+    return 0;
+}
+
+/* Who owns each descriptor below 1024, as a process pid (0 for nobody). A descriptor has one owner. */
+static uint64_t fd_owner[1024];
+
+static void disown_fd(proc_t *me, int fd);
+
+static int own_fd(proc_t *me, int fd)
+{
+    for (uint32_t i = 0; i < me->nfds; i++)
+        if (me->fds[i] == (uint64_t)fd)
+            return 0;
+    if (me->nfds == me->capfds) {
+        uint32_t nc = me->capfds ? me->capfds * 2 : 4;
+        uint64_t *na = realloc(me->fds, nc * sizeof *na);
+        if (!na)
+            return -ENOMEM;
+        me->fds = na;
+        me->capfds = nc;
+    }
+    me->fds[me->nfds++] = (uint64_t)fd;
+    return 0;
+}
+
+static void disown_fd(proc_t *me, int fd)
+{
+    for (uint32_t i = 0; i < me->nfds; i++)
+        if (me->fds[i] == (uint64_t)fd) {
+            me->fds[i] = me->fds[--me->nfds];
+            return;
+        }
+}
+
+/* Takes the descriptor from whoever owns it and gives it to process `to`. */
+static int transfer_fd(sched_t *s, int fd, uint32_t to)
+{
+    if (fd <= 2 || fd >= 1024)
+        return -EBADF;
+    int oi = proc_find(s, fd_owner[fd]);
+    if (oi >= 0)
+        disown_fd(&s->p[oi], fd);
+    int rc = own_fd(&s->p[to], fd);
+    if (rc == 0)
+        fd_owner[fd] = pid_of(s, to);
+    return rc;
+}
+
+/* The descriptor and the poll bits a system call is waiting for, or -1 when it is not one that waits. */
+static int io_wait_target(uint32_t sn, const vm_value *r, short *ev)
+{
+    if (sn == CHBC_SYS_READ) {
+        *ev = POLLIN;
+        return (int)r[1].i;
+    }
+    if (sn == CHBC_SYS_WRITE) {
+        *ev = POLLOUT;
+        return (int)r[1].i;
+    }
+    if (sn == CHBC_SYS_ACCEPT) {
+        *ev = POLLIN;
+        return (int)r[1].i;
+    }
+    if (sn == CHBC_SYS_POLL) {
+        *ev = (short)(((r[2].u & 1) ? POLLIN : 0) | ((r[2].u & 2) ? POLLOUT : 0));
+        return (int)r[1].i;
+    }
+    return -1;
+}
+
+/*
+ * The process system calls. They run outside vm_run on purpose: inside it they made the interpreter loop's
+ * frame twice as large and every ordinary instruction slower. The caller saves the running process first, and
+ * loads it again afterwards, so these only read and write the saved state. They return PA_CONT to go on with the
+ * same process, PA_SWITCH when it blocked or yielded or something that ended took it along, and PA_DEADLOCK when
+ * nothing can ever wake the first process.
+ */
+enum { PA_CONT, PA_SWITCH, PA_DEADLOCK, PA_RUN_SYS };
+#define PA_NEXT() do { me->pc++; return PA_CONT; } while (0)
+
+/*
+ * Runs READ, WRITE, ACCEPT or POLL for a process that is not alone. The call is tried with the descriptor
+ * set to not block. When it would block, the process waits on the descriptor and the call is run again later.
+ * io_ms is how long a read or write may wait with no progress (set by ACCEPT for the connection, and kept per
+ * descriptor in a small table), and a call's own wait is its deadline.
+ */
+static int64_t coop_io_ms[1024];
+
+static __attribute__((noinline)) int coop_io(sched_t *s, vm_sysenv *env, uint32_t sn, int *did)
+{
+    proc_t *me = &s->p[s->cur];
+    vm_value *r = me->r;
+    short ev = 0;
+    int fd = io_wait_target(sn, r, &ev);
+    *did = 0;
+    if (fd <= 2)
+        return PA_RUN_SYS;
+    uint64_t now = now_ns();
+    if (sn == CHBC_SYS_POLL) {
+        /* try once without waiting. Nothing ready and a wait asked for: sleep on the descriptor until the time is up */
+        int64_t wms = r[3].i;
+        vm_value saved3 = r[3];
+        env->mem = me->mem;
+        env->mem_size = me->mem_size;
+        r[3].i = 0;
+        int64_t pres = vm_syscall(env, sn, &r[1]);
+        r[3] = saved3;
+        if (pres != 0 || wms == 0 || (me->dl_set && me->deadline <= now)) {
+            r[0].i = pres;
+            me->pc++;
+            me->dl_set = 0;
+            *did = 1;
+            return PA_CONT;
+        }
+        if (!me->dl_set && wms > 0)
+            set_deadline(s, me, now + (uint64_t)wms * 1000000ull);
+        wf_add(s, s->cur, fd, ev);
+        return PA_SWITCH;
+    }
+    int64_t wait_ms = -1;
+    uint64_t io_deadline = 0;
+    if (sn == CHBC_SYS_ACCEPT) {
+        wait_ms = r[2].i;
+    } else if ((uint32_t)fd < 1024 && coop_io_ms[fd] > 0) {
+        io_deadline = (uint64_t)coop_io_ms[fd] * 1000000ull;
+    }
+    if (sn != CHBC_SYS_ACCEPT) {
+        int rc = set_nonblock(fd);
+        if (rc < 0) {
+            r[0].i = rc;
+            me->pc++;
+            *did = 1;
+            return PA_CONT;
+        }
+    }
+    /* the call itself, with a wait of 0 for ACCEPT */
+    int64_t res;
+    vm_value saved2 = r[2];
+    if (sn == CHBC_SYS_ACCEPT)
+        r[2].i = 0;
+    env->mem = me->mem;
+    env->mem_size = me->mem_size;
+    res = vm_syscall(env, sn, &r[1]);
+    r[2] = saved2;
+    int would_block = (sn == CHBC_SYS_ACCEPT) ? res == -ETIMEDOUT : res == -EAGAIN;
+    if (!would_block) {
+        if (sn == CHBC_SYS_ACCEPT && res >= 0) {
+            if ((uint64_t)res < 1024)
+                coop_io_ms[res] = r[3].i;
+            set_nonblock((int)res);
+            transfer_fd(s, (int)res, s->cur);
+        }
+        r[0].i = res;
+        me->pc++;
+        me->dl_set = 0;
+        *did = 1;
+        return PA_CONT;
+    }
+    /* would block */
+    if (!me->dl_set) {
+        if (sn == CHBC_SYS_ACCEPT) {
+            if (wait_ms == 0) {
+                r[0].i = -ETIMEDOUT;
+                me->pc++;
+                *did = 1;
+                return PA_CONT;
+            }
+            if (wait_ms > 0)
+                set_deadline(s, me, now + (uint64_t)wait_ms * 1000000ull);
+        } else if (io_deadline) {
+            set_deadline(s, me, now + io_deadline);
+        }
+    } else if (me->deadline <= now) {
+        me->dl_set = 0;
+        r[0].i = sn == CHBC_SYS_ACCEPT ? -ETIMEDOUT : -EAGAIN;
+        me->pc++;
+        *did = 1;
+        return PA_CONT;
+    }
+    wf_add(s, s->cur, fd, ev);
+    return PA_SWITCH;
+}
+
+static __attribute__((noinline)) int proc_syscall(sched_t *s, const chbc_image *img, uint32_t sn)
+{
+    int cur = (int)s->cur;
+    proc_t *me = &s->p[cur];
+    vm_value *r = me->r;
+    uint8_t *mem = me->mem;
+    uint64_t mem_size = me->mem_size, heap_ptr = me->heap_ptr;
+    const uint64_t code_size = img->code_size;
+    const uint64_t base_heap = s->p[0].heap_base;
+    (void)heap_ptr; (void)base_heap; (void)code_size; (void)mem;
+    switch (sn) {
+            case CHBC_SYS_SELF:
+                r[0].u = pid_of(s, (uint32_t)cur);
+                PA_NEXT();
+            case CHBC_SYS_PCOUNT:
+                r[0].u = s->alive;
+                PA_NEXT();
+            case CHBC_SYS_YIELD:
+                if (s->alive > 1) {
+                    r[0].i = 0;
+                    me->pc++;
+                        rq_push(s, (uint32_t)cur);
+                    return PA_SWITCH;
+                }
+                r[0].i = 0;
+                PA_NEXT();
+            case CHBC_SYS_SLEEP: {
+                int64_t ms = r[1].i;
+                if (ms < 0 || ms > 86400000) {
+                    r[0].i = -EINVAL;
+                    PA_NEXT();
+                }
+                fflush(stdout);
+                if (s->alive <= 1 || ms == 0) {
+                    if (ms > 0) {
+                        struct timespec ts = {(time_t)(ms / 1000), (long)(ms % 1000) * 1000000L};
+                        while (nanosleep(&ts, &ts) < 0 && errno == EINTR)
+                            ;
+                    }
+                    r[0].i = 0;
+                    PA_NEXT();
+                }
+                r[0].i = 0;
+                me->pc++;
+                me->state = PS_SLEEP;
+                set_deadline(s, me, now_ns() + (uint64_t)ms * 1000000ull);
+                return PA_SWITCH;
+            }
+            case CHBC_SYS_MSGWAIT: {
+                int64_t tag = r[1].i, wait = r[2].i;
+                if (tag < -3 || wait < -1) {
+                    r[0].i = -EINVAL;
+                    PA_NEXT();
+                }
+                msg_t *m = mbox_find(me, tag);
+                if (m) {
+                    me->cur_msg = m;
+                    me->dl_set = 0;
+                    r[0].i = m->len;
+                    PA_NEXT();
+                }
+                uint64_t now = now_ns();
+                if (wait == 0 || (me->dl_set && me->deadline <= now)) {
+                    me->dl_set = 0;
+                    r[0].i = -ETIMEDOUT;
+                    PA_NEXT();
+                }
+                if (s->alive <= 1 && wait < 0) {
+                    return PA_DEADLOCK;
+                }
+                if (s->alive <= 1) {
+                    /* nobody else can send: just wait out the time */
+                    fflush(stdout);
+                    uint64_t left = me->dl_set ? me->deadline - now : (uint64_t)wait * 1000000ull;
+                    struct timespec ts = {(time_t)(left / 1000000000ull), (long)(left % 1000000000ull)};
+                    while (nanosleep(&ts, &ts) < 0 && errno == EINTR)
+                        ;
+                    me->dl_set = 0;
+                    r[0].i = -ETIMEDOUT;
+                    PA_NEXT();
+                }
+                me->state = PS_WMSG;
+                me->wait_tag = tag;
+                if (!me->dl_set && wait > 0)
+                    set_deadline(s, me, now + (uint64_t)wait * 1000000ull);
+                return PA_SWITCH;
+            }
+            case CHBC_SYS_MSGTAKE: {
+                msg_t *m = me->cur_msg;
+                uint64_t b = r[1].u, cap = r[2].u;
+                if (!m) {
+                    r[0].i = -EINVAL;
+                    PA_NEXT();
+                }
+                if (cap < m->len) {
+                    r[0].i = -ERANGE;
+                    PA_NEXT();
+                }
+                if (m->len && !mem_ok(b, m->len, mem_size)) {
+                    r[0].i = -EFAULT;
+                    PA_NEXT();
+                }
+                if (m->len)
+                    memcpy(mem + b, m->data, m->len);
+                r[0].i = m->len;
+                mbox_remove(me, m);
+                PA_NEXT();
+            }
+            case CHBC_SYS_MSGFROM:
+                r[0].i = me->cur_msg ? (int64_t)me->cur_msg->from : -EINVAL;
+                PA_NEXT();
+            case CHBC_SYS_MSGTAG:
+                r[0].i = me->cur_msg ? me->cur_msg->tag : -EINVAL;
+                PA_NEXT();
+            case CHBC_SYS_SEND: {
+                uint64_t to = r[1].u, a = r[3].u, len = r[4].u;
+                int64_t tag = r[2].i;
+                if (tag < 0) {
+                    r[0].i = -EINVAL;
+                    PA_NEXT();
+                }
+                if (len > PROC_MSG_MAX) {
+                    r[0].i = -EMSGSIZE;
+                    PA_NEXT();
+                }
+                if (len && !mem_ok(a, len, mem_size)) {
+                    r[0].i = -EFAULT;
+                    PA_NEXT();
+                }
+                int ti = proc_find(s, to);
+                if (ti < 0) {
+                    r[0].i = -ESRCH;
+                    PA_NEXT();
+                }
+                int rc = mbox_put(&s->p[ti], pid_of(s, (uint32_t)cur), tag, mem + a, (uint32_t)len, 0);
+                if (rc == 0)
+                    wake_for(s, (uint32_t)ti, tag);
+                r[0].i = rc;
+                PA_NEXT();
+            }
+            case CHBC_SYS_PLINK: case CHBC_SYS_PUNLINK: {
+                uint64_t to = r[1].u;
+                int ti = proc_find(s, to);
+                if (ti < 0 || ti == cur) {
+                    r[0].i = ti == cur ? -EINVAL : -ESRCH;
+                    PA_NEXT();
+                }
+                proc_t *o = &s->p[ti];
+                uint64_t mine = pid_of(s, (uint32_t)cur);
+                if (sn == CHBC_SYS_PLINK) {
+                    int rc = list_add(&me->links, &me->nlinks, &me->caplinks, to);
+                    if (!rc)
+                        rc = list_add(&o->links, &o->nlinks, &o->caplinks, mine);
+                    r[0].i = rc;
+                } else {
+                    list_del(me->links, &me->nlinks, to);
+                    list_del(o->links, &o->nlinks, mine);
+                    r[0].i = 0;
+                }
+                PA_NEXT();
+            }
+            case CHBC_SYS_MONITOR: {
+                uint64_t to = r[1].u;
+                int ti = proc_find(s, to);
+                if (ti == cur) {
+                    r[0].i = -EINVAL;
+                    PA_NEXT();
+                }
+                if (ti < 0) {
+                    char text[80];
+                    snprintf(text, sizeof text, "6 0 %llu noproc", (unsigned long long)to);
+                    if (mbox_put(me, to, -3, text, (uint32_t)strlen(text), 1) == 0)
+                        wake_for(s, (uint32_t)cur, -3);
+                    r[0].i = 0;
+                    PA_NEXT();
+                }
+                r[0].i = list_add(&s->p[ti].mons, &s->p[ti].nmons, &s->p[ti].capmons, pid_of(s, (uint32_t)cur));
+                PA_NEXT();
+            }
+            case CHBC_SYS_TRAPEXIT:
+                r[0].i = me->trap;
+                me->trap = r[1].u != 0;
+                PA_NEXT();
+            case CHBC_SYS_PKILL: {
+                int ti = proc_find(s, r[1].u);
+                if (ti < 0) {
+                    r[0].i = -ESRCH;
+                    PA_NEXT();
+                }
+                if (ti == 0) {
+                    r[0].i = -EPERM;
+                    PA_NEXT();
+                }
+                r[0].i = 0;
+                s->cur_died = 0;
+                proc_die(s, (uint32_t)ti, 4, 0, "killed");
+                if (s->cur_died || s->main_dead)
+                    return PA_SWITCH;
+                PA_NEXT();
+            }
+            case CHBC_SYS_PINFO: {
+                int ti = proc_find(s, r[1].u);
+                int64_t what = r[2].i;
+                if (what == 0) {
+                    r[0].i = ti >= 0;
+                    PA_NEXT();
+                }
+                if (ti < 0) {
+                    r[0].i = -ESRCH;
+                    PA_NEXT();
+                }
+                const proc_t *o = &s->p[ti];
+                if (what == 1) {
+                    r[0].i = o->mcount;
+                } else if (what == 2) {
+                    uint64_t hp = o->heap_ptr, sp = o->r[CHBC_REG_SP].u;
+                    uint64_t ms = o->mem_size;
+                    r[0].i = (int64_t)((hp - CHBC_DATA_BASE) + (ms - sp));
+                } else if (what == 3) {
+                    r[0].i = (int64_t)(o->mem_size);
+                } else {
+                    r[0].i = -EINVAL;
+                }
+                PA_NEXT();
+            }
+            case CHBC_SYS_PSPAWN: {
+                uint64_t entry = r[1].u, aa = r[2].u, alen = r[3].u, want = r[4].u, flags = r[5].u;
+                uint64_t give = flags >> 8;   /* a descriptor to hand to the new process, or 0 */
+                flags &= 255;
+                if (flags & ~7ull || (entry & 7) || entry >= code_size || give > 1023 || (give != 0 && give <= 2)) {
+                    r[0].i = -EINVAL;
+                    PA_NEXT();
+                }
+                if (alen > PROC_MSG_MAX) {
+                    r[0].i = -EMSGSIZE;
+                    PA_NEXT();
+                }
+                if (alen && !mem_ok(aa, alen, mem_size)) {
+                    r[0].i = -EFAULT;
+                    PA_NEXT();
+                }
+                if (want > (1ull << 30)) {
+                    r[0].i = -EINVAL;
+                    PA_NEXT();
+                }
+                if (s->alive >= s->max_procs || (s->nfree == 0 && s->used >= s->cap)) {
+                    r[0].i = -EAGAIN;
+                    PA_NEXT();
+                }
+                int fresh = (flags & 1) != 0;
+                uint64_t from_end = fresh ? base_heap : heap_ptr;
+                uint64_t asz = 8 + ((alen + 7) & ~7ull);
+                uint64_t msz = want;
+                uint64_t need = from_end + asz;
+                if (msz == 0)
+                    msz = (need + PROC_DEFAULT_ROOM + 2 * VM_STACK_RESERVE + 8192 + 4095) & ~4095ull;
+                uint64_t sres = msz / 8 < 4096 ? 4096 : (msz / 8 > VM_STACK_RESERVE ? VM_STACK_RESERVE : msz / 8);
+                if (msz < need + 2 * sres + 4096) {
+                    r[0].i = -ENOMEM;
+                    PA_NEXT();
+                }
+                if (s->child_mem + msz > PROC_TOTAL_MEM) {
+                    r[0].i = -ENOMEM;
+                    PA_NEXT();
+                }
+                uint8_t *cm = mmap(NULL, (size_t)msz, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
+                if (cm == MAP_FAILED) {
+                    r[0].i = -ENOMEM;
+                    PA_NEXT();
+                }
+                if (fresh) {
+                    if (img->data_size)
+                        memcpy(cm + CHBC_DATA_BASE, img->data, img->data_size);
+                } else {
+                    memcpy(cm + CHBC_DATA_BASE, mem + CHBC_DATA_BASE, (size_t)(heap_ptr - CHBC_DATA_BASE));
+                }
+                WR(u64u, cm + from_end, alen);
+                if (alen)
+                    memcpy(cm + from_end + 8, mem + aa, (size_t)alen);
+                uint32_t ci;
+                if (s->nfree > 0) {
+                    ci = s->freeq[--s->nfree];
+                } else {
+                    ci = s->used++;
+                }
+                proc_t *cp = &s->p[ci];
+                uint32_t gen = cp->gen;
+                memset(cp, 0, sizeof *cp);
+                cp->gen = gen;
+                cp->mem = cm;
+                cp->mem_size = msz;
+                cp->heap_base = base_heap;
+                cp->heap_ptr = cp->brk = from_end + asz;
+                cp->stack_reserve = sres;
+                cp->heap_step = 16384;
+                cp->r[CHBC_REG_SP].u = msz - 8;
+                cp->r[CHBC_REG_FP].u = msz;
+                WR(u64u, cm + msz - 8, PROC_RET_SENTINEL);
+                cp->r[1].u = from_end;
+                cp->pc = (uint32_t)(entry >> 3);
+                s->child_mem += msz;
+                s->alive++;
+                uint64_t cpid = pid_of(s, ci);
+                if (flags & 2) {
+                    list_add(&me->links, &me->nlinks, &me->caplinks, cpid);
+                    list_add(&cp->links, &cp->nlinks, &cp->caplinks, pid_of(s, (uint32_t)cur));
+                }
+                if (flags & 4)
+                    list_add(&cp->mons, &cp->nmons, &cp->capmons, pid_of(s, (uint32_t)cur));
+                if (give) {
+                    /* the new process owns it from its first instruction, so the one that accepted it can end at once */
+                    if (fd_owner[give] != pid_of(s, (uint32_t)cur)) {
+                        r[0].i = -EBADF;
+                        proc_die(s, ci, 4, 0, "spawn failed");
+                        PA_NEXT();
+                    }
+                    if (transfer_fd(s, (int)give, ci) != 0) {
+                        r[0].i = -ENOMEM;
+                        proc_die(s, ci, 4, 0, "spawn failed");
+                        PA_NEXT();
+                    }
+                }
+                make_runnable(s, ci);
+                r[0].u = cpid;
+                PA_NEXT();
+            }
+    }
+    r[0].i = -ENOSYS;
+    PA_NEXT();
+}
+#endif /* CHVM_PROC_ON */
 
 /* Float to integer conversions saturate, and NaN becomes 0, so they never trap. */
 static int64_t f2i(double d)
@@ -273,13 +1361,15 @@ vm_status vm_run(const chbc_image *img, const vm_config *cfg,
     uint8_t *mem = calloc(c.mem_bytes, 1);
     if (!mem)
         return VM_E_NOMEM;
+    uint64_t stack_reserve = VM_STACK_RESERVE;
+    uint64_t heap_step = HEAP_STEP;
     if (img->data_size)
         memcpy(mem + CHBC_DATA_BASE, img->data, img->data_size);
 
     const chbc_insn *const code = img->code;
     const uint64_t code_size = img->code_size;
-    const uint64_t mem_size = c.mem_bytes;
-    const uint64_t mem_limit = mem_size - CHBC_NULL_PAGE;
+    uint64_t mem_size = c.mem_bytes;
+    uint64_t mem_limit = mem_size - CHBC_NULL_PAGE;
     uint64_t brk = heap_base;
     uint64_t heap_ptr = heap_base;   /* next ALLOC address, always <= brk */
     vm_foreign *foreign = NULL;
@@ -290,14 +1380,73 @@ vm_status vm_run(const chbc_image *img, const vm_config *cfg,
             return foreign_compiled() ? VM_E_NOMEM : VM_E_FOREIGN_OFF;
         }
     }
-    const vm_sysenv env = {mem, mem_size, c.argc, c.argv, foreign, c.allow_spawn};
+    vm_sysenv env = {mem, mem_size, c.argc, c.argv, foreign, c.allow_spawn, c.allow_net};
+    if (c.allow_net)
+        sys_net_init();
 
+    fault_detail[0] = 0;
+#ifdef CHVM_TRY_ON
+    try_rec *tries = NULL;
+    size_t ntries = 0, captries = 0;
+#endif
     vm_value r[CHBC_NREGS];
     memset(r, 0, sizeof r);
     r[CHBC_REG_SP].u = mem_size;
     r[CHBC_REG_FP].u = mem_size;
 
     const chbc_insn *pc = code + img->entry / CHBC_INSN_SIZE;
+
+#ifdef CHVM_PROC_ON
+#define ZERO_LAZY (cur != 0)
+#define SAVEPROC(i) do {                                                     \
+        proc_t *P_ = &sch.p[(i)];                                            \
+        P_->mem = mem; P_->mem_size = mem_size; P_->brk = brk;               \
+        P_->heap_ptr = heap_ptr; P_->heap_base = heap_base;                  \
+        P_->stack_reserve = stack_reserve; P_->heap_step = heap_step;        \
+        memcpy(P_->r, r, sizeof r);                                          \
+        P_->pc = (uint32_t)(pc - code);                                      \
+        PROC_SAVE_TRIES(P_)                                                  \
+    } while (0)
+#define LOADPROC(i) do {                                                     \
+        proc_t *P_ = &sch.p[(i)];                                            \
+        mem = P_->mem; mem_size = P_->mem_size; mem_limit = mem_size - CHBC_NULL_PAGE; \
+        brk = P_->brk; heap_ptr = P_->heap_ptr; heap_base = P_->heap_base;   \
+        stack_reserve = P_->stack_reserve; heap_step = P_->heap_step;        \
+        memcpy(r, P_->r, sizeof r);                                          \
+        pc = code + P_->pc;                                                  \
+        PROC_LOAD_TRIES(P_)                                                  \
+        env.mem = mem; env.mem_size = mem_size;                              \
+    } while (0)
+#ifdef CHVM_TRY_ON
+#define PROC_SAVE_TRIES(P_) (P_)->tries = tries; (P_)->ntries = ntries; (P_)->captries = captries;
+#define PROC_LOAD_TRIES(P_) tries = (P_)->tries; ntries = (P_)->ntries; captries = (P_)->captries;
+#else
+#define PROC_SAVE_TRIES(P_)
+#define PROC_LOAD_TRIES(P_)
+#endif
+/* The running child ends: it is saved first, so that proc_die can free what it holds. */
+#define CHILD_END(kind_, code_, text_) do {                                  \
+        SAVEPROC(cur);                                                       \
+        sch.cur = (uint32_t)cur;                                             \
+        proc_die(&sch, (uint32_t)cur, (kind_), (code_), (text_));            \
+        goto after_death;                                                    \
+    } while (0)
+#endif
+
+#ifndef CHVM_PROC_ON
+#define ZERO_LAZY 0
+#endif
+#ifdef CHVM_PROC_ON
+    sched_t sch;
+    if (sched_init(&sch, c.max_procs)) {
+        free(mem);
+        return VM_E_NOMEM;
+    }
+    int cur = 0;                  /* the slot of the running process */
+    int32_t slice = PROC_SOLO_SLICE;   /* a lone process counts down from a huge number, so it is never interrupted in practice */
+    sch.p[0].heap_base = heap_base;
+    sch.p[0].mem_size = c.mem_bytes;
+#endif
 
 #ifdef CHVM_CGOTO
     static const void *const labels[OP_COUNT] = {
@@ -311,6 +1460,10 @@ dispatch:
     switch (pc->op) {
 #endif
     OP(HALT)
+#ifdef CHVM_PROC_ON
+        if (cur != 0)
+            CHILD_END(0, 0, "normal");
+#endif
         goto done;
     OP(NOP)
         NEXT();
@@ -452,6 +1605,7 @@ dispatch:
         WR(u64u, mem + nsp, ra);
         SP.u = nsp;
         pc = code + (t >> 3);
+        SLICE_CHECK();
         DISPATCH();
     }
     OP(RET) {
@@ -459,8 +1613,13 @@ dispatch:
         if (UNLIKELY(sp - CHBC_NULL_PAGE > mem_limit - 8))
             FAIL(VM_E_STACK_UNDERFLOW);
         const uint64_t ra = RD(u64u, mem + sp);
-        if (UNLIKELY(ra >= code_size || (ra & 7)))
+        if (UNLIKELY(ra >= code_size || (ra & 7))) {
+#ifdef CHVM_PROC_ON
+            if (ra == PROC_RET_SENTINEL && cur != 0)
+                CHILD_END(0, 0, "normal");
+#endif
             FAIL(VM_E_BAD_JUMP);
+        }
         SP.u = sp + 8;
         pc = code + (ra >> 3);
         DISPATCH();
@@ -473,6 +1632,14 @@ dispatch:
         putchar((int)(RA.u & 0xff));
         NEXT();
     OP(EXIT)
+#ifdef CHVM_PROC_ON
+        if (cur != 0) {
+            int64_t ec = RA.i;
+            if (ec == 0)
+                CHILD_END(0, 0, "normal");
+            CHILD_END(1, ec, "exit");
+        }
+#endif
         code_out = RA.i;
         goto done;
 
@@ -481,13 +1648,13 @@ dispatch:
         uint64_t old = brk, nb;
         if (d >= 0) {
             uint64_t sp = SP.u;
-            uint64_t top = sp > VM_STACK_RESERVE ? sp - VM_STACK_RESERVE : 0;
+            uint64_t top = sp > stack_reserve ? sp - stack_reserve : 0;
             if ((uint64_t)d > top || old > top - (uint64_t)d) {
                 RA.i = -1;
                 NEXT();
             }
             nb = old + (uint64_t)d;
-            memset(mem + old, 0, (size_t)(nb - old));
+            zero_grow(mem + old, nb - old, ZERO_LAZY);
         } else {
             uint64_t dec = 0 - (uint64_t)d;
             if (dec > old - heap_ptr) {
@@ -500,9 +1667,61 @@ dispatch:
         RA.u = old;
         NEXT();
     }
-    OP(SYSCALL)
+    OP(SYSCALL) {
+#ifdef CHVM_PROC_ON
+        uint32_t sn = (uint32_t)pc->imm;
+        if (UNLIKELY(sn >= CHBC_SYS_PSPAWN) && sn <= CHBC_SYS_PINFO) {
+            SAVEPROC(cur);
+            sch.cur = (uint32_t)cur;
+            switch (proc_syscall(&sch, img, sn)) {
+            case PA_CONT:
+                LOADPROC(cur);
+                if (sch.alive > 1 && slice > PROC_SLICE)
+                    slice = PROC_SLICE;
+                DISPATCH();
+            case PA_SWITCH:
+                goto schedule;
+            default:
+                LOADPROC(cur);
+                FAIL(VM_E_DEADLOCK);
+            }
+        }
+#endif
+#ifdef CHVM_PROC_ON
+        if (UNLIKELY(sch.alive > 1) && (sn == CHBC_SYS_READ || sn == CHBC_SYS_WRITE || sn == CHBC_SYS_ACCEPT || sn == CHBC_SYS_POLL)) {
+            SAVEPROC(cur);
+            sch.cur = (uint32_t)cur;
+            int did = 0;
+            int rc = coop_io(&sch, &env, sn, &did);
+            if (rc == PA_SWITCH)
+                goto schedule;
+            if (rc == PA_CONT) {
+                LOADPROC(cur);
+                DISPATCH();
+            }
+        }
+        if (sn == CHBC_SYS_CLOSE && r[1].i >= 0 && r[1].i < 1024)
+            fd_nonblock[r[1].i] = 0;
+        if (sn == CHBC_SYS_CLOSE && r[1].i > 2 && r[1].i < 1024) {
+            int oi = proc_find(&sch, fd_owner[r[1].i]);
+            if (oi >= 0)
+                disown_fd(&sch.p[oi], (int)r[1].i);
+            fd_owner[r[1].i] = 0;
+        }
+        if (sn == CHBC_SYS_LISTEN || sn == CHBC_SYS_ACCEPT) {
+            r[0].i = vm_syscall(&env, sn, &r[1]);
+            if (sn == CHBC_SYS_ACCEPT && r[0].i >= 0 && (uint64_t)r[0].i < 1024)
+                coop_io_ms[r[0].i] = r[3].i;
+            if (r[0].i > 2 && r[0].i < 1024 && sn == CHBC_SYS_ACCEPT) {
+                if (transfer_fd(&sch, (int)r[0].i, (uint32_t)cur) != 0)
+                    fd_owner[r[0].i] = 0;
+            }
+            NEXT();
+        }
+#endif
         r[0].i = vm_syscall(&env, (uint32_t)pc->imm, &r[1]);
         NEXT();
+    }
     OP(TRAP)
         FAIL(VM_E_TRAP);
 
@@ -703,6 +1922,7 @@ dispatch:
         double k = (double)pc[1].imm;       \
         if (cond) {                         \
             pc = TARGET;                    \
+            SLICE_CHECK();                  \
             DISPATCH();                     \
         }                                   \
         pc += 2;                            \
@@ -868,11 +2088,11 @@ dispatch:
             FAIL(VM_E_OOM);
         sz = (sz + 7) & ~(uint64_t)7;
         if (UNLIKELY(heap_ptr + sz > brk)) {
-            uint64_t grow = sz > HEAP_STEP ? (sz + HEAP_STEP - 1) / HEAP_STEP * HEAP_STEP : HEAP_STEP;
-            uint64_t top = SP.u > VM_STACK_RESERVE ? SP.u - VM_STACK_RESERVE : 0;
+            uint64_t grow = sz > heap_step ? (sz + heap_step - 1) / heap_step * heap_step : heap_step;
+            uint64_t top = SP.u > stack_reserve ? SP.u - stack_reserve : 0;
             if (UNLIKELY(grow > top || brk > top - grow))
                 FAIL(VM_E_OOM);
-            memset(mem + brk, 0, (size_t)grow);
+            zero_grow(mem + brk, grow, ZERO_LAZY);
             brk += grow;
         }
         RA.u = heap_ptr;
@@ -882,11 +2102,11 @@ dispatch:
     OP(ALLOCI) {
         uint64_t sz = ((uint64_t)(uint32_t)pc->imm + 7) & ~(uint64_t)7;
         if (UNLIKELY(heap_ptr + sz > brk)) {
-            uint64_t grow = sz > HEAP_STEP ? (sz + HEAP_STEP - 1) / HEAP_STEP * HEAP_STEP : HEAP_STEP;
-            uint64_t top = SP.u > VM_STACK_RESERVE ? SP.u - VM_STACK_RESERVE : 0;
+            uint64_t grow = sz > heap_step ? (sz + heap_step - 1) / heap_step * heap_step : heap_step;
+            uint64_t top = SP.u > stack_reserve ? SP.u - stack_reserve : 0;
             if (UNLIKELY(grow > top || brk > top - grow))
                 FAIL(VM_E_OOM);
-            memset(mem + brk, 0, (size_t)grow);
+            zero_grow(mem + brk, grow, ZERO_LAZY);
             brk += grow;
         }
         RA.u = heap_ptr;
@@ -962,6 +2182,54 @@ dispatch:
         print_double(RA.f);
         NEXT();
 
+    OP(TRY) {
+#ifdef CHVM_TRY_ON
+        if (UNLIKELY(ntries == captries)) {
+            if (UNLIKELY(ntries >= VM_MAX_TRIES))
+                FAIL(VM_E_STACK_OVERFLOW);
+            size_t nc = captries ? captries * 2 : 16;
+            try_rec *nt = realloc(tries, nc * sizeof *nt);
+            if (UNLIKELY(!nt))
+                FAIL(VM_E_NOMEM);
+            tries = nt;
+            captries = nc;
+        }
+        tries[ntries].target = (uint32_t)pc->imm >> 3;
+        tries[ntries].sp = SP.u;
+        tries[ntries].fp = r[CHBC_REG_FP].u;
+        ntries++;
+#endif
+        NEXT();
+    }
+    OP(ENDTRY) {
+#ifdef CHVM_TRY_ON
+        if (UNLIKELY(ntries == 0))
+            FAIL(VM_E_TRAP);    /* the compiler pairs every TRY with an ENDTRY, so this is a bug in the program */
+        ntries--;
+        NEXT();
+#else
+        FAIL(VM_E_TRAP);
+#endif
+    }
+    OP(THROW) {
+        uint64_t v = RA.u;
+        if (UNLIKELY(v < CHBC_NULL_PAGE || v > mem_size - 8))
+            FAIL(VM_E_BAD_MEM);
+#ifdef CHVM_TRY_ON
+        if (ntries > 0) {
+            const try_rec *t = &tries[--ntries];
+            SP.u = t->sp;
+            r[CHBC_REG_FP].u = t->fp;
+            r[0].u = v;
+            r[1].u = 0;
+            pc = code + t->target;
+            DISPATCH();
+        }
+#endif
+        set_detail(mem, mem_size, v);
+        FAIL(VM_E_UNCAUGHT);
+    }
+
 #ifndef CHVM_CGOTO
     default:
         abort();
@@ -974,11 +2242,92 @@ L_unused: __attribute__((unused));
     FAIL(VM_E_TRAP);
 #endif
 
+
+#ifdef CHVM_PROC_ON
+preempt:
+    SAVEPROC(cur);
+    rq_push(&sch, (uint32_t)cur);
+    goto schedule;
+after_death:
+schedule:
+    for (;;) {
+        if (sch.main_dead) {
+            LOADPROC(0);
+            cur = 0;
+            snprintf(fault_detail, sizeof fault_detail, "%s", sch.main_text);
+            status = VM_E_UNCAUGHT;
+            goto fail_main;
+        }
+        timers_check(&sch, now_ns());
+        if (sch.nwf > 0)
+            fd_poll(&sch, 0);
+        int nx = rq_pop(&sch);
+        if (nx >= 0) {
+            cur = nx;
+            LOADPROC(cur);
+            slice = sch.alive > 1 ? PROC_SLICE : PROC_SOLO_SLICE;
+            DISPATCH();
+        }
+        if (sch.nwf > 0) {
+            uint64_t now = now_ns();
+            int ms = -1;
+            if (sch.next_deadline != PROC_NO_DEADLINE)
+                ms = sch.next_deadline > now ? (int)((sch.next_deadline - now + 999999ull) / 1000000ull) : 0;
+            fflush(stdout);
+            fd_poll(&sch, ms);
+            continue;
+        }
+        if (sch.next_deadline != PROC_NO_DEADLINE) {
+            uint64_t now = now_ns();
+            if (sch.next_deadline > now) {
+                uint64_t left = sch.next_deadline - now;
+                struct timespec ts = {(time_t)(left / 1000000000ull), (long)(left % 1000000000ull)};
+                fflush(stdout);
+                nanosleep(&ts, NULL);
+            }
+            continue;
+        }
+        LOADPROC(0);
+        cur = 0;
+        status = VM_E_DEADLOCK;
+        goto fail_main;
+    }
+#endif
+
 fail:
+#ifdef CHVM_TRY_ON
+    if (ntries > 0 && vm_catchable(status)) {
+        const try_rec *t = &tries[--ntries];
+        SP.u = t->sp;
+        r[CHBC_REG_FP].u = t->fp;
+        r[0].u = 0;
+        r[1].u = (uint64_t)status;
+        status = VM_OK;
+        pc = code + t->target;
+        DISPATCH();
+    }
+#endif
+#ifdef CHVM_PROC_ON
+    if (cur != 0) {
+        int thrown = status == VM_E_UNCAUGHT;
+        int kind = thrown ? 3 : 2;
+        int64_t ecode = thrown ? 0 : (int64_t)status;
+        const char *why = thrown ? fault_detail : vm_status_str(status);
+        status = VM_OK;
+        CHILD_END(kind, ecode, why);
+    }
+fail_main:
+#endif
     if (fault_off)
         *fault_off = (uint32_t)((uint64_t)(pc - code) * CHBC_INSN_SIZE);
 done:
     fflush(stdout);
+#ifdef CHVM_TRY_ON
+    free(tries);
+#endif
+#ifdef CHVM_PROC_ON
+    sched_free(&sch);
+#endif
     foreign_free(foreign);
     free(mem);
     if (exit_code)
@@ -1001,6 +2350,8 @@ const char *vm_status_str(vm_status s)
     case VM_E_INDEX:            return "index out of range";
     case VM_E_OOM:              return "out of memory";
     case VM_E_HEAP:             return "bad heap release (the mark is not a current allocation point)";
+    case VM_E_UNCAUGHT:         return "uncaught exception";
+    case VM_E_DEADLOCK:         return "deadlock: every process is waiting for a message and nothing can wake them";
     case VM_E_FOREIGN_OFF:      return "foreign calls are not enabled (run chvm with -F)";
     case VM_E_FOREIGN_FN:       return "foreign call: unknown, closed or forged function id";
     case VM_E_FOREIGN_SIG:      return "foreign call: bad signature";

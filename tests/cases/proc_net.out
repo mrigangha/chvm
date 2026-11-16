@@ -1,0 +1,5 @@
+1
+fast client got fast one in under a second: True
+third client got third
+slow client was dropped with no reply: True
+it was dropped by the server's 3 s read timeout, not before: True

@@ -1,0 +1,21 @@
+import socket, sys, time
+port = int(sys.argv[1])
+slow = socket.create_connection(("127.0.0.1", port), timeout=10)
+time.sleep(0.05)
+t0 = time.time()
+fast = socket.create_connection(("127.0.0.1", port), timeout=10)
+fast.sendall(b"fast one")
+got = fast.recv(100)
+dt = time.time() - t0
+fast.close()
+print("fast client got", got.decode(), "in under a second:", dt < 1.0)
+third = socket.create_connection(("127.0.0.1", port), timeout=10)
+third.sendall(b"third")
+print("third client got", third.recv(100).decode())
+third.close()
+t1 = time.time()
+slow.settimeout(10)
+d = slow.recv(100)
+waited = time.time() - t0
+print("slow client was dropped with no reply:", d == b"")
+print("it was dropped by the server's 3 s read timeout, not before:", 2.5 < waited < 4.5)

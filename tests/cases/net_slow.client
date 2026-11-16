@@ -1,0 +1,20 @@
+import socket, sys, time
+port = int(sys.argv[1])
+# 1: connects and says nothing, for longer than the server's 200 ms
+silent = socket.create_connection(("127.0.0.1", port), timeout=5)
+t0 = time.time()
+# 2: a normal client that arrives while the first is still silent
+time.sleep(0.05)
+b = socket.create_connection(("127.0.0.1", port), timeout=5)
+b.sendall(b"hi")
+time.sleep(0.5)
+# 3: connects and closes at once
+c = socket.create_connection(("127.0.0.1", port), timeout=5)
+c.close()
+time.sleep(0.1)
+# 4: sends one byte
+d = socket.create_connection(("127.0.0.1", port), timeout=5)
+d.sendall(b"x")
+time.sleep(0.3)
+silent.close(); b.close(); d.close()
+print("client done")

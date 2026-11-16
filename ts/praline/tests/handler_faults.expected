@@ -1,0 +1,20 @@
+before: HTTP/1.1 200 OK | fine
+throw: HTTP/1.1 500 Internal Server Error | <h1>500 Internal Server Error</h1>
+  reason: the handler gave up
+index: HTTP/1.1 500 Internal Server Error | <h1>500 Internal Server Error</h1>
+  reason: index out of range
+slug: HTTP/1.1 500 Internal Server Error | <h1>500 Internal Server Error</h1>
+  reason: index out of range
+pop: HTTP/1.1 500 Internal Server Error | <h1>500 Internal Server Error</h1>
+  reason: index out of range
+overflow: HTTP/1.1 500 Internal Server Error | <h1>500 Internal Server Error</h1>
+  reason: stack overflow
+work: HTTP/1.1 500 Internal Server Error | <h1>500 Internal Server Error</h1>
+  reason: total 1225
+secret not shown to the client: HTTP/1.1 500 Internal Server Error | <h1>500 Internal Server Error</h1>
+after: HTTP/1.1 200 OK | fine
+head: HTTP/1.1 500 Internal Server Error | 
+300 mixed requests, right status for 300
+own page: HTTP/1.1 500 Internal Server Error | our page: something went wrong
+own page for index: HTTP/1.1 500 Internal Server Error | our page: something went wrong
+abort(500) uses it too: HTTP/1.1 200 OK | fine

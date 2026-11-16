@@ -2,11 +2,11 @@
 // so the language does not need null.
 
 export interface Type {
-  kind: string      // "number" "string" "boolean" "void" "any" "array" "iface" "name" "none"
+  kind: string      // "number" "string" "boolean" "void" "any" "array" "iface" "func" "name" "none"
   name: string      // interface name, or the written name while kind is "name"
-  elem: Type        // element type of an array
+  elem: Type        // element type of an array, or the return type of a function type
   fnames: string[]  // interface field names
-  ftypes: Type[]    // interface field types
+  ftypes: Type[]    // interface field types, or the parameter types of a function type
 }
 
 export interface Node {

@@ -1,0 +1,9 @@
+<!doctype html>
+<title>{% block title %}Default title{% endblock %} - {{ site }}</title>
+{% include "nav.html" %}
+<main>
+{% block content %}
+nothing here
+{% endblock %}
+</main>
+{% block footer %}<footer>{{ site }}</footer>{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{# the page overrides two blocks and keeps the footer #}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+{% include "card.html" %}
+{% endblock %}

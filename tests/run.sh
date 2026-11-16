@@ -6,6 +6,10 @@
 #   <name>.ffi  run with -F, the test library path is program argument 1
 #   <name>.needffi  skipped in a build without libffi, but run without -F
 #   <name>.spawn    run with -X, which allows SYS_SPAWN
+#   <name>.net      run with -N. Every test runs with CHVM_TEST_VAR=hello and CHVM_TEST_EMPTY set to the empty text
+#   <name>.client   a python3 script run against the program while it listens. The program prints its port on the
+#                   first line and the client gets it as its first argument. The expected output is what the
+#                   program prints after the port line, then what the client prints
 cd "$(dirname "$0")/.." || exit 1
 B=build
 T=$(mktemp -d)
@@ -45,8 +49,40 @@ for asm in tests/cases/*.asm; do
     fi
     in=/dev/null
     [ -f "tests/cases/$n.in" ] && in="tests/cases/$n.in"
-    $B/chvm $vmargs "$T/$n.chbc" $pargs <"$in" >"$T/out" 2>"$T/err"
-    rc=$?
+    if [ -f "tests/cases/$n.net" ]; then
+        vmargs="-N $vmargs"
+    fi
+    if [ -f "tests/cases/$n.client" ]; then
+        # the program prints its port first, then waits. The client runs against it and its output follows.
+        if ! command -v python3 >/dev/null 2>&1; then
+            echo "skip $n (needs python3)"
+            continue
+        fi
+        rm -f "$T/client.out"
+        : >"$T/out"    # empty before the program starts, so the wait below cannot see the last test's output
+        CHVM_TEST_VAR=hello CHVM_TEST_EMPTY= $B/chvm $vmargs "$T/$n.chbc" $pargs <"$in" >"$T/out" 2>"$T/err" &
+        pid=$!
+        tries=0
+        while [ ! -s "$T/out" ] && [ $tries -lt 100 ] && kill -0 $pid 2>/dev/null; do sleep 0.05; tries=$((tries + 1)); done
+        port=$(head -n 1 "$T/out")
+        python3 "tests/cases/$n.client" "$port" >"$T/client.out" 2>"$T/client.err"
+        crc=$?
+        i=0
+        while kill -0 $pid 2>/dev/null && [ $i -lt 100 ]; do sleep 0.05; i=$((i + 1)); done
+        if kill -0 $pid 2>/dev/null; then kill -9 $pid 2>/dev/null; fi
+        wait $pid 2>/dev/null
+        rc=$?
+        if [ "$crc" -ne 0 ]; then
+            bad "$n (client failed: $(head -c 300 "$T/client.err"))"
+            continue
+        fi
+        # the first line is the port, which differs every run, so it is left out of the comparison
+        tail -n +2 "$T/out" >"$T/out.rest"
+        cat "$T/out.rest" "$T/client.out" >"$T/out"
+    else
+        CHVM_TEST_VAR=hello CHVM_TEST_EMPTY= $B/chvm $vmargs "$T/$n.chbc" $pargs <"$in" >"$T/out" 2>"$T/err"
+        rc=$?
+    fi
     if [ -f "tests/cases/$n.out" ]; then
         want=0
         [ -f "tests/cases/$n.rc" ] && want=$(cat "tests/cases/$n.rc")

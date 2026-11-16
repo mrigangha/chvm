@@ -55,6 +55,16 @@ offset  size  field
 | 6c | Baked executables | `chbake`: the program and the interpreter in one file, keeping only the instructions the program uses | done |
 | 6d | Fewer instructions | register results, loop inversion, shared registers, early return, 32-bit constant branches, folded consts, hoisted loads | done |
 | 6e | 32 registers, add-and-branch, inlining | `r0`..`r31`, `INCBLT` family, pure-function inlining | done |
+| 6g | Actors | processes with own memory, mailboxes, links, monitors, preemption, cooperative I/O, `std/actor.ts`, supervisors | done |
+| 6f | Exceptions and assertions | `TRY`, `ENDTRY`, `THROW`, catchable faults, chts `throw` and `try`/`catch`/`finally`, `std/assert.ts` | done |
+| 7a | Environment and sockets | `SYS_GETENV`, `SYS_LISTEN`, `SYS_ACCEPT`, `SYS_POLL`, `SYS_SHUTDOWN`, `SYS_SOCKPORT`, `chvm -N`, `chbake --net`, `docs/ABI.md`, `tests/cases/net_*` | done |
+| 7b | Strings and function values | `split`, `startsWith`, `toLowerCase`, `trim`, `indexOf` from a position, `parseInt`, byte-safe strings; function pointers (`CALLR`) or a `handle()` dispatch | todo |
+| 7c | HTTP core | `ts/std/net.ts` and `net_chvm.ts`, `ts/std/http.ts`: request parser, response writer, limits, `Connection: close` | todo |
+| 7d | Static site server | file serving from `public/`, MIME types, `..` blocked, 404 and 500 pages, `/healthz`, per-request `arenaMark`/`arenaFree`, request log | todo |
+| 7e | Flask-like layer | built as Praline, stages 8a to 8h, see `docs/PRALINE.md`. 8a (function values), 8b (core and routing), 8c (params and input), 8d (responses and errors), 8e (templates) and 8f (static files, hooks, server loop) are done | todo |
+| 7f | Hardening and concurrency | header, body and idle limits (done in 8f), lightweight processes with links, monitors and supervisors, one process per connection (`docs/ACTORS.md`); SIGTERM exit still to do | done except SIGTERM |
+| 7g | Deploy on Render | `Dockerfile`, `render.yaml`, `$PORT` on `0.0.0.0`, health check path, custom domain | todo |
+| 8a-8h | Praline, the Flask-like framework | function values, routing, input, responses, templates, static and server loop, dev mode, portfolio. See `docs/PRALINE.md` | todo |
 | 5 | Optimiser | peephole, constant folding, dead code, superinstructions, as a `.chbc` to `.chbc` pass | todo |
 | 6 | Extras | float opcodes, disassembler, fuzzing the loader and verifier | todo |
 
@@ -91,3 +101,23 @@ offset  size  field
   proves nothing allocated inside survives. It must be conservative, because a wrong answer is a silent
   use-after-free. It will not free objects that replace each other inside long-lived state. Needs a debug
   mode that poisons freed memory, and tests that compare output with and without freeing.
+
+## Web server stages (7a to 7g)
+
+Goal: a Flask-like server in chts that serves a portfolio site on Render. Each stage ends with a test that passes before the next one starts.
+
+| Stage | Done when |
+|---|---|
+| 7a | An assembly program reads `$PORT`, accepts a connection on `0.0.0.0`, echoes bytes back, and `curl` sees them. Without `-N` every socket call returns `-EPERM`. Error cases (bad fd, port in use) return `-errno`. |
+| 7b | A chts program splits a request line and parses a number, with output equal to node. Binary bytes round-trip through a string. A function can be passed and called, or the dispatch design is chosen and documented in `LANG.md`. |
+| 7c | A chts program answers `curl` with a fixed page. Bad requests get 400, oversize headers get 431, an unknown method gets 405. `net.ts` gives node the same API for tests. |
+| 7d | The portfolio's files load in a browser. `GET /../x` and `GET /%2e%2e/x` get 404. Images and fonts download byte for byte (`cmp`). Memory stays flat over 100,000 requests. |
+| 7e | Done when stages 8a to 8h pass (`docs/PRALINE.md`). |
+| 7f | A client that sends nothing is dropped on a timeout, and a second client is still served meanwhile. SIGTERM exits cleanly. A scan with junk requests never crashes the server. |
+| 7g | The Render URL serves the site over HTTPS, the health check passes, and a redeploy causes no downtime. |
+
+Risks:
+- chts has no closures, `Map` or `switch`. 7b decides how routes are written.
+- There is no GC. Per-request arenas are the only protection from leaks, and the VM cannot check that nothing escapes.
+- The VM is a sandbox by default. Sockets must stay off unless `-N` is given.
+- Render's native runtimes do not include chvm. Deploy with the Docker runtime.

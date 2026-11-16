@@ -1,0 +1,12 @@
+import socket, sys
+port = int(sys.argv[1])
+s = socket.create_connection(("127.0.0.1", port), timeout=5)
+s.sendall(b"hello, praline 123")
+s.shutdown(socket.SHUT_WR)
+data = b""
+while True:
+    d = s.recv(100)
+    if not d:
+        break
+    data += d
+print("client got", data.decode())

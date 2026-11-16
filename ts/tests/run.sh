@@ -28,6 +28,9 @@ for f in tests/programs/*.ts; do
         # a program that must stop with a fault: its output up to the fault is what node would print
         node "$f" 2>/dev/null | head -n "$(grep -c . "tests/programs/$n.out" 2>/dev/null || echo 0)" >"$T/want"
         if [ -f "tests/programs/$n.out" ]; then cp "tests/programs/$n.out" "$T/want"; else : >"$T/want"; fi
+    elif [ -f "tests/programs/$n.out" ]; then
+        # a program that node runs differently (a stack overflow, a fault node does not have): the output is written out
+        cp "tests/programs/$n.out" "$T/want"
     else
         node "$f" >"$T/want" 2>/dev/null
     fi

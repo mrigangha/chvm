@@ -2,12 +2,15 @@
  * chbake: turns a .chbc file into a C source file that holds the program as a byte array and runs it
  * on the chvm interpreter. Compile the result with the VM sources to get one standalone executable.
  *
- *   chbake prog.chbc prog.c
- *   cc -O2 -fno-crossjumping -Isrc prog.c src/chbc.c src/sys.c src/foreign.c -lm -o prog   (vm.c is included by prog.c)
+ *   chbake [--net] prog.chbc prog.c
+ *   cc -O2 -fno-crossjumping --param max-goto-duplication-insns=32 -Isrc prog.c src/chbc.c src/sys.c src/foreign.c -lm -o prog   (vm.c is included by prog.c)
  *
  * Keep -fno-crossjumping. With few handlers, gcc merges the identical "next instruction" jump at the end
  * of each one back into a few shared jumps, which defeats computed goto and made trimmed programs 2 to 9
  * percent slower than the full interpreter. The flag keeps one jump per handler.
+ *
+ * Keep --param max-goto-duplication-insns=32 too. Without it gcc 13 merges the jumps for a different reason
+ * once the process code is in the function, and every program runs 50 to 100 percent slower.
  *
  * The image is checked once, at run time, exactly as chvm checks a file.
  */
@@ -16,18 +19,27 @@
 #include <string.h>
 
 #include "chbc.h"
+#include "syscalls.h"
 
 int main(int argc, char **argv)
 {
     int trim = 1;
+    int net = 0;
     int ai = 1;
-    if (ai < argc && !strcmp(argv[ai], "--all")) {
-        trim = 0;
+    while (ai < argc && argv[ai][0] == '-' && argv[ai][1]) {
+        if (!strcmp(argv[ai], "--all"))
+            trim = 0;
+        else if (!strcmp(argv[ai], "--net"))
+            net = 1;
+        else
+            break;
         ai++;
     }
     if (argc - ai != 2) {
-        fputs("usage: chbake [--all] in.chbc out.c\n"
-              "  --all  keep every instruction in the interpreter (the default keeps only the ones the program uses)\n",
+        fputs("usage: chbake [--all] [--net] in.chbc out.c\n"
+              "  --all  keep every instruction in the interpreter (the default keeps only the ones the program uses)\n"
+              "  --net  the baked program may read environment variables and wait for network connections\n"
+              "         (what chvm -N does). Without it those calls fail with -EPERM\n",
               stderr);
         return 64;
     }
@@ -51,6 +63,7 @@ int main(int argc, char **argv)
     /* which opcodes does the code section contain? the image is verified, so every byte at a multiple of 8 is an opcode */
     static unsigned char has[OP_COUNT];
     int nused = 0;
+    int uses_proc = 0;
     if (trim) {
         chbc_image img;
         chbc_err le = chbc_load_mem(buf, (size_t)n, &img);
@@ -61,8 +74,11 @@ int main(int argc, char **argv)
             fprintf(stderr, "chbake: %s: %s (offset %u)\n", argv[1], chbc_err_str(le), bad);
             return 65;
         }
-        for (uint32_t i = 0; i < img.code_size / CHBC_INSN_SIZE; i++)
+        for (uint32_t i = 0; i < img.code_size / CHBC_INSN_SIZE; i++) {
             has[img.code[i].op] = 1;
+            if (img.code[i].op == OP_SYSCALL && (uint32_t)img.code[i].imm >= CHBC_SYS_PSPAWN && (uint32_t)img.code[i].imm <= CHBC_SYS_PINFO)
+                uses_proc = 1;
+        }
         for (int i = 0; i < OP_COUNT; i++)
             nused += has[i];
     }
@@ -77,6 +93,7 @@ int main(int argc, char **argv)
         fprintf(out, "/* %d of %d instructions are used, so the interpreter keeps only those */\n#define CHVM_TRIM 1\n", nused, OP_COUNT);
         for (int i = 0; i < OP_COUNT; i++)
             fprintf(out, "#define CHVM_HAS_%s %d\n", chbc_op_name[i], has[i]);
+        fprintf(out, "#define CHVM_HAS_PROC %d\n", uses_proc);
     }
     fputs("#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n"
           "#include \"chbc.h\"\n#include \"vm.h\"\n"
@@ -95,6 +112,8 @@ int main(int argc, char **argv)
           "    vm_config cfg = vm_default_config;\n"
           "    chbc_image img;\n    uint32_t off = 0;\n"
           "    cfg.argc = argc;\n    cfg.argv = argv;\n"
+          "    cfg.allow_net = %d;\n", net);
+    fprintf(out,
           "    /* CHVM_MEM sets the memory size in bytes, like chvm -m */\n"
           "    const char *mem = getenv(\"CHVM_MEM\");\n"
           "    if (mem) {\n        char *end;\n        unsigned long long v = strtoull(mem, &end, 0);\n"
@@ -109,7 +128,9 @@ int main(int argc, char **argv)
           "    vm_status st = vm_run(&img, &cfg, &off, &code);\n"
           "    if (st != VM_OK) {\n"
           "        chbc_loc loc;\n"
-          "        fprintf(stderr, \"%%s: runtime error: %%s (offset %%u\", argv[0], vm_status_str(st), off);\n"
+          "        fprintf(stderr, \"%%s: runtime error: %%s\", argv[0], vm_status_str(st));\n"
+          "        if (st == VM_E_UNCAUGHT && vm_fault_detail()[0])\n            fprintf(stderr, \": %%s\", vm_fault_detail());\n"
+          "        fprintf(stderr, \" (offset %%u\", off);\n"
           "        if (chbc_lookup(&img, off, &loc)) {\n"
           "            if (loc.func)\n                fprintf(stderr, \", in %%s\", loc.func);\n"
           "            if (loc.file)\n                fprintf(stderr, \", %%s:%%u\", loc.file, loc.line);\n"

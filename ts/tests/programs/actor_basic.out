@@ -1,0 +1,13 @@
+alone: 1 pid 1
+reply tag:HELLO WORLD from the child: true
+child sees a copy of the globals: hello 5, and the parent's counter is still 0
+fresh child: counter=0 arg=1
+fault: kind 2 pid ok true index out of range
+throw: kind 3 my own error x
+normal: kind 0 normal
+alive while spinning: true, and this process still runs
+killed: kind 4, alive now false
+nothing sent: err -110
+send to a dead process: -3
+linked crash seen as a message, tag -2 kind 2
+left: 1

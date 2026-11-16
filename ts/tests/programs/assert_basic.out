@@ -1,0 +1,10 @@
+t1: ok
+t2: assertion failed: arithmetic is broken
+t3: ok
+t4: assertion failed: product: expected 7 but got 6
+t5: ok
+t6: assertion failed: concat: expected "abc" but got "ab"
+t7: ok
+t8: assertion failed: sum: expected 0.3 (within 0.0001) but got 0.5
+t9: assertion failed: nan is never near: expected 1 (within 1) but got NaN
+t10: assertion failed: unreachable: after the loop

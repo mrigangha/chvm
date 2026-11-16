@@ -1,7 +1,7 @@
 import { NIL, NOTYPE, mkNode, mkType } from "./ast.ts"
 import type { Node, Type } from "./ast.ts"
 import { fail } from "./diag.ts"
-import { T_NUM, T_STR, T_BOOL, T_VOID, T_ANY, arrayOf, typeStr, typeEq, assignable, INTRINSICS, findIntrinsic } from "./types.ts"
+import { T_NUM, T_STR, T_BOOL, T_VOID, T_ANY, arrayOf, funcOf, typeStr, typeEq, assignable, INTRINSICS, findIntrinsic } from "./types.ts"
 import { newMap, mapFind, mapSet, startsWith } from "./util.ts"
 import type { IndexMap } from "./util.ts"
 
@@ -37,6 +37,7 @@ export interface FuncInfo {
   calls: number     // calls made from the body, including runtime helper calls
   usesCalls: boolean
   inl: Node         // the returned expression when the function can be inlined, else NIL
+  hasTry: boolean   // the body has a try: its locals live in memory, so a throw cannot leave a stale register
 }
 
 export interface Program {
@@ -65,6 +66,8 @@ interface Ctx {
   cur: FuncInfo
   nslots: number
   loopDepth: number
+  finallyDepth: number  // inside a finally block: return is not allowed
+  finallyLoopBase: number  // loopDepth when the innermost finally block began: a break needs a loop inside it
   inFunc: boolean
   strIndex: IndexMap
   syms: Sym[]       // locals of the function being checked
@@ -82,6 +85,17 @@ function resolveType(c: Ctx, t: Type, at: Node): Type {
     const e = resolveType(c, t.elem, at)
     if (e.kind === "void") err(at, "an array of void is not allowed")
     return arrayOf(e)
+  }
+  if (t.kind === "func") {
+    const ps: Type[] = []
+    let i = 0
+    while (i < t.ftypes.length) {
+      const p = resolveType(c, t.ftypes[i], at)
+      if (p.kind === "void") err(at, "a parameter cannot be void")
+      ps.push(p)
+      i++
+    }
+    return funcOf(ps, resolveType(c, t.elem, at))
   }
   if (t.kind === "number") return T_NUM
   if (t.kind === "string") return T_STR
@@ -264,7 +278,16 @@ function checkId(c: Ctx, n: Node): Type {
     n.tag = s.slot < 0 ? s.label : ""
     return s.ty
   }
-  if (mapFind(c.funcIndex, n.text) >= 0) err(n, "functions can only be called, not used as values")
+  const fi = mapFind(c.funcIndex, n.text)
+  if (fi >= 0) {
+    const fn = c.prog.funcs[fi]
+    if (isPrelude(fn.node.file) && !isPrelude(n.file)) err(n, "'" + n.text + "' is only available to the runtime")
+    n.kind = "fnref"
+    n.text = fn.label
+    n.slot = fi
+    n.tag = ""
+    return funcOf(fn.params, fn.ret)
+  }
   err(n, "unknown name '" + n.text + "'")
   return NOTYPE
 }
@@ -347,6 +370,7 @@ function checkMember(c: Ctx, n: Node): Type {
 }
 
 function checkAssignable(c: Ctx, n: Node): void {
+  if (n.kind === "fnref") err(n, "a function cannot be assigned to")
   if (n.kind === "id") {
     const s = lookup(c, n.text)
     if (s !== NOSYM && s.isConst) err(n, "'" + n.text + "' is a constant and cannot be assigned")
@@ -453,9 +477,11 @@ function checkCall(c: Ctx, n: Node): Type {
       n.text = f.text
       return INTRINSICS[ii].ret
     }
+    const sym = lookup(c, f.text)
+    if (sym !== NOSYM && sym.ty.kind === "func") return checkCallValue(c, n)
     const fi = mapFind(c.funcIndex, f.text)
     if (fi < 0) {
-      if (lookup(c, f.text) !== NOSYM) err(n, "'" + f.text + "' is not a function")
+      if (sym !== NOSYM) err(n, "'" + f.text + "' is not a function")
       err(n, "unknown function '" + f.text + "'")
     }
     const fn = c.prog.funcs[fi]
@@ -467,8 +493,22 @@ function checkCall(c: Ctx, n: Node): Type {
     return fn.ret
   }
   if (f.kind === "member") return checkMethod(c, n)
-  err(n, "only named functions and methods can be called")
-  return NOTYPE
+  return checkCallValue(c, n)
+}
+
+// A call through a value of function type: a variable, a field, an element, or the result of a call.
+// The callee is evaluated first, then the arguments, as in JavaScript.
+function checkCallValue(c: Ctx, n: Node): Type {
+  const ft = checkExpr(c, n.a, NOTYPE)
+  return finishCallValue(c, n, ft)
+}
+
+function finishCallValue(c: Ctx, n: Node, ft: Type): Type {
+  if (ft.kind !== "func") err(n, "only functions can be called, this is " + typeStr(ft))
+  checkArgs(c, n, ft.ftypes, "this function")
+  c.cur.calls++
+  n.tag = "callv"
+  return ft.elem
 }
 
 function isPrelude(file: string): boolean {
@@ -526,6 +566,14 @@ function checkMethod(c: Ctx, n: Node): Type {
     err(f, "unknown name '" + o + "'")
   }
   const t = checkExpr(c, obj, NOTYPE)
+  if (t.kind === "iface") {
+    const fi = ifaceField(t, name)
+    if (fi < 0) err(f, "'" + t.name + "' has no field '" + name + "'")
+    f.tag = "field"
+    f.slot = fi
+    f.ty = t.ftypes[fi]
+    return finishCallValue(c, n, t.ftypes[fi])
+  }
   n.tag = "method"
   c.cur.calls++
   f.ty = t
@@ -618,8 +666,15 @@ function checkStmt(c: Ctx, n: Node): void {
     checkBlockScoped(c, n.d)
     c.loopDepth--
     popScope(c)
+  } else if (k === "throw") {
+    const t = checkExpr(c, n.a, NOTYPE)
+    if (t.kind !== "string" && t.kind !== "any") err(n.a, "'throw' takes a string, this is " + typeStr(t) + ": throw \"what went wrong\"")
+    c.cur.calls++
+  } else if (k === "try") {
+    checkTry(c, n)
   } else if (k === "return") {
     if (!c.inFunc) err(n, "'return' outside a function")
+    if (c.finallyDepth > 0) err(n, "'return' is not allowed inside a 'finally' block")
     if (n.a === NIL) {
       if (c.cur.ret.kind !== "void") err(n, "this function must return " + typeStr(c.cur.ret))
     } else {
@@ -629,10 +684,45 @@ function checkStmt(c: Ctx, n: Node): void {
     }
   } else if (k === "break" || k === "continue") {
     if (c.loopDepth === 0) err(n, "'" + k + "' outside a loop")
+    if (c.finallyDepth > 0 && c.loopDepth <= c.finallyLoopBase) err(n, "'" + k + "' is not allowed inside a 'finally' block, it would leave the block")
   } else if (k === "empty") {
     return
   } else {
     err(n, "unexpected " + k)
+  }
+}
+
+// try { a } catch (e: any) { b } finally { c }
+// The catch variable is a string in the program (a thrown string, or the text of a machine fault). It is
+// written ': any' so that tsc accepts the same source, and tsc lets an any be used as a string.
+// A try with a finally also gets a hidden variable (n.num) that holds the pending error while the finally runs.
+function checkTry(c: Ctx, n: Node): void {
+  c.cur.hasTry = true
+  c.cur.calls++
+  checkBlockScoped(c, n.a)
+  if (n.b !== NIL) {
+    // the catch variable belongs to the catch block itself, so 'let e' inside it is a redeclaration, as in tsc
+    pushScope(c)
+    if (n.text !== "") {
+      const s = declareLocal(c, n, n.text, T_STR, false)
+      n.slot = s.slot
+    }
+    let i = 0
+    while (i < n.b.list.length) {
+      checkStmt(c, n.b.list[i])
+      i++
+    }
+    popScope(c)
+  }
+  if (n.c !== NIL) {
+    const hidden = declareLocal(c, n, "%pending" + c.nslots, T_STR, false)
+    n.num = hidden.slot
+    const savedBase = c.finallyLoopBase
+    c.finallyLoopBase = c.loopDepth
+    c.finallyDepth++
+    checkBlockScoped(c, n.c)
+    c.finallyDepth--
+    c.finallyLoopBase = savedBase
   }
 }
 
@@ -659,10 +749,10 @@ function checkVar(c: Ctx, n: Node): void {
 // ---- program ----
 
 function newCtx(prog: Program): Ctx {
-  const dummy: FuncInfo = { name: "", node: NIL, params: [], ret: T_VOID, label: "", nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL }
+  const dummy: FuncInfo = { name: "", node: NIL, params: [], ret: T_VOID, label: "", nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL, hasTry: false }
   return {
     prog: prog, funcIndex: newMap(), ifaceIndex: newMap(), globalIndex: newMap(),
-    scopes: [], cur: dummy, nslots: 0, loopDepth: 0, inFunc: false, strIndex: newMap(), syms: [], tick: 0,
+    scopes: [], cur: dummy, nslots: 0, loopDepth: 0, finallyDepth: 0, finallyLoopBase: 0, inFunc: false, strIndex: newMap(), syms: [], tick: 0,
   }
 }
 
@@ -672,7 +762,7 @@ function labelFor(file: string, name: string): string {
 }
 
 export function check(files: Node[]): Program {
-  const dummyStart: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL }
+  const dummyStart: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL, hasTry: false }
   const prog: Program = { funcs: [], globals: [], ifaces: [], top: [], topSlots: 0, strings: [], start: dummyStart }
   const c = newCtx(prog)
 
@@ -737,7 +827,7 @@ export function check(files: Node[]): Program {
           params.push(pt)
           j++
         }
-        const info: FuncInfo = { name: it.text, node: it, params: params, ret: resolveType(c, it.ann, it), label: labelFor(it.file, it.text), nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL }
+        const info: FuncInfo = { name: it.text, node: it, params: params, ret: resolveType(c, it.ann, it), label: labelFor(it.file, it.text), nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL, hasTry: false }
         prog.funcs.push(info)
         mapSet(c.funcIndex, it.text, prog.funcs.length - 1)
       }
@@ -790,7 +880,7 @@ export function check(files: Node[]): Program {
   c.inFunc = false
   c.nslots = 0
   c.scopes = []
-  const startInfo: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL }
+  const startInfo: FuncInfo = { name: "__start", node: NIL, params: [], ret: T_VOID, label: "__start", nslots: 0, syms: [], calls: 0, usesCalls: false, inl: NIL, hasTry: false }
   c.cur = startInfo
   c.syms = []
   pushScope(c)
@@ -816,6 +906,7 @@ export function check(files: Node[]): Program {
   startInfo.syms = c.syms
   startInfo.nslots = c.nslots
   startInfo.usesCalls = true
+  startInfo.hasTry = c.cur.hasTry
   prog.start = startInfo
 
   // every body is checked now, so calls can be replaced by the functions' bodies
@@ -1019,7 +1110,7 @@ function findInlinable(info: FuncInfo): void {
   if (body.kind !== "block" || body.list.length !== 1) return
   const st = body.list[0]
   if (st.kind !== "return" || st.a === NIL) return
-  if (info.ret.kind === "void" || info.ret.kind === "any") return
+  if (info.ret.kind === "void" || info.ret.kind === "any" || info.hasTry) return
   let i = 0
   while (i < info.params.length) {
     if (info.params[i].kind === "any") return
@@ -1096,6 +1187,11 @@ function alwaysReturns(n: Node): boolean {
     return false
   }
   if (n.kind === "if") return n.c !== NIL && alwaysReturns(n.b) && alwaysReturns(n.c)
+  if (n.kind === "throw") return true
+  if (n.kind === "try") {
+    if (n.c !== NIL && alwaysReturns(n.c)) return true
+    return alwaysReturns(n.a) && (n.b === NIL || alwaysReturns(n.b))
+  }
   if (n.kind === "while" && n.a.kind === "true") return true
   if (n.kind === "for" && n.b === NIL) return true
   return false

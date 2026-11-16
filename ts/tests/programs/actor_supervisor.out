@@ -1,0 +1,20 @@
+--- one for one: only the child that crashed is restarted
+A handled one
+restarted 1
+a has a new pid: true, b is the same: true
+A handled two
+B handled still here
+starts: a 2, b 1
+after stop: 1
+--- one for all: when one crashes, all are restarted
+restarted 2
+both are new: true, y1 gone: true
+starts: x 2, y 2, alive 2
+--- a child that always crashes: the supervisor gives up after the limit
+restarts before giving up: 3, gave up: true, running: 0
+nothing is left running: 1
+--- restart rules
+a child that ended normally under rule 1, and one under rule 2, were not restarted: 0
+starts: once 1, never 1
+--- a window: crashes spread over time do not add up
+5 crashes, 100 ms apart, with a limit of 2 in 150 ms: all restarted true, gave up false

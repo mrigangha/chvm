@@ -1,6 +1,10 @@
 CC      ?= gcc
 CFLAGS  ?= -O2
 override CFLAGS += -std=gnu11 -Wall -Wextra -Isrc
+# vm_run ends every instruction with its own jump to the next one (computed goto). GCC merges those jumps into
+# one shared jump when it thinks duplicating them is too big, which made every program 50 to 100 percent slower
+# once the process code was added. The limit is raised so that each handler keeps its own jump.
+override CFLAGS += --param max-goto-duplication-insns=32
 BUILD   := build
 .DEFAULT_GOAL := all
 

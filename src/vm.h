@@ -29,7 +29,9 @@ typedef enum {
     VM_E_FOREIGN_RET,
     VM_E_INDEX,
     VM_E_OOM,
-    VM_E_HEAP
+    VM_E_HEAP,
+    VM_E_UNCAUGHT,
+    VM_E_DEADLOCK
 } vm_status;
 
 typedef struct {
@@ -38,6 +40,8 @@ typedef struct {
     char **argv;
     int allow_foreign;   /* 1 enables DLOPEN, DLSYM and CALLX. Off by default. */
     int allow_spawn;     /* 1 enables SYS_SPAWN. Off by default. */
+    int allow_net;       /* 1 enables GETENV, LISTEN, ACCEPT, POLL, SHUTDOWN and SOCKPORT. Off by default. */
+    int max_procs;       /* most processes alive at once, 0 for the default (4096) */
 } vm_config;
 
 extern const vm_config vm_default_config;
@@ -49,5 +53,8 @@ extern const vm_config vm_default_config;
 vm_status vm_run(const chbc_image *img, const vm_config *cfg,
                  uint32_t *fault_off, int64_t *exit_code);
 const char *vm_status_str(vm_status s);
+
+/* For VM_E_UNCAUGHT: the text of the thrown string (control bytes shown as ?), valid until the next vm_run. */
+const char *vm_fault_detail(void);
 
 #endif

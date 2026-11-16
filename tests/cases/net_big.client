@@ -1,0 +1,9 @@
+import socket, sys, time
+port = int(sys.argv[1])
+a = socket.create_connection(("127.0.0.1", port), timeout=10)
+time.sleep(1.5)
+a.close()
+b = socket.create_connection(("127.0.0.1", port), timeout=5)
+b.close()
+time.sleep(0.5)
+print("client done")

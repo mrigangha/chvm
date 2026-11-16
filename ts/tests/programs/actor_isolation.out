@@ -1,0 +1,24 @@
+--- a child cannot change its parent's memory
+mutated 999 4 100
+parent: shared 10, table 3 1
+--- a child that runs out of memory ends alone
+memory hog: kind 2 out of memory, still alive: 2
+--- a child that overflows its stack ends alone
+stack hog: kind 2 stack overflow
+--- messages are copies, in order, and bounded
+send 10000 bytes: 0
+got 10000
+50 messages answered in order: true
+a message over 1 MiB: -90
+a message of exactly 1 MiB: 0
+a negative tag: -22
+to a pid that never existed: -3
+mailbox of a busy process: accepted 1000, then error -105, waiting 1000
+--- a pid is not reused by mistake
+old pid dead: true, new alive: true, different: true
+send to the old pid: -3
+--- a conversation
+1000 round trips: 1000
+--- the first process cannot be killed
+kill 1: -1
+end: 1

@@ -6,4 +6,6 @@ for t in lexer parser checker; do
     node tests/${t}_test.ts || rc=1
 done
 sh tests/run.sh || rc=1
+sh praline/tests/run.sh || rc=1
+sh tests/net/run.sh || rc=1
 exit $rc

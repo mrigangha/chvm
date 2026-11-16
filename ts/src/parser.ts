@@ -6,7 +6,8 @@ import { fail } from "./diag.ts"
 
 // Syntax tree node kinds
 //   expressions: num str true false id array object index member call unary update binary logical assign cond
-//   statements:  var expr if while for block return break continue empty
+//   statements:  var expr if while for block return break continue empty throw try
+//     try: a = body, b = catch block or NIL, c = finally block or NIL, text = catch variable or ""
 //   top level:   func iface import
 
 export interface Parser {
@@ -102,11 +103,49 @@ function endStmt(p: Parser): void {
 
 // ---- types ----
 
+// "(" starts a function type when it is followed by ")" or by a parameter name. Otherwise it groups a type.
+function isFuncTypeStart(p: Parser): boolean {
+  const a = peekAt(p, 1)
+  if (a.kind === "punct" && a.text === ")") return true
+  const b = peekAt(p, 2)
+  return a.kind === "id" && b.kind === "punct" && (b.text === ":" || b.text === "?" || b.text === ",")
+}
+
+// (name: Type, ...) => Type
+function parseFuncType(p: Parser): Type {
+  const open = expectP(p, "(")
+  const params: Type[] = []
+  const names: string[] = []
+  while (!isP(p, ")")) {
+    const nameTok = peek(p)
+    if (nameTok.kind !== "id" || isReserved(nameTok.text)) errHere(p, "expected a parameter name but found " + describe(nameTok))
+    advance(p)
+    if (isP(p, "?")) errHere(p, "optional parameters are not supported")
+    expectP(p, ":")
+    names.push(nameTok.text)
+    params.push(parseType(p))
+    if (!isP(p, ")")) expectP(p, ",")
+  }
+  expectP(p, ")")
+  if (params.length > 5) fail(p.file, open.line, open.col, "a function type can have at most 5 parameters")
+  expectP(p, "=>")
+  const ret = parseType(p)
+  const t = mkType("func", "", ret)
+  t.ftypes = params
+  t.fnames = names
+  return t
+}
+
 function parseType(p: Parser): Type {
   const t = peek(p)
   let base = NOTYPE
-  if (t.kind !== "id") errHere(p, "expected a type but found " + describe(t))
-  if (t.text === "number" || t.text === "string" || t.text === "boolean" || t.text === "void" || t.text === "any") {
+  if (t.kind === "punct" && t.text === "(") {
+    if (isFuncTypeStart(p)) return parseFuncType(p)
+    advance(p)
+    base = parseType(p)
+    expectP(p, ")")
+  } else if (t.kind !== "id") errHere(p, "expected a type but found " + describe(t))
+  else if (t.text === "number" || t.text === "string" || t.text === "boolean" || t.text === "void" || t.text === "any") {
     advance(p)
     base = mkType(t.text, t.text, NOTYPE)
   } else if (isReserved(t.text)) {
@@ -451,7 +490,42 @@ function parseStmt(p: Parser): Node {
     if (t.text === "function" || t.text === "interface" || t.text === "import" || t.text === "export") {
       errHere(p, "'" + t.text + "' is only allowed at the top level")
     }
-    if (t.text === "do" || t.text === "switch" || t.text === "try" || t.text === "throw" || t.text === "class" || t.text === "enum" || t.text === "type") {
+    if (t.text === "throw") {
+      advance(p)
+      const n = mk(p, "throw", t)
+      const nx = peek(p)
+      if (nx.nl || nx.kind === "eof" || (nx.kind === "punct" && (nx.text === ";" || nx.text === "}"))) {
+        fail(p.file, t.line, t.col, "'throw' needs a value on the same line, as in throw \"message\"")
+      }
+      n.a = parseExpr(p)
+      endStmt(p)
+      return n
+    }
+    if (t.text === "try") {
+      advance(p)
+      const n = mk(p, "try", t)
+      n.a = parseBlock(p)
+      if (isId(p, "catch")) {
+        advance(p)
+        if (acceptP(p, "(")) {
+          const nameTok = expectName(p)
+          n.text = nameTok.text
+          if (!isP(p, ":")) fail(p.file, nameTok.line, nameTok.col, "write 'catch (" + nameTok.text + ": any)': the caught value is a string, kept in a variable of type any")
+          advance(p)
+          const ty = parseType(p)
+          if (ty.kind !== "any") fail(p.file, nameTok.line, nameTok.col, "the catch variable must be written ': any'")
+          expectP(p, ")")
+        }
+        n.b = parseBlock(p)
+      }
+      if (isId(p, "finally")) {
+        advance(p)
+        n.c = parseBlock(p)
+      }
+      if (n.b === NIL && n.c === NIL) fail(p.file, t.line, t.col, "'try' needs a 'catch' or a 'finally'")
+      return n
+    }
+    if (t.text === "do" || t.text === "switch" || t.text === "class" || t.text === "enum" || t.text === "type") {
       errHere(p, "'" + t.text + "' is not supported")
     }
   }
@@ -591,7 +665,16 @@ export function dump(n: Node): string {
 }
 
 export function typeText(t: Type): string {
-  if (t.kind === "array") return typeText(t.elem) + "[]"
+  if (t.kind === "array") return t.elem.kind === "func" ? "(" + typeText(t.elem) + ")[]" : typeText(t.elem) + "[]"
+  if (t.kind === "func") {
+    const ps: string[] = []
+    let i = 0
+    while (i < t.ftypes.length) {
+      ps.push(typeText(t.ftypes[i]))
+      i++
+    }
+    return "(" + ps.join(", ") + ") => " + typeText(t.elem)
+  }
   if (t.kind === "none") return "?"
   return t.name
 }

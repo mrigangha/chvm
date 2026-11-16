@@ -1,0 +1,5 @@
+<nav>
+{% for link in links %}
+  <a href="{{ link.url }}"{% if link.current %} class="current"{% endif %}>{{ link.label }}</a>
+{% endfor %}
+</nav>

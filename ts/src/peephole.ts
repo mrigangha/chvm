@@ -90,7 +90,7 @@ function isControl(s: string): boolean {
   if (isLabel(s) || isDirective(s)) return true
   const op = opOf(s)
   return op === "JMP" || op === "JZ" || op === "JNZ" || op === "CALL" || op === "CALLR" || op === "RET" || op === "HALT" ||
-    op === "EXIT" || op === "TRAP" || op === "SYSCALL" || op === "JTAB" || op.slice(0, 1) === "B"
+    op === "EXIT" || op === "TRAP" || op === "TRY" || op === "ENDTRY" || op === "THROW" || op === "SYSCALL" || op === "JTAB" || op.slice(0, 1) === "B"
 }
 
 // True when the first real line at or after `from` is the label `name` (directives and other labels may sit between).

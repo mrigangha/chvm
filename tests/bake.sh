@@ -7,7 +7,7 @@ cd "$(dirname "$0")/.." || exit 1
 B=build
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
-cc_flags="-O1 -std=gnu11 -fno-crossjumping -Isrc"
+cc_flags="-O1 -std=gnu11 -fno-crossjumping --param max-goto-duplication-insns=32 -Isrc"
 libs="-lm"
 if [ -f "$B/libchvmtest.so" ]; then
     cc_flags="$cc_flags -DCHVM_FFI $(pkg-config --cflags libffi)"
@@ -19,7 +19,8 @@ skipped=0
 for asm in tests/cases/*.asm; do
     n=$(basename "$asm" .asm)
     if [ -f "tests/cases/$n.ffi" ] || [ -f "tests/cases/$n.args" ] || [ -f "tests/cases/$n.in" ] ||
-       [ -f "tests/cases/$n.vmargs" ] || [ -f "tests/cases/$n.needffi" ] || [ -f "tests/cases/$n.spawn" ]; then
+       [ -f "tests/cases/$n.vmargs" ] || [ -f "tests/cases/$n.needffi" ] || [ -f "tests/cases/$n.spawn" ] ||
+       [ -f "tests/cases/$n.net" ] || [ -f "tests/cases/$n.client" ]; then
         skipped=$((skipped + 1))
         continue
     fi
@@ -39,5 +40,28 @@ for asm in tests/cases/*.asm; do
         echo "FAIL $n: output or exit code differs from chvm"; fail=$((fail + 1))
     fi
 done
+# --net: a baked program may use the network only when it was baked with --net
+if command -v python3 >/dev/null 2>&1; then
+    $B/chasm tests/cases/net_echo.asm "$T/echo.chbc" && $B/chbake "$T/echo.chbc" "$T/echo0.c" && $B/chbake --net "$T/echo.chbc" "$T/echo1.c"
+    # shellcheck disable=SC2086
+    if cc $cc_flags -o "$T/echo0" "$T/echo0.c" src/chbc.c src/sys.c src/foreign.c $libs 2>"$T/err" &&
+       cc $cc_flags -o "$T/echo1" "$T/echo1.c" src/chbc.c src/sys.c src/foreign.c $libs 2>>"$T/err"; then
+        "$T/echo0" >"$T/net0.out" 2>/dev/null </dev/null
+        if [ "$(head -n 1 "$T/net0.out")" = "-1" ]; then pass=$((pass + 1)); else echo "FAIL baked without --net must refuse the network"; fail=$((fail + 1)); fi
+        : >"$T/net1.out"
+        "$T/echo1" >"$T/net1.out" 2>/dev/null &
+        pid=$!
+        tries=0
+        while [ ! -s "$T/net1.out" ] && [ $tries -lt 100 ] && kill -0 $pid 2>/dev/null; do sleep 0.05; tries=$((tries + 1)); done
+        if python3 tests/cases/net_echo.client "$(head -n 1 "$T/net1.out")" 2>/dev/null | grep -q "HELLO, PRALINE 123"; then
+            pass=$((pass + 1))
+        else
+            echo "FAIL baked with --net did not serve a client"; fail=$((fail + 1))
+        fi
+        wait $pid 2>/dev/null
+    else
+        echo "FAIL --net (compile): $(head -2 "$T/err")"; fail=$((fail + 2))
+    fi
+fi
 echo "baked: passed $pass, failed $fail, skipped $skipped"
 [ $fail -eq 0 ]

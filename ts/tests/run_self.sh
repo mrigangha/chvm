@@ -23,6 +23,7 @@ for f in tests/programs/*.ts; do
     fi
     "$BIN/chasm" "$T/$n.asm" "$T/$n.chbc" || { echo "FAIL $n (assemble)"; fail=$((fail + 1)); continue; }
     if [ -f "tests/programs/$n.rc" ] && [ "$(cat "tests/programs/$n.rc")" -ne 0 ]; then cp "tests/programs/$n.out" "$T/want"
+    elif [ -f "tests/programs/$n.out" ]; then cp "tests/programs/$n.out" "$T/want"
     else node "$f" >"$T/want" 2>/dev/null; fi
     vmargs=""
     [ -f "tests/programs/$n.vmargs" ] && vmargs=$(cat "tests/programs/$n.vmargs")

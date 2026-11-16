@@ -1,7 +1,13 @@
 #include "sys.h"
 
 #include <errno.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <poll.h>
+#include <signal.h>
 #include <spawn.h>
+#include <sys/socket.h>
+#include <sys/time.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <limits.h>
@@ -430,6 +436,154 @@ static int64_t sys_spawn(const vm_sysenv *e, const vm_value *a)
     return -ECHILD;
 }
 
+/*
+ * Environment and network. Only with chvm -N. A program can wait for connections but cannot open one, so
+ * a bytecode program cannot be used to reach other machines or to scan a network.
+ */
+#define ENV_NAME_LIMIT 256
+
+void sys_net_init(void)
+{
+    signal(SIGPIPE, SIG_IGN);
+}
+
+static int64_t sys_getenv(const vm_sysenv *e, const vm_value *a)
+{
+    if (!e->allow_net)
+        return -EPERM;
+    char name[ENV_NAME_LIMIT];
+    int rc = get_str(e, a[0].u, name, sizeof name);
+    if (rc)
+        return rc;
+    const char *v = getenv(name);
+    if (!v)
+        return -ENOENT;
+    uint64_t len = strlen(v);
+    if (a[2].u < len + 1)
+        return -ERANGE;
+    if (!range_ok(e, a[1].u, len + 1))
+        return -EFAULT;
+    memcpy(e->mem + a[1].u, v, len + 1);
+    return (int64_t)len;
+}
+
+static int64_t sys_listen(const vm_sysenv *e, const vm_value *a)
+{
+    if (!e->allow_net)
+        return -EPERM;
+    uint64_t host = a[0].u, port = a[1].u, backlog = a[2].u;
+    if (host > 1 || port > 65535 || backlog < 1 || backlog > 4096)
+        return -EINVAL;
+    int fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (fd < 0)
+        return -errno;
+    int one = 1;
+    struct sockaddr_in sa;
+    memset(&sa, 0, sizeof sa);
+    sa.sin_family = AF_INET;
+    sa.sin_port = htons((uint16_t)port);
+    sa.sin_addr.s_addr = htonl(host ? INADDR_ANY : INADDR_LOOPBACK);
+    /* non-blocking, so an accept that follows a connection that already went away cannot hang */
+    if (fcntl(fd, F_SETFD, FD_CLOEXEC) < 0 || fcntl(fd, F_SETFL, O_NONBLOCK) < 0 ||
+        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof one) < 0 ||
+        bind(fd, (struct sockaddr *)&sa, sizeof sa) < 0 || listen(fd, (int)backlog) < 0) {
+        int err = errno;
+        close(fd);
+        return -err;
+    }
+    return fd;
+}
+
+static int64_t sys_accept(const vm_sysenv *e, const vm_value *a)
+{
+    if (!e->allow_net)
+        return -EPERM;
+    int64_t fd = a[0].i, wait = a[1].i, io = a[2].i;
+    if (!valid_fd(fd))
+        return -EBADF;
+    if (wait < -1 || wait > INT_MAX || io < 0 || io > 3600000)
+        return -EINVAL;
+    fflush(stdout);
+    struct pollfd p = {(int)fd, POLLIN, 0};
+    int pr;
+    do
+        pr = poll(&p, 1, (int)wait);
+    while (pr < 0 && errno == EINTR);
+    if (pr < 0)
+        return -errno;
+    if (pr == 0)
+        return -ETIMEDOUT;
+    int c = accept((int)fd, NULL, NULL);
+    if (c < 0)
+        return (errno == EWOULDBLOCK || errno == ECONNABORTED || errno == EINTR) ? -EAGAIN : -errno;
+    int fl = fcntl(c, F_GETFL);
+    if (fcntl(c, F_SETFD, FD_CLOEXEC) < 0 || fl < 0 || fcntl(c, F_SETFL, fl & ~O_NONBLOCK) < 0) {
+        int err = errno;
+        close(c);
+        return -err;
+    }
+    if (io > 0) {
+        struct timeval tv = {(time_t)(io / 1000), (suseconds_t)(io % 1000) * 1000};
+        if (setsockopt(c, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof tv) < 0 ||
+            setsockopt(c, SOL_SOCKET, SO_SNDTIMEO, &tv, sizeof tv) < 0) {
+            int err = errno;
+            close(c);
+            return -err;
+        }
+    }
+    return c;
+}
+
+static int64_t sys_poll(const vm_sysenv *e, const vm_value *a)
+{
+    if (!e->allow_net)
+        return -EPERM;
+    int64_t fd = a[0].i, wait = a[2].i;
+    uint64_t ev = a[1].u;
+    if (!valid_fd(fd))
+        return -EBADF;
+    if (ev == 0 || ev > 3 || wait < -1 || wait > INT_MAX)
+        return -EINVAL;
+    fflush(stdout);
+    struct pollfd p = {(int)fd, (short)(((ev & 1) ? POLLIN : 0) | ((ev & 2) ? POLLOUT : 0)), 0};
+    int pr;
+    do
+        pr = poll(&p, 1, (int)wait);
+    while (pr < 0 && errno == EINTR);
+    if (pr < 0)
+        return -errno;
+    if (p.revents & POLLNVAL)
+        return -EBADF;
+    return ((p.revents & POLLIN) ? 1 : 0) | ((p.revents & POLLOUT) ? 2 : 0) | ((p.revents & (POLLERR | POLLHUP)) ? 4 : 0);
+}
+
+static int64_t sys_shutdown(const vm_sysenv *e, const vm_value *a)
+{
+    if (!e->allow_net)
+        return -EPERM;
+    static const int how[] = {SHUT_RD, SHUT_WR, SHUT_RDWR};
+    if (!valid_fd(a[0].i))
+        return -EBADF;
+    if (a[1].u > 2)
+        return -EINVAL;
+    return shutdown((int)a[0].i, how[a[1].u]) < 0 ? -errno : 0;
+}
+
+static int64_t sys_sockport(const vm_sysenv *e, const vm_value *a)
+{
+    if (!e->allow_net)
+        return -EPERM;
+    if (!valid_fd(a[0].i))
+        return -EBADF;
+    struct sockaddr_in sa;
+    socklen_t len = sizeof sa;
+    if (getsockname((int)a[0].i, (struct sockaddr *)&sa, &len) < 0)
+        return -errno;
+    if (sa.sin_family != AF_INET)
+        return -EINVAL;
+    return ntohs(sa.sin_port);
+}
+
 int64_t vm_syscall(const vm_sysenv *e, uint32_t num, const vm_value *a)
 {
     switch (num) {
@@ -448,6 +602,12 @@ int64_t vm_syscall(const vm_sysenv *e, uint32_t num, const vm_value *a)
     case CHBC_SYS_DLOPEN: return sys_dlopen(e, a);
     case CHBC_SYS_DLSYM:  return sys_dlsym(e, a);
     case CHBC_SYS_DLCLOSE: return sys_dlclose(e, a);
+    case CHBC_SYS_GETENV: return sys_getenv(e, a);
+    case CHBC_SYS_LISTEN: return sys_listen(e, a);
+    case CHBC_SYS_ACCEPT: return sys_accept(e, a);
+    case CHBC_SYS_POLL:   return sys_poll(e, a);
+    case CHBC_SYS_SHUTDOWN: return sys_shutdown(e, a);
+    case CHBC_SYS_SOCKPORT: return sys_sockport(e, a);
     }
     return -ENOSYS;
 }

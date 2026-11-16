@@ -128,6 +128,12 @@ A caller does not need to know whether a callee is variadic. There is no hidden 
 | `SYS_DLSYM` 11 | handle, name | function id (1 or more) |
 | `SYS_DLCLOSE` 12 | handle | 0 |
 | `SYS_SPAWN` 15 | argv, flags | exit code of the child (128 + n if signal n killed it), or `-errno`. See below |
+| `SYS_GETENV` 16 | name, buf, cap | length of the value, copied with a NUL. Needs `-N`. See "Environment and network" |
+| `SYS_LISTEN` 17 | host, port, backlog | listening socket fd. Needs `-N` |
+| `SYS_ACCEPT` 18 | fd, wait_ms, io_ms | connection fd. Needs `-N` |
+| `SYS_POLL` 19 | fd, events, wait_ms | ready bits. Needs `-N` |
+| `SYS_SHUTDOWN` 20 | fd, how | 0. Needs `-N` |
+| `SYS_SOCKPORT` 21 | fd | local port. Needs `-N` |
 
 Buffers must lie inside memory and above the null page, or the call returns `-14` (`EFAULT`).
 Output through `SYS_WRITE` to fd 1 and through `PRINT` shares one buffer, so the order is kept.
@@ -192,6 +198,61 @@ Assembler directives, for a compiler to emit:
 - The VM flushes its own output first, so the order of output is kept.
 - A program that cannot be started returns `-errno` (for example `-2`). A child that ran and exited with 127 returns 127.
 
+## Exceptions
+
+Three instructions, in any `.chbc` (version 4 files that do not use them are unchanged):
+
+| Instruction | Does |
+|---|---|
+| `TRY label` | pushes a handler record: the catch target, and the current `sp` and `fp`. The VM keeps the records itself, so they take no guest memory. At most 262,144 deep: one more is `VM_E_STACK_OVERFLOW`, which can be caught by an outer `TRY` |
+| `ENDTRY` | pops the newest record. With no record it is a `TRAP`, which is not catchable |
+| `THROW r` | `r` is the address of a string (`[length][bytes]`). Pops the newest record, sets `sp` and `fp` from it, puts the address in `r0` and 0 in `r1`, and jumps to the catch target. With no record the program ends with `VM_E_UNCAUGHT` and the text of the string. An address that is not in memory is `VM_E_BAD_MEM` |
+
+**A fault inside a `TRY`** is turned into a throw when it is one of `VM_E_STACK_UNDERFLOW` (1), `VM_E_STACK_OVERFLOW` (2), `VM_E_DIV_ZERO` (3), `VM_E_BAD_MEM` (4), `VM_E_BAD_JUMP` (5), `VM_E_INDEX` (14), `VM_E_OOM` (15) and `VM_E_HEAP` (16). The catch target gets `r0` = 0 and `r1` = the code. `TRAP`, `VM_E_FOREIGN_*`, `VM_E_NOMEM` and the others end the program. The VM checks every access before it makes it, so a caught fault changed nothing.
+
+**What the VM restores:** `sp` and `fp`, and nothing else. A function between the `THROW` and the `TRY` never runs its epilogue, so the registers it saved are not restored. A compiler must therefore reload every callee-saved register at the catch target from a frame it saved on entry, and must not keep a variable that the `try` body assigns in a register that the catch reads. chts does both.
+
+**The heap is not rolled back.** `HEAPMARK` and `HEAPFREE` do that, if the program asks.
+
+**Uncaught output:** `chvm: runtime error: uncaught exception: <text> (offset N, in func, file:line)`, exit code 70. Bytes below 32 and 127 in the text show as `?`, and at most 199 bytes are shown.
+
+## Processes
+
+Lightweight processes (actors), always available. A process is a function running with its own memory block, registers, `TRY` stack and mailbox. It shares nothing with any other process: a message is a copy of bytes, and a fault ends only the process it happens in. The first process is the program. When it ends, the machine ends and every other process with it. The calls are `SYS_PSPAWN` to `SYS_PINFO` (22 to 37, listed in `src/syscalls.h`).
+
+**Scheduling.** All processes run on one OS thread, in turn. A process is preempted after 10,000 taken branches and calls (like Erlang's reduction count), so one that loops cannot starve the rest. A process that waits (a message, a timer, a descriptor) is not run until what it waits for happens. A program that never starts a second process pays one counter decrement per taken branch, and a program that does not use these calls at all, baked with `chbake`, has none of the code. If every process is waiting and nothing can wake the first one, the machine stops with `deadlock`.
+
+**Memory.** A process's memory is a private anonymous mapping (`mmap`, no reserve), so pages cost nothing until they are used, and `munmap` frees all of it when the process ends. `PSPAWN` copies the parent's data, bss and heap by default (so the child sees the program's globals, routes and settings, as they were at that moment, and cannot change the parent's). With `SPAWN_FRESH` it copies only the program's constants, which is far smaller. A new process gets 128 KiB of room above what it copies, or the size asked for. The sum of all child memory is limited to 2 GiB, and the number of processes to `-P` (4096 by default).
+
+**Messages.** A message is bytes with a tag (0 or more). `SEND` copies it into the target's mailbox, which holds up to 1000 messages and 4 MiB (`-ENOBUFS` beyond that, so a sender must handle a full mailbox). A message may be 1 MiB. `MSGWAIT` waits for the first message with a tag, or any message with -1. Messages with other tags stay where they are, so a process can wait for a reply while requests pile up. `MSGTAKE` copies the message out. Order is first in, first out for one tag. A pid is a generation and a slot, so the pid of a process that ended is never mistaken for a new process in the same slot (`-ESRCH`).
+
+**Failure.** `PLINK` joins two processes: when one ends abnormally, the other is ended too, unless it called `TRAPEXIT(1)`, in which case it receives a message with tag -2 and lives. A normal end does not take a linked process with it. `MONITOR` gives one-way news: a message with tag -3, whatever the reason, and it never harms the monitor. The text of such a message is `kind code pid detail`: kind 0 normal, 1 exit with a code, 2 a machine fault (code is the `VM_E_*` number), 3 an uncaught throw, 4 killed, 6 no such process. A `TRY` in a process catches that process's own faults, as it does in the first process. A fault that is not caught ends only that process.
+
+**Spawn with a connection.** `flags >> 8` is a descriptor the caller owns (one it accepted). It becomes the new process's before the new process runs. A process owns the connections it accepts, and the machine closes them when it ends, however it ends, so a connection cannot leak.
+
+**Input and output with several processes.** While more than one process is alive, `READ`, `WRITE`, `ACCEPT` and `POLL` on a descriptor above 2 do not block the machine. The descriptor is set not to block, the call is tried, and if it would block the process sleeps until the descriptor is ready or its time is up. Only that process waits. `ACCEPT`'s third argument (the io timeout) is remembered for the connection, and a `READ` or `WRITE` that makes no progress for that long returns `-EAGAIN`. Running another program with `SYS_SPAWN` still blocks the whole machine until it ends. Files are read at once.
+
+**Limits and costs, measured.** Starting and ending a process costs about 25 microseconds. 10,000 processes waiting for a message fit in under 90 MB with the default copy, and each uses 8.5 KB with `SPAWN_FRESH`. A message round trip is a few microseconds. These are numbers from one machine, not promises.
+
+## Environment and network
+
+These calls need the `-N` flag: `chvm -N prog.chbc`. Without it every one returns `-1` (`EPERM`). A program baked with `chbake` has them off unless it was baked with `chbake --net`.
+
+**What a program can do:** read an environment variable, listen on a TCP port and accept connections, and then read and write the connections with `SYS_READ`, `SYS_WRITE` and `SYS_CLOSE`.
+
+**What it cannot do:** open a connection to another machine, look up a name, or use UDP. A bytecode program cannot be used to reach other hosts or scan a network. IPv4 only.
+
+- `SYS_GETENV name, buf, cap`: `name` is a NUL-terminated string of at most 255 bytes. The value is copied with a NUL, and the length (without the NUL) is returned. A variable that is set but empty returns 0. `-2` (`ENOENT`) if it is not set, `-34` (`ERANGE`) if `cap` is smaller than the length plus one, `-14` for a bad pointer.
+- `SYS_LISTEN host, port, backlog`: `host` 0 is `127.0.0.1` and 1 is `0.0.0.0` (all interfaces). `port` 0 picks a free port, and `SYS_SOCKPORT` tells you which. `backlog` is 1 to 4096. Anything else is `-22`. `SO_REUSEADDR` is set, so a restart does not fail with "address in use" while old connections wind down. A port that is in use returns `-98`, and a privileged port without permission returns `-13`. The socket is closed in a program started by `SYS_SPAWN`.
+- `SYS_ACCEPT fd, wait_ms, io_ms`: waits up to `wait_ms` for a connection (-1 for ever, 0 not at all) and returns its fd. `-110` (`ETIMEDOUT`) means none came, so a loop can check for a shutdown request. `-11` (`EAGAIN`) means a client connected and went away before it was taken: try again. `io_ms` (0 to 3,600,000) is how long a `SYS_READ` or `SYS_WRITE` on that connection may be stuck: after that it returns `-11`. **Set `io_ms` for every server.** With 0 a client that connects and says nothing holds a single-threaded server for ever.
+- `SYS_POLL fd, events, wait_ms`: `events` is 1 (readable), 2 (writable) or 3. The result is a set of bits: 1 readable, 2 writable, 4 error or hang-up, and 0 means the wait ran out. A closed or reset connection reports readable, and the read then returns 0 or an error.
+- `SYS_SHUTDOWN fd, how`: 0 stops reading, 1 stops writing (the client sees the end of the reply), 2 both. `-88` (`ENOTSOCK`) for an fd that is not a socket.
+- `SYS_SOCKPORT fd`: the local port of a listening or accepted socket.
+- A write to a connection that the client has closed returns `-32` (`EPIPE`) and does not end the program. `-N` turns `SIGPIPE` off for the process.
+- `SYS_CLOSE` closes any fd from 3 up, so a connection must be closed by the program. A server that does not close each connection runs out of descriptors. The test `net_many` serves 300 connections in a row and checks the fd numbers stay small.
+
+**This is not a sandbox.** `-N` lets the program accept connections from anyone who can reach the port. With `host` 1 that is the whole network. Bind to `host` 0 (`127.0.0.1`) unless the program is meant to be public, and put a proxy in front of it if it is.
+
 ## Calling native (C) libraries
 
 A program can call functions in shared libraries (`.so`). This needs a build with libffi and the `-F` flag: `chvm -F prog.chbc`. Without `-F`, `SYS_DLOPEN`, `SYS_DLSYM` and `SYS_DLCLOSE` return `-EPERM` and `CALLX` faults. In a build without libffi they return `-ENOSYS`, and `-F` is refused. The static build (`make static`) has no foreign calls.
@@ -238,17 +299,18 @@ interpreter. Compile it with the runtime sources to get one standalone executabl
 
 ```
 build/chbake prog.chbc prog.c
-cc -O2 -fno-crossjumping -Isrc prog.c src/chbc.c src/sys.c src/foreign.c -lm -o prog
+cc -O2 -fno-crossjumping --param max-goto-duplication-insns=32 -Isrc prog.c src/chbc.c src/sys.c src/foreign.c -lm -o prog
 ```
 
 - **Only the instructions the program uses are kept.** `chbake` reads the verified code, notes which
   opcodes appear, and the generated file defines `CHVM_HAS_<name>` for each one. The interpreter points
   every unused opcode at a common stub, so nothing refers to its handler and the compiler removes it.
-  `chbake --all` keeps every instruction. A typical program uses 44 to 48 of 193, and the interpreter
+  `chbake --all` keeps every instruction. `chbake --net` lets the program use the environment and network calls (see above). A typical program uses 44 to 48 of 219, and the interpreter
   loop shrinks from about 15 KB to about 4 KB.
+- **A program that does not use processes has no process code at all.** `chbake` looks for the process calls, and when there are none the scheduler is not compiled in. Such a program ran as fast as before in my measurements (within 1 to 3 percent).
 - **Keep `-fno-crossjumping`.** With few handlers, gcc merges the identical "go to the next instruction"
   jump at the end of each one into a few shared jumps. That defeats computed goto, and the trimmed program
   ran 2 to 9 percent slower than the full interpreter. With the flag it runs at the same speed.
 - `vm.c` is included by the generated file, so do not also list it on the compile line.
 - A baked program takes its memory size from the `CHVM_MEM` environment variable (bytes), like `chvm -m`.
-- A baked program cannot call native libraries, since it never enables them.
+- A baked program cannot call native libraries or run other programs, since it never enables them. It cannot use the environment and network calls unless it was baked with `--net`.

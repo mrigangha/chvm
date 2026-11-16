@@ -25,10 +25,19 @@ interface Home {
   off: number         // frame offset (negative) when in memory
 }
 
+// A try body or catch block being generated: how many handler records it holds in the machine, and the
+// finally block to run when control leaves it by return, break or continue.
+interface TryRegion {
+  pops: number
+  fin: Node
+}
+
 interface Gen {
   out: string[]
   label: number
   loops: string[]       // innermost last: "<continue label> <break label>"
+  loopTry: number[]     // per loop: how many try regions were open where the loop began
+  tryStack: TryRegion[] // the try regions open at this point, innermost last
   fname: string
   prog: Program
   file: string
@@ -208,6 +217,8 @@ function genTo(g: Gen, n: Node, dst: number): void {
   } else if (k === "id") {
     if (n.slot >= 0) loadLocal(g, n.slot, dst)
     else emit(g, "LDG " + rn(dst) + ", " + n.tag)
+  } else if (k === "fnref") {
+    emit(g, "LI " + rn(dst) + ", " + n.text)
   } else if (k === "array") {
     genArrayLit(g, n, dst)
   } else if (k === "object") {
@@ -1074,6 +1085,10 @@ function genCall(g: Gen, n: Node, dst: number): void {
     genIntrinsic(g, n, dst)
     return
   }
+  if (n.tag === "callv") {
+    genCallValue(g, n, dst)
+    return
+  }
   const args: Node[] = []
   if (n.tag === "method") args.push(n.a.a)
   let i = 0
@@ -1125,6 +1140,27 @@ function genCall(g: Gen, n: Node, dst: number): void {
   }
   emit(g, "CALL " + n.text)
   restoreTemps(g, dst)
+  if (n.ty.kind !== "void") emit(g, "MOV " + rn(dst) + ", r0")
+}
+
+// A call through a function value. The callee waits on the machine stack while the arguments are
+// built in r1..rN, then it is popped into r0 for CALLR. Live temporaries below dst are saved first.
+function genCallValue(g: Gen, n: Node, dst: number): void {
+  const spill = g.liveFloor < dst
+  if (spill) saveTemps(g, dst)
+  genTo(g, n.a, dst)
+  emit(g, "PUSH " + rn(dst))
+  const savedFloor = g.liveFloor
+  g.liveFloor = 1
+  let i = 0
+  while (i < n.list.length) {
+    genTo(g, n.list[i], 1 + i)
+    i++
+  }
+  g.liveFloor = savedFloor
+  emit(g, "POP r0")
+  emit(g, "CALLR r0")
+  if (spill) restoreTemps(g, dst)
   if (n.ty.kind !== "void") emit(g, "MOV " + rn(dst) + ", r0")
 }
 
@@ -1270,11 +1306,38 @@ function genIntrinsic(g: Gen, n: Node, dst: number): void {
   else if (name === "__argc") emit(g, "SYSCALL SYS_ARGC")
   else if (name === "__argv") emit(g, "SYSCALL SYS_ARGV")
   else if (name === "__spawn") emit(g, "SYSCALL SYS_SPAWN")
+  else if (name === "__getenv") emit(g, "SYSCALL SYS_GETENV")
+  else if (name === "__listen") emit(g, "SYSCALL SYS_LISTEN")
+  else if (name === "__accept") emit(g, "SYSCALL SYS_ACCEPT")
+  else if (name === "__poll") emit(g, "SYSCALL SYS_POLL")
+  else if (name === "__shutdown") emit(g, "SYSCALL SYS_SHUTDOWN")
+  else if (name === "__sockport") emit(g, "SYSCALL SYS_SOCKPORT")
+  else if (name === "__time") emit(g, "SYSCALL SYS_TIME")
+  else if (name === "__seek") emit(g, "SYSCALL SYS_SEEK")
+  else if (name === "__pspawn") emit(g, "SYSCALL SYS_PSPAWN")
+  else if (name === "__self") emit(g, "SYSCALL SYS_SELF")
+  else if (name === "__send") emit(g, "SYSCALL SYS_SEND")
+  else if (name === "__msgwait") emit(g, "SYSCALL SYS_MSGWAIT")
+  else if (name === "__msgtake") emit(g, "SYSCALL SYS_MSGTAKE")
+  else if (name === "__msgfrom") emit(g, "SYSCALL SYS_MSGFROM")
+  else if (name === "__msgtag") emit(g, "SYSCALL SYS_MSGTAG")
+  else if (name === "__plink") emit(g, "SYSCALL SYS_PLINK")
+  else if (name === "__punlink") emit(g, "SYSCALL SYS_PUNLINK")
+  else if (name === "__monitor") emit(g, "SYSCALL SYS_MONITOR")
+  else if (name === "__trapexit") emit(g, "SYSCALL SYS_TRAPEXIT")
+  else if (name === "__pkill") emit(g, "SYSCALL SYS_PKILL")
+  else if (name === "__sleep") emit(g, "SYSCALL SYS_SLEEP")
+  else if (name === "__yield") emit(g, "SYSCALL SYS_YIELD")
+  else if (name === "__pcount") emit(g, "SYSCALL SYS_PCOUNT")
+  else if (name === "__pinfo") emit(g, "SYSCALL SYS_PINFO")
   else if (name === "__exit") {
     emit(g, "EXIT r1")
     result = ""
   } else if (name === "__trap") {
     emit(g, "TRAP")
+    result = ""
+  } else if (name === "__throw") {
+    emit(g, "THROW r1")
     result = ""
   } else if (name === "__fmtnum") emit(g, "SYSCALL SYS_FMTNUM")
   else if (name === "__parsenum") {
@@ -1332,6 +1395,7 @@ function genStmt(g: Gen, n: Node): void {
     const cont = lab(g, "wcont")
     const end = lab(g, "wend")
     g.loops.push(cont + " " + end)
+    g.loopTry.push(g.tryStack.length)
     genJumpIfFalse(g, n.a, end, FIRST_TEMP)
     place(g, top)
     genStmt(g, n.b)
@@ -1340,12 +1404,14 @@ function genStmt(g: Gen, n: Node): void {
     genJumpIfTrue(g, n.a, top, FIRST_TEMP)
     place(g, end)
     g.loops.pop()
+    g.loopTry.pop()
   } else if (k === "for") {
     const top = lab(g, "for")
     const cont = lab(g, "fcont")
     const end = lab(g, "fend")
     if (n.a !== NIL) genStmt(g, n.a)
     g.loops.push(cont + " " + end)
+    g.loopTry.push(g.tryStack.length)
     if (n.b !== NIL) genJumpIfFalse(g, n.b, end, FIRST_TEMP)
     // Hoist loads that cannot change while the loop runs, after the first test so that a loop that
     // never runs never loads. Only for a loop with no stores and no calls anywhere in it.
@@ -1367,8 +1433,17 @@ function genStmt(g: Gen, n: Node): void {
     place(g, end)
     releaseHoisted(g, hoistedHere)
     g.loops.pop()
+    g.loopTry.pop()
   } else if (k === "return") {
-    if (n.a !== NIL) {
+    if (g.tryStack.length > 0) {
+      // the value waits on the stack while the handlers are removed and the finally blocks run
+      if (n.a !== NIL) {
+        genTo(g, n.a, FIRST_TEMP)
+        emit(g, "PUSH r1")
+      }
+      leaveRegions(g, 0)
+      if (n.a !== NIL) emit(g, "POP r0")
+    } else if (n.a !== NIL) {
       genTo(g, n.a, FIRST_TEMP)
       emit(g, "MOV r0, r1")
     }
@@ -1376,7 +1451,117 @@ function genStmt(g: Gen, n: Node): void {
   } else if (k === "break" || k === "continue") {
     const top = g.loops[g.loops.length - 1]
     const at = top.indexOf(" ")
+    leaveRegions(g, g.loopTry[g.loopTry.length - 1])
     emit(g, "JMP " + (k === "break" ? top.slice(at + 1, top.length) : top.slice(0, at)))
+  } else if (k === "throw") {
+    genTo(g, n.a, FIRST_TEMP)
+    emit(g, "THROW r1")
+  } else if (k === "try") {
+    genTry(g, n)
+  }
+}
+
+// ---- try, catch, finally ----
+//
+// try { A } catch (e) { B } finally { C } becomes
+//
+//        TRY  fin            handler 1: anything thrown in A or B goes to fin
+//        TRY  catch          handler 2: anything thrown in A goes to catch
+//        A
+//        ENDTRY              remove handler 2
+//        JMP  after
+//   catch:                   the machine removed handler 2 and put the thrown value in r0, a fault code in r1
+//        reload the saved registers, e = the thrown string (or the text for the fault)
+//        B
+//   after:
+//        ENDTRY              remove handler 1
+//        C                   finally, when nothing was thrown
+//        JMP  end
+//   fin:                     the machine removed handler 1
+//        reload the saved registers, keep the error in a hidden variable
+//        C                   finally, when something was thrown
+//        THROW the error
+//   end:
+//
+// A return, break or continue that leaves a region removes that region's handlers and runs its finally
+// block first, so it is the same code in one more place.
+// Every local of a function with a try lives in memory, and the function saves all callee-saved registers
+// in its prologue. A throw skips the epilogues of the calls it leaves, so at a catch the registers are
+// loaded again from the frame: they then hold what the caller expects, and no local is in a register.
+
+const RELOAD_MARK = "    ;reload saved registers"
+
+function reloadSaved(g: Gen): void {
+  if (!g.isStart) g.out.push(RELOAD_MARK)
+}
+
+// r0 = thrown value or 0, r1 = fault code. Leaves the string in r0.
+function errorString(g: Gen): void {
+  emit(g, "MOV r2, r1")
+  emit(g, "I2F r2, r2")
+  emit(g, "MOV r1, r0")
+  emit(g, "CALL __catch_value")
+}
+
+// Leaves the regions above `down`: removes their handlers and runs their finally blocks, innermost first.
+function leaveRegions(g: Gen, down: number): void {
+  const all = g.tryStack
+  let i = all.length - 1
+  while (i >= down) {
+    const r = all[i]
+    let p = 0
+    while (p < r.pops) {
+      emit(g, "ENDTRY")
+      p++
+    }
+    if (r.fin !== NIL) {
+      // the finally block runs outside its own try, so a throw in it goes to the next one out
+      g.tryStack = all.slice(0, i)
+      genStmt(g, r.fin)
+      g.tryStack = all
+    }
+    i--
+  }
+}
+
+function genTry(g: Gen, n: Node): void {
+  const hasCatch = n.b !== NIL
+  const hasFin = n.c !== NIL
+  const lcatch = lab(g, "catch")
+  const lfin = lab(g, "fin")
+  const lafter = lab(g, "tafter")
+  const lend = lab(g, "tend")
+  if (hasFin) emit(g, "TRY " + lfin)
+  if (hasCatch) emit(g, "TRY " + lcatch)
+  g.tryStack.push({ pops: (hasFin ? 1 : 0) + (hasCatch ? 1 : 0), fin: n.c })
+  genStmt(g, n.a)
+  g.tryStack.pop()
+  if (hasCatch) {
+    emit(g, "ENDTRY")
+    emit(g, "JMP " + lafter)
+    place(g, lcatch)
+    reloadSaved(g)
+    if (n.text !== "") {
+      errorString(g)
+      storeLocal(g, n.slot, 0)
+    }
+    if (hasFin) g.tryStack.push({ pops: 1, fin: n.c })
+    genStmt(g, n.b)
+    if (hasFin) g.tryStack.pop()
+    place(g, lafter)
+  }
+  if (hasFin) {
+    emit(g, "ENDTRY")
+    genStmt(g, n.c)
+    emit(g, "JMP " + lend)
+    place(g, lfin)
+    reloadSaved(g)
+    errorString(g)
+    storeLocal(g, n.num, 0)
+    genStmt(g, n.c)
+    loadLocal(g, n.num, FIRST_TEMP)
+    emit(g, "THROW r1")
+    place(g, lend)
   }
 }
 
@@ -1426,7 +1611,7 @@ function assignHomes(g: Gen, f: FuncInfo, nparams: number): void {
     const s = syms[order[k]]
     // With 21 saved registers there is room for every variable that is used at all more than once,
     // and a variable the loop reads is worth a register even if it is read only once per trip.
-    if (s.uses >= 2) {
+    if (s.uses >= 2 && !f.hasTry) {
       let r = 0
       let placed = false
       while (r < NSAVED && !placed) {
@@ -1529,23 +1714,32 @@ function genFuncRaw(g: Gen, f: FuncInfo): void {
   g.out = head
   if (early !== NIL) genEarlyReturn(g, f, early)
 
-  // saved registers: those that hold variables, then those used only for parking
+  // saved registers: those that hold variables, then those used only for parking. A function with a
+  // try saves all of them, because a catch reloads them all.
   const saved: number[] = []
-  i = 0
-  while (i < g.usedRegs.length) {
-    saved.push(g.usedRegs[i])
-    i++
-  }
-  i = 0
-  while (i < g.extraRegs.length) {
-    saved.push(g.extraRegs[i])
-    i++
+  if (f.hasTry) {
+    i = 0
+    while (i < NSAVED) {
+      saved.push(savedReg(i))
+      i++
+    }
+  } else {
+    i = 0
+    while (i < g.usedRegs.length) {
+      saved.push(g.usedRegs[i])
+      i++
+    }
+    i = 0
+    while (i < g.extraRegs.length) {
+      saved.push(g.extraRegs[i])
+      i++
+    }
   }
   // memory locals sit below the saved registers
   let shift = 8 * (saved.length - g.usedRegs.length)
   // fp is only needed to address memory locals. Without any, saved registers go on the stack with
   // PUSH and POP, and the function has no frame pointer at all.
-  const hasFrame = memLocals > 0
+  const hasFrame = memLocals > 0 || f.hasTry
   g.hasFrame = hasFrame
   if (hasFrame) {
     emit(g, "PUSH fp")
@@ -1566,7 +1760,15 @@ function genFuncRaw(g: Gen, f: FuncInfo): void {
   }
   i = 0
   while (i < body.length) {
-    g.out.push(shiftFrameRef(body[i], shift))
+    if (body[i] === RELOAD_MARK) {
+      let r = 0
+      while (r < saved.length) {
+        emit(g, "LD64 " + rn(saved[r]) + ", [fp" + (-8 * (r + 1)) + "]")
+        r++
+      }
+    } else {
+      g.out.push(shiftFrameRef(body[i], shift))
+    }
     i++
   }
   place(g, f.label + "_ret")
@@ -1678,7 +1880,7 @@ function escapeBytes(s: string): string {
 
 export function generate(prog: Program, entryFile: string): string {
   const g: Gen = {
-    out: [], label: 0, loops: [], fname: "", prog: prog, file: entryFile, line: 0,
+    out: [], label: 0, loops: [], loopTry: [], tryStack: [], fname: "", prog: prog, file: entryFile, line: 0,
     homes: [], usedRegs: [], depth: 0, hasFrame: false, isStart: false,
     hoisted: [], hoistReg: [], liveFloor: 1, parked: [], usedMask: [], extraUsed: [], extraRegs: [],
   }

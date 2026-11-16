@@ -1,0 +1,10 @@
+import socket, sys
+port = int(sys.argv[1])
+ok = 0
+for i in range(300):
+    s = socket.create_connection(("127.0.0.1", port), timeout=5)
+    s.sendall(b"x")
+    if s.recv(10) == b"ok":
+        ok += 1
+    s.close()
+print("client ok", ok)

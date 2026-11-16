@@ -10,10 +10,13 @@ enum { EXIT_USAGE = 64, EXIT_LOAD = 65, EXIT_RUN = 70 };
 
 static void usage(void)
 {
-    fputs("usage: chvm [-m mem_bytes] [-F] [-X] [-v] file.chbc [args...]\n"
+    fputs("usage: chvm [-m mem_bytes] [-P max_procs] [-F] [-X] [-N] [-v] file.chbc [args...]\n"
           "  -m  memory size in bytes (default 64 MiB)\n"
+          "  -P  most processes alive at once (default 4096, at most 1048574)\n"
           "  -F  allow calls into native libraries (dlopen, CALLX). Trusted code only.\n"
           "  -X  allow the program to run other programs (SYS_SPAWN). Trusted code only.\n"
+          "  -N  allow the program to read environment variables and wait for network connections\n"
+          "      (GETENV, LISTEN, ACCEPT, POLL, SHUTDOWN, SOCKPORT). It cannot connect out.\n"
           "  -v  verify only, do not run\n",
           stderr);
 }
@@ -39,6 +42,15 @@ int main(int argc, char **argv)
             verify_only = 1;
         } else if (!strcmp(argv[i], "-X")) {
             cfg.allow_spawn = 1;
+        } else if (!strcmp(argv[i], "-N")) {
+            cfg.allow_net = 1;
+        } else if (!strcmp(argv[i], "-P") && i + 1 < argc) {
+            size_t np;
+            if (parse_size(argv[++i], &np) || np > 1048574) {
+                usage();
+                return EXIT_USAGE;
+            }
+            cfg.max_procs = (int)np;
         } else if (!strcmp(argv[i], "-F")) {
             if (!foreign_compiled()) {
                 fputs("chvm: this build has no foreign call support (rebuild with libffi)\n", stderr);
@@ -82,7 +94,10 @@ int main(int argc, char **argv)
     vm_status st = vm_run(&img, &cfg, &off, &code);
     if (st != VM_OK) {
         chbc_loc loc;
-        fprintf(stderr, "chvm: runtime error: %s (offset %u", vm_status_str(st), off);
+        fprintf(stderr, "chvm: runtime error: %s", vm_status_str(st));
+        if (st == VM_E_UNCAUGHT && vm_fault_detail()[0])
+            fprintf(stderr, ": %s", vm_fault_detail());
+        fprintf(stderr, " (offset %u", off);
         if (chbc_lookup(&img, off, &loc)) {
             if (loc.func)
                 fprintf(stderr, ", in %s", loc.func);

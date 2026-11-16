@@ -15,9 +15,29 @@ function __alloc(n: number): number {
   return __alloc_vm(n)
 }
 
+// A fault the program can catch: a runtime check that failed. With no try around it the machine
+// stops with "uncaught exception: msg".
 function __die(msg: string): void {
-  __print(2, "error: " + msg + "\n")
-  __trap()
+  __throw(msg)
+}
+
+// The text for a fault the machine raised, by its code. These are static strings, so building one needs no memory.
+function __fault_msg(code: number): string {
+  if (code === 1) return "stack underflow"
+  if (code === 2) return "stack overflow"
+  if (code === 3) return "division by zero"
+  if (code === 4) return "memory access out of range"
+  if (code === 5) return "bad jump target"
+  if (code === 14) return "index out of range"
+  if (code === 15) return "out of memory"
+  if (code === 16) return "bad heap release"
+  return "runtime fault"
+}
+
+// What a catch block receives: the thrown string, or for a machine fault the text for its code.
+function __catch_value(v: any, code: number): any {
+  if (__toaddr(v) !== 0) return v
+  return __fault_msg(code)
 }
 
 function __print(fd: number, s: string): void {

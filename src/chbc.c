@@ -293,7 +293,7 @@ chbc_err chbc_verify(const chbc_image *img, uint32_t *bad_off)
     /* a KDATA in the last slot would let a branch run past the end */
     unsigned last = img->code[n - 1].op;
     if (last != OP_HALT && last != OP_JMP && last != OP_RET && last != OP_EXIT &&
-        last != OP_TRAP) {
+        last != OP_TRAP && last != OP_THROW) {
         *bad_off = (n - 1) * CHBC_INSN_SIZE;
         return CHBC_E_END;
     }

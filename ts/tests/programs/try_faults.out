@@ -1,0 +1,12 @@
+ok -> 2
+high failed: index out of range
+negative failed: index out of range
+pop failed: index out of range
+slice failed: index out of range
+recursion failed: stack overflow
+after the overflow -> 2
+109900
+c1;f1;c2 index out of range;
+fin;caught second
+array still fine -> 2
+100
