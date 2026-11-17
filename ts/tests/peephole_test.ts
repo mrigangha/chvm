@@ -67,4 +67,32 @@ t([".line 3", "MOV r1, r1"], [".line 3"])
 // LDAX writes its destination before it finishes reading its inputs, so it is not rewritten onto a source
 t(["LDAX r1, r2, r3", "MOV r2, r1", "FADD r1, r5, r6"], ["LDAX r1, r2, r3", "MOV r2, r1", "FADD r1, r5, r6"])
 
+// ---- fusing the ends of a function ----
+t(["PUSH r9", "PUSH r10"], ["PUSH2 r9, r10"])
+t(["POP r10", "POP r9"], ["POP2 r10, r9"])
+t(["POP r9", "RET"], ["POPRET r9"])
+t(["POP r10", "POP r9", "RET"], ["POP2RET r10, r9"])
+t(["MOV r0, r5", "RET"], ["RETR r5"])
+// three pushes: the first two fuse and the third stays
+t(["PUSH r9", "PUSH r10", "PUSH r11"], ["PUSH2 r9, r10", "PUSH r11"])
+// four pushes make two pairs
+t(["PUSH r9", "PUSH r10", "PUSH r11", "PUSH r12"], ["PUSH2 r9, r10", "PUSH2 r11, r12"])
+// a label between the two: something can jump to the second alone, so they stay apart
+t(["PUSH r9", "L5:", "PUSH r10"], ["PUSH r9", "L5:", "PUSH r10"])
+t(["POP r9", "L5:", "RET"], ["POP r9", "L5:", "RET"])
+t(["MOV r0, r5", "f_ret:", "RET"], ["MOV r0, r5", "f_ret:", "RET"])
+// a directive that ends a function between them
+t(["POP r9", ".endfunc", "RET"], ["POP r9", ".endfunc", "RET"])
+// a line number is not a boundary: it moves in front of the fused instruction
+t(["PUSH r9", ".line 4", "PUSH r10"], [".line 4", "PUSH2 r9, r10"])
+// only a move into r0 fuses with RET
+t(["MOV r1, r5", "RET"], ["MOV r1, r5", "RET"])
+// the first move is dead (r0 is written again), so it goes, and the second fuses
+t(["MOV r0, r5", "MOV r0, r6", "RET"], ["RETR r6"])
+// a push followed by something else stays
+t(["PUSH r9", "MOV r1, r2"], ["PUSH r9", "MOV r1, r2"])
+t(["POP r9", "MOV r1, r2"], ["POP r9", "MOV r1, r2"])
+// the whole of a typical function ending
+t(["FADD r0, r31, r1", "f_fib_ret:", "POP r31", "POP r9", "RET"], ["FADD r0, r31, r1", "f_fib_ret:", "POP2RET r31, r9"])
+
 console.log(bad === 0 ? "peephole: all passed" : "peephole: " + bad + " failed")

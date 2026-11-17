@@ -221,14 +221,89 @@ function deadAfter(lines: string[], from: number, r: string): boolean {
   return false
 }
 
+// ---- fusing the instructions a function begins and ends with ----
+//
+//   PUSH a ; PUSH b           becomes  PUSH2 a, b
+//   POP a ; POP b             becomes  POP2 a, b
+//   POP a ; RET               becomes  POPRET a
+//   POP2 a, b ; RET           becomes  POP2RET a, b
+//   MOV r0, a ; RET           becomes  RETR a
+//
+// Two instructions are fused only when they are next to each other, with no label between them (a label means
+// something can jump to the second one alone) and no directive that could be a function end between them.
+// A line number directive is not a boundary, so it is moved to the front of the fused instruction.
+function isLineDirective(s: string): boolean {
+  return s.slice(0, 6) === ".line "
+}
+
+// The index of the next instruction after i, skipping only line directives, or -1 when something else is in the way.
+function nextInsn(lines: string[], i: number): number {
+  let j = i + 1
+  while (j < lines.length && isLineDirective(lines[j])) j++
+  if (j >= lines.length) return -1
+  const s = lines[j]
+  if (isLabel(s) || isDirective(s)) return -1
+  return j
+}
+
+function fuseEnds(lines: string[]): string[] {
+  const out: string[] = []
+  let i = 0
+  while (i < lines.length) {
+    const a = lines[i]
+    if (isLabel(a) || isDirective(a)) {
+      out.push(a)
+      i++
+      continue
+    }
+    const j = nextInsn(lines, i)
+    if (j < 0) {
+      out.push(a)
+      i++
+      continue
+    }
+    const b = lines[j]
+    const oa = opOf(a)
+    const ob = opOf(b)
+    let fused = ""
+    if (oa === "PUSH" && ob === "PUSH") fused = "PUSH2 " + operands(a)[0] + ", " + operands(b)[0]
+    else if (oa === "POP" && ob === "POP") fused = "POP2 " + operands(a)[0] + ", " + operands(b)[0]
+    else if (oa === "POP" && ob === "RET") fused = "POPRET " + operands(a)[0]
+    else if (oa === "POP2" && ob === "RET") fused = "POP2RET " + operands(a).join(", ")
+    else if (oa === "MOV" && ob === "RET" && operands(a)[0] === "r0") fused = "RETR " + operands(a)[1]
+    if (fused === "") {
+      out.push(a)
+      i++
+      continue
+    }
+    let k = i + 1
+    while (k < j) {
+      out.push(lines[k])
+      k++
+    }
+    out.push("    " + fused)
+    i = j + 1
+  }
+  return out
+}
+
 export function peephole(lines: string[]): string[] {
   let cur = lines
   let round = 0
   while (round < 4) {
     const next = onePass(cur)
-    if (next.length === cur.length) return next
+    if (next.length === cur.length) break
     cur = next
     round++
+  }
+  // the ends are fused until nothing changes, so POP, POP, RET becomes POP, POPRET and then POP2RET
+  let again = true
+  let guard = 0
+  while (again && guard < 6) {
+    const fused = fuseEnds(cur)
+    again = fused.length !== cur.length
+    cur = fused
+    guard++
   }
   return cur
 }

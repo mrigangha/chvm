@@ -627,10 +627,87 @@ typedef struct {
 
 static uint8_t fd_nonblock[1024];   /* descriptors already set not to block, so the call is made once */
 
+/*
+ * Memory blocks of processes that ended, kept for the next process of the same size. A process costs a block of
+ * memory to start and to end, and a server that starts one per connection pays for it on every request: the system
+ * maps the block, the process touches its first pages (a page fault each), and the system unmaps it again. Reusing a
+ * block skips all of that.
+ *
+ * A block in the pool is entirely zero, exactly as a new one is, so a process cannot tell the two apart and cannot
+ * see what an earlier process left behind. To make it so, mincore tells which pages the process touched (an anonymous
+ * page is resident only if it was written or read), and exactly those are cleared. That holds for any store the
+ * process made, wherever it was, and it does not depend on how large the heap grew: a server's request buffer is
+ * allocated large and mostly never touched. A block that was touched all over is given back to the system instead
+ * (MADV_DONTNEED leaves it zero too).
+ */
+#define BLK_POOL_MAX 32
+#define BLK_ROUND 65536u
+#define BLK_MAX_SIZE (8ull << 20)
+#define BLK_CLEAR_MAX_PAGES 256
+static struct { uint8_t *mem; uint64_t size; } blk_pool[BLK_POOL_MAX];
+static int blk_n;
+
+static uint8_t *blk_acquire(uint64_t size)
+{
+    for (int i = blk_n - 1; i >= 0; i--) {
+        if (blk_pool[i].size == size) {
+            uint8_t *m = blk_pool[i].mem;
+            blk_pool[i] = blk_pool[--blk_n];
+            return m;
+        }
+    }
+    uint8_t *m = mmap(NULL, (size_t)size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
+    return m == MAP_FAILED ? NULL : m;
+}
+
+static void blk_release(uint8_t *mem, uint64_t size)
+{
+    if (blk_n < BLK_POOL_MAX && size <= BLK_MAX_SIZE) {
+        unsigned char vec[BLK_MAX_SIZE / 4096];
+        size_t pages = (size_t)(size / 4096);
+        if (mincore(mem, (size_t)size, vec) == 0) {
+            size_t touched = 0;
+            for (size_t i = 0; i < pages; i++)
+                touched += vec[i] & 1;
+            int ok = 1;
+            if (touched > BLK_CLEAR_MAX_PAGES) {
+                ok = madvise(mem, (size_t)size, MADV_DONTNEED) == 0;
+            } else {
+                for (size_t i = 0; i < pages;) {
+                    if (!(vec[i] & 1)) {
+                        i++;
+                        continue;
+                    }
+                    size_t j = i;
+                    while (j < pages && (vec[j] & 1))
+                        j++;
+                    memset(mem + i * 4096, 0, (j - i) * 4096);
+                    i = j;
+                }
+            }
+            if (ok) {
+                blk_pool[blk_n].mem = mem;
+                blk_pool[blk_n].size = size;
+                blk_n++;
+                return;
+            }
+        }
+    }
+    munmap(mem, (size_t)size);
+}
+
+static void blk_pool_free(void)
+{
+    while (blk_n > 0) {
+        blk_n--;
+        munmap(blk_pool[blk_n].mem, (size_t)blk_pool[blk_n].size);
+    }
+}
+
 static void proc_free_resources(proc_t *p)
 {
     if (p->mem)
-        munmap(p->mem, p->mem_size);
+        blk_release(p->mem, p->mem_size);
     p->mem = NULL;
 #ifdef CHVM_TRY_ON
     free(p->tries);
@@ -758,6 +835,7 @@ static void sched_free(sched_t *s)
     free(s->p);
     free(s->rq);
     free(s->freeq);
+    blk_pool_free();
 }
 
 
@@ -1218,6 +1296,7 @@ static __attribute__((noinline)) int proc_syscall(sched_t *s, const chbc_image *
                 uint64_t need = from_end + asz;
                 if (msz == 0)
                     msz = (need + PROC_DEFAULT_ROOM + 2 * VM_STACK_RESERVE + 8192 + 4095) & ~4095ull;
+                msz = (msz + (BLK_ROUND - 1)) & ~(uint64_t)(BLK_ROUND - 1);
                 uint64_t sres = msz / 8 < 4096 ? 4096 : (msz / 8 > VM_STACK_RESERVE ? VM_STACK_RESERVE : msz / 8);
                 if (msz < need + 2 * sres + 4096) {
                     r[0].i = -ENOMEM;
@@ -1227,8 +1306,8 @@ static __attribute__((noinline)) int proc_syscall(sched_t *s, const chbc_image *
                     r[0].i = -ENOMEM;
                     PA_NEXT();
                 }
-                uint8_t *cm = mmap(NULL, (size_t)msz, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, -1, 0);
-                if (cm == MAP_FAILED) {
+                uint8_t *cm = blk_acquire(msz);
+                if (!cm) {
                     r[0].i = -ENOMEM;
                     PA_NEXT();
                 }
@@ -1608,21 +1687,61 @@ dispatch:
         SLICE_CHECK();
         DISPATCH();
     }
-    OP(RET) {
-        uint64_t sp = SP.u;
-        if (UNLIKELY(sp - CHBC_NULL_PAGE > mem_limit - 8))
-            FAIL(VM_E_STACK_UNDERFLOW);
-        const uint64_t ra = RD(u64u, mem + sp);
-        if (UNLIKELY(ra >= code_size || (ra & 7))) {
 #ifdef CHVM_PROC_ON
-            if (ra == PROC_RET_SENTINEL && cur != 0)
-                CHILD_END(0, 0, "normal");
+#define RET_SENTINEL_CHECK(ra_) \
+    if ((ra_) == PROC_RET_SENTINEL && cur != 0) \
+        CHILD_END(0, 0, "normal");
+#else
+#define RET_SENTINEL_CHECK(ra_)
 #endif
-            FAIL(VM_E_BAD_JUMP);
-        }
-        SP.u = sp + 8;
-        pc = code + (ra >> 3);
-        DISPATCH();
+/* Pops the return address and goes there. A process that returns from its first function has ended. */
+#define DO_RET()                                                          \
+    do {                                                                  \
+        uint64_t sp_ = SP.u;                                              \
+        if (UNLIKELY(sp_ - CHBC_NULL_PAGE > mem_limit - 8))               \
+            FAIL(VM_E_STACK_UNDERFLOW);                                   \
+        const uint64_t ra_ = RD(u64u, mem + sp_);                         \
+        if (UNLIKELY(ra_ >= code_size || (ra_ & 7))) {                    \
+            RET_SENTINEL_CHECK(ra_)                                       \
+            FAIL(VM_E_BAD_JUMP);                                          \
+        }                                                                 \
+        SP.u = sp_ + 8;                                                   \
+        pc = code + (ra_ >> 3);                                           \
+        DISPATCH();                                                       \
+    } while (0)
+#define DO_POP(reg_)                                                      \
+    do {                                                                  \
+        uint64_t spp_ = SP.u;                                             \
+        if (UNLIKELY(spp_ - CHBC_NULL_PAGE > mem_limit - 8))              \
+            FAIL(VM_E_STACK_UNDERFLOW);                                   \
+        (reg_).u = RD(u64u, mem + spp_);                                  \
+        SP.u = spp_ + 8;                                                  \
+    } while (0)
+    OP(RET)
+        DO_RET();
+    OP(POPRET)
+        DO_POP(RA);
+        DO_RET();
+    OP(POP2RET)
+        DO_POP(RA);
+        DO_POP(RB);
+        DO_RET();
+    OP(RETR)
+        r[0] = RA;
+        DO_RET();
+    OP(POP2)
+        DO_POP(RA);
+        DO_POP(RB);
+        NEXT();
+    OP(PUSH2) {
+        uint64_t va = RA.u, vb = RB.u;
+        uint64_t nsp = SP.u - 16;
+        if (UNLIKELY(nsp < brk || nsp > mem_size - 16))
+            FAIL(VM_E_STACK_OVERFLOW);
+        WR(u64u, mem + nsp + 8, va);
+        WR(u64u, mem + nsp, vb);
+        SP.u = nsp;
+        NEXT();
     }
 
     OP(PRINT)

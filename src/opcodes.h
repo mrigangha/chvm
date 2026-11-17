@@ -27,6 +27,10 @@
  * end of a counting loop in one instruction. INCBLE branches on <=. DECBGT and DECBGE subtract 1 and
  * branch on > and >=. The I forms take a 16-bit constant bound instead of a register.
  *
+ * PUSH2 a, b is PUSH a then PUSH b. POP2 a, b is POP a then POP b. POPRET a is POP a then RET, POP2RET a, b is
+ * POP a, POP b, RET, and RETR a is MOV r0, a then RET. They take the place of the pairs a function's entry and exit are
+ * made of, which are most of the instructions of a small recursive function.
+ *
  * CALLX rd, fn, sig uses F_RRR: a = rd, b = fn, c = sig, and the argument array address is in r1.
  */
 enum chbc_fmt {
@@ -100,7 +104,8 @@ enum chbc_fmt {
     X(BFEQK, F_RJ) X(BFNEK, F_RJ) X(KDATA, F_I)                            \
     X(APUSH, F_RRR) X(APOP, F_RR) X(ALLOC, F_RR) X(ALLOCI, F_RI)           \
     X(AADDR, F_RRR) X(HEAPMARK, F_R) X(HEAPFREE, F_R)                      \
-    X(TRY, F_J) X(ENDTRY, F_NONE) X(THROW, F_R)
+    X(TRY, F_J) X(ENDTRY, F_NONE) X(THROW, F_R)                            \
+    X(PUSH2, F_RR) X(POP2, F_RR) X(POPRET, F_R) X(POP2RET, F_RR) X(RETR, F_R)
 
 enum chbc_op {
 #define X(name, fmt) OP_##name,

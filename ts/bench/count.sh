@@ -12,7 +12,8 @@ root, t = sys.argv[1:3]
 s = open(root + '/src/vm.c').read()
 s = s.replace('#define DISPATCH() goto *labels[pc->op]', '#define DISPATCH() do { icount++; goto *labels[pc->op]; } while (0)')
 s = s.replace('vm_status vm_run(', 'static unsigned long long icount;\nvm_status vm_run(', 1)
-s = s.replace('    fflush(stdout);\n    foreign_free(foreign);', '    fflush(stdout); fprintf(stderr, "insns %llu\\n", icount);\n    foreign_free(foreign);')
+assert 'done:\n    fflush(stdout);\n' in s, 'the end of vm_run moved: update count.sh'
+s = s.replace('done:\n    fflush(stdout);\n', 'done:\n    fflush(stdout); fprintf(stderr, "insns %llu\\n", icount);\n', 1)
 open(t + '/vm_count.c', 'w').write(s)
 PY
 FF=""; LL="-lm"

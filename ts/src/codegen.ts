@@ -238,7 +238,7 @@ function genTo(g: Gen, n: Node, dst: number): void {
   } else if (k === "logical" || (k === "unary" && n.text === "!")) {
     genLogicalValue(g, n, dst)
   } else if (k === "assign") {
-    genAssign(g, n, dst)
+    genAssign(g, n, dst, true)
   } else if (k === "cond") {
     const no = lab(g, "no")
     const end = lab(g, "end")
@@ -290,7 +290,9 @@ function genUpdateEffect(g: Gen, n: Node): void {
 // Evaluate n and leave the value in register `out`. Only the last instruction writes `out`, after every
 // operand has been read, so `out` may be a variable's own register even when n reads that variable.
 // All temporaries stay in r1..r8, so no other variable's register is touched.
-function genInto(g: Gen, n: Node, out: number): void {
+// scratch: the register the value is computed in when it cannot go straight to out. A caller that has values
+// waiting in r1 and above passes a free register, so they are not overwritten.
+function genInto(g: Gen, n: Node, out: number, scratch: number): void {
   if (savedIndex(out) >= 0) {
     if (n.kind === "num") {
       if (isSmallInt(n.num)) emit(g, "FMOVI " + rn(out) + ", " + n.num)
@@ -302,12 +304,12 @@ function genInto(g: Gen, n: Node, out: number): void {
       return
     }
     if (n.kind === "binary" && n.tag !== "concat" && n.tag !== "str" && !hasCall(n)) {
-      genBinaryOut(g, n, FIRST_TEMP, out)
+      genBinaryOut(g, n, scratch, out)
       return
     }
   }
-  genTo(g, n, FIRST_TEMP)
-  emit(g, "MOV " + rn(out) + ", r1")
+  genTo(g, n, scratch)
+  emit(g, "MOV " + rn(out) + ", " + rn(scratch))
 }
 
 function genAssignEffect(g: Gen, n: Node): void {
@@ -316,7 +318,7 @@ function genAssignEffect(g: Gen, n: Node): void {
     const home = target.slot >= 0 ? homeOf(g, target.slot).reg : -1
     if (n.text === "=") {
       if (home >= 0) {
-        genInto(g, n.b, home)
+        genInto(g, n.b, home, FIRST_TEMP)
       } else {
         genTo(g, n.b, FIRST_TEMP)
         storeVar(g, target, FIRST_TEMP)
@@ -332,7 +334,7 @@ function genAssignEffect(g: Gen, n: Node): void {
     storeVar(g, target, FIRST_TEMP)
     return
   }
-  genTo(g, n, FIRST_TEMP)
+  genAssign(g, n, FIRST_TEMP, false)
 }
 
 // ---- loop invariant loads ----
@@ -540,18 +542,18 @@ function genPair(g: Gen, a: Node, b: Node, dst: number): number[] {
   if (hasCall(b) && pa < 0) {
     // The left value must survive the call in b. A call keeps r9..r13, so it waits in a saved register
     // when one is free, which costs no memory access at all.
-    genTo(g, a, dst)
     const park = parkReg(g)
     if (park >= 0) {
-      emit(g, "MOV " + rn(park) + ", " + rn(dst))
-      const savedFloor = g.liveFloor
-      g.liveFloor = dst + 1
-      genTo(g, b, dst + 1)
-      g.liveFloor = savedFloor
-      emit(g, "MOV " + rn(dst) + ", " + rn(park))
+      // The left value goes straight into the parking register, so there is no move after it is computed, and
+      // dst is free for the right one. The floor is left as it is: registers below dst may hold arguments of an
+      // enclosing call that are still needed, and the call in b must save them. (Setting the floor to dst + 1, as
+      // this used to, told it nothing below was live, and it overwrote r1 in g2(1, a * h3(...)).)
+      genInto(g, a, park, dst)
+      genTo(g, b, dst)
       releaseReg(g, park)
-      return [dst, dst + 1]
+      return [park, dst]
     }
+    genTo(g, a, dst)
     emit(g, "PUSH " + rn(dst))
     genTo(g, b, dst + 1)
     emit(g, "POP " + rn(dst))
@@ -734,15 +736,21 @@ function moveArgs(g: Gen, srcs: number[]): void {
 // left + right as strings, result in dst. Live temporaries below dst are saved first, because
 // the call arguments are built in r1 and r2.
 function genConcat(g: Gen, left: Node, right: Node, dst: number): void {
+  const floor = g.liveFloor
   saveTemps(g, dst)
+  // Everything below dst is on the stack now, and the left value will be too, so no call inside this
+  // expression has to save them again. restoreTemps below needs the original floor.
+  g.liveFloor = dst
   genTo(g, left, dst)
   convertToString(g, left.ty, dst)
   emit(g, "PUSH " + rn(dst))
+  g.liveFloor = dst + 1
   genTo(g, right, dst + 1)
   convertToString(g, right.ty, dst + 1)
   emit(g, "MOV r2, " + rn(dst + 1))
   emit(g, "POP r1")
   emit(g, "CALL __str_concat")
+  g.liveFloor = floor
   restoreTemps(g, dst)
   emit(g, "MOV " + rn(dst) + ", r0")
 }
@@ -947,7 +955,7 @@ function genAddrTo(g: Gen, n: Node, dst: number): void {
   }
 }
 
-function genAssign(g: Gen, n: Node, dst: number): void {
+function genAssign(g: Gen, n: Node, dst: number, keep: boolean): void {
   const target = n.a
   const compound = n.text !== "="
   if (target.kind === "id") {
@@ -972,7 +980,7 @@ function genAssign(g: Gen, n: Node, dst: number): void {
   }
   // element or field
   if (!compound) {
-    genAddrOrPair(g, target, n.b, dst)
+    genAddrOrPair(g, target, n.b, dst, keep)
     return
   }
   genAddrTo(g, target, dst)
@@ -994,7 +1002,7 @@ function genAssign(g: Gen, n: Node, dst: number): void {
   }
   emitCompound(g, n, dst + 1, dst + 1, dst + 2)
   emit(g, "ST64 [" + rn(dst) + "], " + rn(dst + 1))
-  emit(g, "MOV " + rn(dst) + ", " + rn(dst + 1))
+  if (keep) emit(g, "MOV " + rn(dst) + ", " + rn(dst + 1))
 }
 
 // out = cur op (n.b), with `scratch` free for the right operand
@@ -1016,7 +1024,8 @@ function storeVar(g: Gen, target: Node, src: number): void {
 }
 
 // target = value for an element or a field. The value is the result.
-function genAddrOrPair(g: Gen, target: Node, value: Node, dst: number): void {
+// keep: the value of the assignment is used, so it is left in dst. As a statement it is not, and the copy is skipped.
+function genAddrOrPair(g: Gen, target: Node, value: Node, dst: number, keep: boolean): void {
   if (target.kind === "index") {
     const rs = genPair(g, target.a, target.b, dst)
     // the value may itself call, so keep the two operands safe
@@ -1027,12 +1036,12 @@ function genAddrOrPair(g: Gen, target: Node, value: Node, dst: number): void {
       emit(g, "POP " + rn(dst + 1))
       emit(g, "POP " + rn(dst))
       emit(g, "STAX " + rn(dst) + ", " + rn(dst + 1) + ", " + rn(dst + 2))
-      emit(g, "MOV " + rn(dst) + ", " + rn(dst + 2))
+      if (keep) emit(g, "MOV " + rn(dst) + ", " + rn(dst + 2))
       return
     }
     const rv = operand(g, value, dst + 2)
     emit(g, "STAX " + rn(rs[0]) + ", " + rn(rs[1]) + ", " + rn(rv))
-    if (rv !== dst) emit(g, "MOV " + rn(dst) + ", " + rn(rv))
+    if (keep && rv !== dst) emit(g, "MOV " + rn(dst) + ", " + rn(rv))
     return
   }
   const robj = operand(g, target.a, dst)
@@ -1041,12 +1050,12 @@ function genAddrOrPair(g: Gen, target: Node, value: Node, dst: number): void {
     genTo(g, value, dst + 1)
     emit(g, "POP " + rn(dst))
     emit(g, "ST64 [" + rn(dst) + "+" + target.slot * 8 + "], " + rn(dst + 1))
-    emit(g, "MOV " + rn(dst) + ", " + rn(dst + 1))
+    if (keep) emit(g, "MOV " + rn(dst) + ", " + rn(dst + 1))
     return
   }
   const rv = operand(g, value, dst + 1)
   emit(g, "ST64 [" + rn(robj) + "+" + target.slot * 8 + "], " + rn(rv))
-  if (rv !== dst) emit(g, "MOV " + rn(dst) + ", " + rn(rv))
+  if (keep && rv !== dst) emit(g, "MOV " + rn(dst) + ", " + rn(rv))
 }
 
 function genUpdate(g: Gen, n: Node, dst: number): void {
@@ -1364,7 +1373,7 @@ function genStmt(g: Gen, n: Node): void {
     if (n.slot >= 0) {
       const h = homeOf(g, n.slot)
       if (h.reg >= 0) {
-        genInto(g, n.a, h.reg)
+        genInto(g, n.a, h.reg, FIRST_TEMP)
       } else {
         genTo(g, n.a, FIRST_TEMP)
         storeLocal(g, n.slot, FIRST_TEMP)
@@ -1444,8 +1453,12 @@ function genStmt(g: Gen, n: Node): void {
       leaveRegions(g, 0)
       if (n.a !== NIL) emit(g, "POP r0")
     } else if (n.a !== NIL) {
-      genTo(g, n.a, FIRST_TEMP)
-      emit(g, "MOV r0, r1")
+      if (n.a.kind === "binary" && n.a.tag !== "concat" && n.a.tag !== "str" && floatOp(n.a.text) !== "") {
+        genBinaryOut(g, n.a, FIRST_TEMP, 0)
+      } else {
+        genTo(g, n.a, FIRST_TEMP)
+        emit(g, "MOV r0, r1")
+      }
     }
     emit(g, "JMP " + g.fname + "_ret")
   } else if (k === "break" || k === "continue") {
