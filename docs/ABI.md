@@ -134,6 +134,7 @@ A caller does not need to know whether a callee is variadic. There is no hidden 
 | `SYS_POLL` 19 | fd, events, wait_ms | ready bits. Needs `-N` |
 | `SYS_SHUTDOWN` 20 | fd, how | 0. Needs `-N` |
 | `SYS_SOCKPORT` 21 | fd | local port. Needs `-N` |
+| `SYS_STOPPING` 38 | | 1 once SIGTERM or SIGINT was received, else 0. Needs `-N`. See "Environment and network" |
 
 Buffers must lie inside memory and above the null page, or the call returns `-14` (`EFAULT`).
 Output through `SYS_WRITE` to fd 1 and through `PRINT` shares one buffer, so the order is kept.
@@ -248,6 +249,7 @@ These calls need the `-N` flag: `chvm -N prog.chbc`. Without it every one return
 - `SYS_POLL fd, events, wait_ms`: `events` is 1 (readable), 2 (writable) or 3. The result is a set of bits: 1 readable, 2 writable, 4 error or hang-up, and 0 means the wait ran out. A closed or reset connection reports readable, and the read then returns 0 or an error.
 - `SYS_SHUTDOWN fd, how`: 0 stops reading, 1 stops writing (the client sees the end of the reply), 2 both. `-88` (`ENOTSOCK`) for an fd that is not a socket.
 - `SYS_SOCKPORT fd`: the local port of a listening or accepted socket.
+- `SYS_STOPPING`: with `-N` (or `chbake --net`) SIGTERM and SIGINT do not end the program. They set a flag, and this call returns 1 once it is set. A server checks it between connections, finishes the one it is serving, and exits with 0. The handler is then removed, so a second signal ends the program at once. A host that stops a service with SIGTERM (Render, Docker) needs this to avoid cutting requests off.
 - A write to a connection that the client has closed returns `-32` (`EPIPE`) and does not end the program. `-N` turns `SIGPIPE` off for the process.
 - `SYS_CLOSE` closes any fd from 3 up, so a connection must be closed by the program. A server that does not close each connection runs out of descriptors. The test `net_many` serves 300 connections in a row and checks the fd numbers stay small.
 

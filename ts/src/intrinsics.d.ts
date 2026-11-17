@@ -29,6 +29,7 @@ declare function __accept(a0: number, a1: number, a2: number): number
 declare function __poll(a0: number, a1: number, a2: number): number
 declare function __shutdown(a0: number, a1: number): number
 declare function __sockport(a0: number): number
+declare function __stopping(): number
 declare function __time(a0: number): number
 declare function __seek(a0: number, a1: number, a2: number): number
 declare function __pspawn(a0: any, a1: number, a2: number, a3: number, a4: number): number

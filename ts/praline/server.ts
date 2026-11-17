@@ -1,9 +1,10 @@
 import type { App } from "./app.ts"
 import { handle } from "./app.ts"
 import { errorResponse, serialize } from "./response.ts"
-import { getEnv, listen, accept, pollFd, sendAll, finishWriting, closeFd, localPort, nowMs, bufNew, bufRecv, bufFindHead, bufSlice } from "../std/net.ts"
+import { getEnv, listen, accept, pollFd, sendAll, finishWriting, closeFd, localPort, nowMs, bufNew, bufRecv, bufFindHead, bufSlice, stopping } from "../std/net.ts"
 import { arenaMark, arenaFree } from "../std/arena.ts"
 import { printErr } from "../std/os.ts"
+import { sleep } from "../std/actor.ts"
 import { plFatal } from "./fatal.ts"
 import { plCharIndex, plLower, plIsDigits, plParseUint } from "./strings.ts"
 
@@ -143,8 +144,10 @@ export function serveConnection(app: App, fd: number, buf: number, cap: number, 
   return got.status !== 0 ? got.status : 200
 }
 
-// Listens and serves, for ever (or for maxRequests connections). A fault that is not caught in a handler
-// still ends the program: a supervisor restarts it (see stage 8g).
+// Listens and serves, for ever (or for maxRequests connections), or until the process is asked to stop
+// (SIGTERM or SIGINT): the connection being served is finished, then the function returns.
+// A fault in a handler is caught and answered with 500. A fault in the loop itself is logged and the loop
+// goes on, after a short pause so that a fault that repeats cannot use the whole processor.
 export function run(app: App, cfg: ServerConfig): void {
   const fd = listen(cfg.port, cfg.host === "0.0.0.0")
   if (fd < 0) plFatal("cannot listen on " + cfg.host + ":" + cfg.port + " (error " + (0 - fd) + ")")
@@ -154,18 +157,30 @@ export function run(app: App, cfg: ServerConfig): void {
   // the first line of stdout is the port, so a test or a supervisor that asked for port 0 can find it
   console.log(localPort(fd))
   let served = 0
-  while (cfg.maxRequests === 0 || served < cfg.maxRequests) {
-    const c = accept(fd, 1000, cfg.ioMs)
-    if (c === -110 || c === -11 || c === -4) continue
-    if (c < 0) {
-      printErr("praline: accept failed (error " + (0 - c) + ")\n")
-      continue
-    }
+  while ((cfg.maxRequests === 0 || served < cfg.maxRequests) && !stopping()) {
     const mark = arenaMark()
-    serveConnection(app, c, buf, cap, cfg)
-    closeFd(c)
+    try {
+      served += plServeTurn(app, fd, buf, cap, cfg)
+    } catch (e: any) {
+      const msg: string = e
+      printErr("praline: the server loop failed and goes on: " + msg + "\n")
+      sleep(100)
+    }
     arenaFree(mark)
-    served++
   }
+  if (stopping()) printErr("praline: stopping\n")
   closeFd(fd)
+}
+
+// One turn of the loop: waits for a connection and serves it. Returns 1 if there was one.
+function plServeTurn(app: App, fd: number, buf: number, cap: number, cfg: ServerConfig): number {
+  const c = accept(fd, 1000, cfg.ioMs)
+  if (c === -110 || c === -11 || c === -4) return 0
+  if (c < 0) {
+    printErr("praline: accept failed (error " + (0 - c) + ")\n")
+    return 0
+  }
+  serveConnection(app, c, buf, cap, cfg)
+  closeFd(c)
+  return 1
 }

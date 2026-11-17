@@ -137,4 +137,12 @@ for script in abuse concurrency; do
         exit 1
     fi
 done
-echo "net: passed 6, failed 0"
+# SIGTERM and SIGINT: finish the request in progress, stop accepting, exit 0
+for mode in conc seq; do
+    if ! python3 tests/net/shutdown.py "$CHVM_BIN/chvm" "$T/cc.chbc" $mode >"$T/sd.out" 2>&1; then
+        echo "FAIL shutdown ($mode):"; grep -v "^ok" "$T/sd.out" | head -8
+        echo "net: passed 6, failed 1"
+        exit 1
+    fi
+done
+echo "net: passed 8, failed 0"

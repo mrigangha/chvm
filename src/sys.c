@@ -442,9 +442,33 @@ static int64_t sys_spawn(const vm_sysenv *e, const vm_value *a)
  */
 #define ENV_NAME_LIMIT 256
 
+static volatile sig_atomic_t stop_requested;
+
+static void on_stop(int sig)
+{
+    (void)sig;
+    stop_requested = 1;
+}
+
 void sys_net_init(void)
 {
     signal(SIGPIPE, SIG_IGN);
+    /* The first SIGTERM or SIGINT only sets a flag, which the program reads with SYS_STOPPING. The handler is then
+     * removed (SA_RESETHAND), so a second signal ends the program even if it ignores the first. */
+    struct sigaction sa;
+    memset(&sa, 0, sizeof sa);
+    sa.sa_handler = on_stop;
+    sa.sa_flags = SA_RESETHAND;
+    sigemptyset(&sa.sa_mask);
+    sigaction(SIGTERM, &sa, NULL);
+    sigaction(SIGINT, &sa, NULL);
+}
+
+static int64_t sys_stopping(const vm_sysenv *e)
+{
+    if (!e->allow_net)
+        return -EPERM;
+    return stop_requested ? 1 : 0;
 }
 
 static int64_t sys_getenv(const vm_sysenv *e, const vm_value *a)
@@ -608,6 +632,7 @@ int64_t vm_syscall(const vm_sysenv *e, uint32_t num, const vm_value *a)
     case CHBC_SYS_POLL:   return sys_poll(e, a);
     case CHBC_SYS_SHUTDOWN: return sys_shutdown(e, a);
     case CHBC_SYS_SOCKPORT: return sys_sockport(e, a);
+    case CHBC_SYS_STOPPING: return sys_stopping(e);
     }
     return -ENOSYS;
 }

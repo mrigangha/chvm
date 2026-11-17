@@ -100,6 +100,7 @@ export const INTRINSICS: Intrinsic[] = [
   intr("__poll", [T_NUM, T_NUM, T_NUM], T_NUM),
   intr("__shutdown", [T_NUM, T_NUM], T_NUM),
   intr("__sockport", [T_NUM], T_NUM),
+  intr("__stopping", [], T_NUM),
   intr("__time", [T_NUM], T_NUM),
   intr("__seek", [T_NUM, T_NUM, T_NUM], T_NUM),
   intr("__pspawn", [T_ANY, T_NUM, T_NUM, T_NUM, T_NUM], T_NUM),

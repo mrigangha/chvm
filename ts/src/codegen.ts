@@ -1321,6 +1321,7 @@ function genIntrinsic(g: Gen, n: Node, dst: number): void {
   else if (name === "__poll") emit(g, "SYSCALL SYS_POLL")
   else if (name === "__shutdown") emit(g, "SYSCALL SYS_SHUTDOWN")
   else if (name === "__sockport") emit(g, "SYSCALL SYS_SOCKPORT")
+  else if (name === "__stopping") emit(g, "SYSCALL SYS_STOPPING")
   else if (name === "__time") emit(g, "SYSCALL SYS_TIME")
   else if (name === "__seek") emit(g, "SYSCALL SYS_SEEK")
   else if (name === "__pspawn") emit(g, "SYSCALL SYS_PSPAWN")

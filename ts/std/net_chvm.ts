@@ -107,3 +107,8 @@ export function bufPut(buf: number, offset: number, s: string): void {
 export function localPort(fd: number): number {
   return __sockport(fd)
 }
+
+// True once the process was asked to stop (SIGTERM or SIGINT). A server checks it between connections.
+export function stopping(): boolean {
+  return __stopping() === 1
+}

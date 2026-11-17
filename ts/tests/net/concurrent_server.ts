@@ -5,6 +5,7 @@ import { text, securityHeaders } from "../../praline/response.ts"
 import { json, jsonObject, jsonString, jsonNumber } from "../../praline/json.ts"
 import { serverConfig } from "../../praline/server.ts"
 import { runConcurrent, concurrentConfig } from "../../praline/concurrent.ts"
+import { run } from "../../praline/server.ts"
 import { param, form } from "../../praline/input.ts"
 import { getEnv } from "../../std/net.ts"
 import { sleep } from "../../std/actor.ts"
@@ -49,6 +50,10 @@ function main(): void {
   sc.ioMs = Number(getEnv("IO_MS", "700"))
   sc.maxRequests = Number(getEnv("MAX_REQUESTS", "0"))
   sc.log = getEnv("LOG", "") !== ""
+  if (getEnv("MODE", "conc") === "seq") {
+    run(app, sc)
+    return
+  }
   const cc = concurrentConfig(sc)
   cc.maxConnections = Number(getEnv("MAX_CONNECTIONS", "256"))
   runConcurrent(app, cc)

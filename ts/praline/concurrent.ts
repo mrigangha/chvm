@@ -1,8 +1,8 @@
 import type { App } from "./app.ts"
 import type { ServerConfig } from "./server.ts"
 import { serveConnection } from "./server.ts"
-import { listen, accept, closeFd, localPort, bufNew, sendAll, finishWriting } from "../std/net.ts"
-import { spawnConnection, receive, trapExit, parseDown, memoryUsed, self } from "../std/actor.ts"
+import { listen, accept, closeFd, localPort, bufNew, sendAll, finishWriting, stopping } from "../std/net.ts"
+import { spawnConnection, receive, trapExit, parseDown, memoryUsed, self, sleep } from "../std/actor.ts"
 import { errorResponse, serialize } from "./response.ts"
 import { printErr } from "../std/os.ts"
 import { arenaMark, arenaFree } from "../std/arena.ts"
@@ -104,18 +104,30 @@ export function runConcurrent(app: App, cfg: ConcurrentConfig): void {
   trapExit(true)
   let accepted = 0
   let busy = 0
-  while (sc.maxRequests === 0 || accepted < sc.maxRequests) {
+  while ((sc.maxRequests === 0 || accepted < sc.maxRequests) && !stopping()) {
     // The loop allocates (messages, strings), and nothing is collected, so each turn is freed. Without this the
     // heap grows for ever, and every connection process, which starts with a copy of it, grows with it.
     const mark = arenaMark()
-    const r = acceptTurn(fd, cfg, busy)
+    let r = 2 * (busy + 1000000)
+    try {
+      r = acceptTurn(fd, cfg, busy)
+    } catch (e: any) {
+      // A fault in the loop itself is logged and the loop goes on. The pause keeps a fault that repeats from using
+      // the whole processor. The connection counts are kept, since the turn gave none back.
+      const msg: string = e
+      printErr("praline: the accept loop failed and goes on: " + msg + "\n")
+      sleep(100)
+    }
     arenaFree(mark)
     accepted += r % 2
     busy = Math.floor(r / 2) - 1000000
   }
-  // wait for the connections still being served
+  if (stopping()) printErr("praline: stopping, " + busy + " connections to finish\n")
+  // Stop accepting, and wait for the connections still being served: up to 25 seconds, since a host that sends
+  // SIGTERM ends the program by force soon after (Render waits 30 seconds).
+  closeFd(fd)
   let guard = 0
-  while (busy > 0 && guard < 600) {
+  while (busy > 0 && guard < 250) {
     const mark = arenaMark()
     const done = receive(-3, 100)
     if (done.err === 0) {
@@ -126,7 +138,6 @@ export function runConcurrent(app: App, cfg: ConcurrentConfig): void {
     arenaFree(mark)
     guard++
   }
-  closeFd(fd)
 }
 
 function spawnMonitored(fd: number, mem: number): number {

@@ -100,3 +100,8 @@ export function bufPut(buf: number, offset: number, s: string): void {
 export function localPort(fd: number): number {
   return -9
 }
+
+// True once the process was asked to stop. Under node there is no server loop, so it is never true.
+export function stopping(): boolean {
+  return false
+}

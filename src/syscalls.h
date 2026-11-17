@@ -35,6 +35,9 @@
  *                               4 error or hang-up. 0 is returned when the wait ran out
  *   SHUTDOWN(fd, how)           0 stop reading, 1 stop writing (the peer sees the end), 2 both
  *   SOCKPORT(fd)                the local port of a listening or accepted socket
+ *   STOPPING()                  1 once the process has received SIGTERM or SIGINT, else 0. The signal does not end
+ *                               the program: a server checks this between connections, finishes what it is doing and
+ *                               exits. A second signal ends the program at once. Needs -N, which installs the handlers
  * A connected socket is used with READ, WRITE and CLOSE. There is no way to open a connection to another
  * machine: a program can only wait for connections.
  * Processes (lightweight actors, always available, bounded by max_procs and memory limits):
@@ -72,7 +75,7 @@
     X(GETENV, 16) X(LISTEN, 17) X(ACCEPT, 18) X(POLL, 19) X(SHUTDOWN, 20) X(SOCKPORT, 21) \
     X(PSPAWN, 22) X(SELF, 23) X(SEND, 24) X(MSGWAIT, 25) X(MSGTAKE, 26) X(MSGFROM, 27) X(MSGTAG, 28) \
     X(PLINK, 29) X(PUNLINK, 30) X(MONITOR, 31) X(TRAPEXIT, 32) X(PKILL, 33) X(SLEEP, 34) X(YIELD, 35) \
-    X(PCOUNT, 36) X(PINFO, 37)
+    X(PCOUNT, 36) X(PINFO, 37) X(STOPPING, 38)
 
 enum {
 #define X(name, num) CHBC_SYS_##name = num,
